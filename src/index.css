@@ -1,9 +1,28 @@
 .App {
   display: grid;
   grid-template-areas:
-    ". title ."
+    "title title title"
     ". game controls";
   grid-template-columns: repeat(3, 1fr);
+}
+
+.game-container {
+  grid-area: game;
+  position: relative;
+  user-select: none;
+  margin: auto;
+}
+
+.hand-detect {
+  transform-origin: left;
+  transform: scale(1);
+  width: 500px;
+  aspect-ratio: 12/20;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  min-width: 0;
 }
 
 h1 {
@@ -17,9 +36,8 @@ h1 {
 
 .board {
   border: 2px solid black;
-  user-select: none;
-  margin: auto;
-  grid-area: game;
+
+  box-sizing: border-box;
 }
 
 .row {
@@ -27,14 +45,14 @@ h1 {
 }
 
 .cell {
-  width: 30px;
+  width: 35px;
   aspect-ratio: 1;
   border: 1px solid black;
 }
 
 .cell.Empty {
   background-color: rgb(200, 200, 200);
-  opacity: 0.5;
+  opacity: 0;
 }
 
 .cell.I {
@@ -69,7 +87,7 @@ h1 {
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 20px;
 }
 
 .cell.hidden {

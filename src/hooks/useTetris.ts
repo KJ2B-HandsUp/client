@@ -6,7 +6,7 @@ import {
   useTetrisBoard,
   getEmptyBoard,
 } from "./useTetrisBoard";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import useInterval from "./useInterval";
 import {
   Block,
@@ -15,6 +15,7 @@ import {
   EmptyCell,
   SHAPES,
 } from "../components/types";
+import { MoveContext } from "../pages/GamePage";
 
 enum TickSpeed {
   Normal = 800,
@@ -28,6 +29,9 @@ export function useTetris() {
   const [tickSpeed, setTickSpeed] = useState<TickSpeed | null>(null);
   const [isCommitting, setIsCommitting] = useState(false);
   const [upComingBlocks, setUpComingBlocks] = useState<Block[]>([]);
+
+  const moveContext = useContext(MoveContext);
+  const moveType = moveContext?.moveType;
 
   const [
     { board, droppingRow, droppingColumn, droppingBlock, droppingShape },
