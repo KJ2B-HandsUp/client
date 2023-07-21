@@ -74,7 +74,7 @@ export default function HandDetect() {
       }
       prevPose = results;
     }
-  }, 200);
+  }, 50);
 
   return (
     <div className="hand-detect">
@@ -110,27 +110,55 @@ function checkMotion(
   }
 
   const fingerNum = [4, 8, 12, 16, 20];
+  const fingerX = fingerNum.map((idx) => currentHand[idx].x);
+  if (
+    Math.abs(
+      fingerX.reduce(function add(sum, currValue) {
+        return sum + currValue;
+      }, 0) /
+        fingerNum.length -
+        0.5,
+    ) > 0.2
+  ) {
+    return "nothing";
+  }
+
+  const fingerY = fingerNum.map((idx) => currentHand[idx].y);
+  if (
+    Math.abs(
+      fingerY.reduce(function add(sum, currValue) {
+        return sum + currValue;
+      }, 0) /
+        fingerNum.length -
+        0.5,
+    ) > 0.2
+  ) {
+    return "nothing";
+  }
+
   let totalMoveX = 0;
   let totalMoveY = 0;
   let result = "nothing";
+
+  currentHand[fingerNum];
 
   fingerNum.map((idx) => {
     totalMoveX += currentHand[idx].x - prevHand[idx].x;
     totalMoveY += currentHand[idx].y - prevHand[idx].y;
   });
 
-  if (totalMoveX > 0.2) {
+  if (totalMoveX > 0.4) {
     result = "left";
-  } else if (totalMoveX < -0.2) {
+  } else if (totalMoveX < -0.4) {
     result = "right";
   }
 
-  if (totalMoveY > 0.2) {
+  if (totalMoveY > 0.4) {
     result = "down";
-  } else if (totalMoveY < -0.2) {
+  } else if (totalMoveY < -0.4) {
     result = "up";
   }
 
-  console.log(result);
+  //console.log(result);
   return result;
 }

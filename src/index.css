@@ -11,6 +11,7 @@
   position: relative;
   user-select: none;
   margin: auto;
+  overflow: hidden;
 }
 
 .hand-detect {

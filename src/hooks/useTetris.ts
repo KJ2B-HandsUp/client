@@ -132,6 +132,7 @@ export function useTetris() {
     }
     gameTick();
   }, tickSpeed);
+  const prevMoveType = "nothing";
 
   useEffect(() => {
     if (!isPlaying) {
@@ -143,78 +144,114 @@ export function useTetris() {
     let moveIntervalID: number | undefined;
 
     const updateMovementInterval = () => {
-      clearInterval(moveIntervalID);
       dispatchBoardState({
         type: "move",
         isPressingLeft,
         isPressingRight,
       });
-
-      moveIntervalID = setInterval(() => {
-        dispatchBoardState({
-          type: "move",
-          isPressingLeft,
-          isPressingRight,
-        });
-      }, 300);
     };
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.repeat) {
-        return;
+    if (moveType === "nothing") {
+      if (prevMoveType != "nothing") {
+        isPressingLeft = false;
+        isPressingRight = false;
+        updateMovementInterval();
       }
-
-      if (event.key === "ArrowDown") {
-        setTickSpeed(TickSpeed.Fast);
-      }
-
-      if (event.key === "ArrowUp") {
+      return;
+    }
+    console.log(moveType);
+    switch (moveType) {
+      case "left":
+        isPressingLeft = true;
+        isPressingRight = false;
+        break;
+      case "right":
+        isPressingLeft = false;
+        isPressingRight = true;
+        break;
+      case "up":
+        isPressingLeft = false;
+        isPressingRight = false;
         dispatchBoardState({
           type: "move",
           isRotating: true,
         });
-      }
-
-      if (event.key === "ArrowLeft") {
-        isPressingLeft = true;
-        updateMovementInterval();
-      }
-
-      if (event.key === "ArrowRight") {
-        isPressingRight = true;
-        updateMovementInterval();
-      }
-    };
-
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.repeat) {
-        return;
-      }
-
-      if (event.key === "ArrowUp") {
         setTickSpeed(TickSpeed.Normal);
-      }
-
-      if (event.key === "ArrowLeft") {
+        return;
+      case "down":
         isPressingLeft = false;
-        updateMovementInterval();
-      }
-
-      if (event.key === "ArrowRight") {
         isPressingRight = false;
-        updateMovementInterval();
-      }
-    };
+        setTickSpeed(TickSpeed.Fast);
+        return;
+      default:
+        isPressingLeft = false;
+        isPressingRight = false;
+    }
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-      clearInterval(moveIntervalID);
-      setTickSpeed(TickSpeed.Normal);
-    };
-  }, [dispatchBoardState, isPlaying]);
+    updateMovementInterval();
+  }, [moveType, dispatchBoardState, isPlaying]);
+
+  // useEffect(() => {
+  //   if (!isPlaying) {
+  //     return;
+  //   }
+
+  //   const handleKeyDown = (event: KeyboardEvent) => {
+  //     if (event.repeat) {
+  //       return;
+  //     }
+
+  //     if (event.key === "ArrowDown") {
+  //       setTickSpeed(TickSpeed.Fast);
+  //     }
+
+  //     if (event.key === "ArrowUp") {
+  //       dispatchBoardState({
+  //         type: "move",
+  //         isRotating: true,
+  //       });
+  //     }
+
+  //     if (event.key === "ArrowLeft") {
+  //       isPressingLeft = true;
+  //       updateMovementInterval();
+  //     }
+
+  //     if (event.key === "ArrowRight") {
+  //       isPressingRight = true;
+  //       updateMovementInterval();
+  //     }
+  //   };
+
+  //   const handleKeyUp = (event: KeyboardEvent) => {
+  //     if (event.repeat) {
+  //       return;
+  //     }
+
+  //     if (event.key === "ArrowUp") {
+  //       setTickSpeed(TickSpeed.Normal);
+  //     }
+
+  //     if (event.key === "ArrowLeft") {
+  //       isPressingLeft = false;
+  //       updateMovementInterval();
+  //     }
+
+  //     if (event.key === "ArrowRight") {
+  //       isPressingRight = false;
+  //       updateMovementInterval();
+  //     }
+  //   };
+
+  //   // document.addEventListener("keydown", handleKeyDown);
+  //   // document.addEventListener("keyup", handleKeyUp);
+  //   return () => {
+  //     // document.removeEventListener("keydown", handleKeyDown);
+  //     // document.removeEventListener("keyup", handleKeyUp);
+  //     clearInterval(moveIntervalID);
+  //     setTickSpeed(TickSpeed.Normal);
+  //   };
+  // }, [dispatchBoardState, isPlaying]);
 
   const renderedBoard = structuredClone(board);
   if (isPlaying) {
