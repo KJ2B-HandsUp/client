@@ -1,34 +1,35 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import Board from "./components/Board";
+import UpcomingBlocks from "./components/UpcommingBlocks";
+import { useTetris } from "./hooks/useTetris";
+import WebCam from "./components/WebCam";
+
+import "./index.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { board, startGame, isPlaying, score, upComingBlocks } = useTetris();
+  const { videoRef, getUserCamera } = WebCam();
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="App">
+      <h1>Tetris</h1>
+      <video className="webcam" ref={videoRef} autoPlay></video>
+      <Board currentBoard={board} />
+      <div className="controls">
+        <h2>Score: {score}</h2>
+        {isPlaying ? (
+          <UpcomingBlocks upcomingBlocks={upComingBlocks} />
+        ) : (
+          <button onClick={startGame}>New Game</button>
+        )}
+        <button
+          onClick={() => {
+            getUserCamera().catch((e) => console.log(e));
+          }}
+        >
+          카메라 ON
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   );
 }
 
