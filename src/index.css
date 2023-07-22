@@ -14,6 +14,13 @@
   overflow: hidden;
 }
 
+.loginBtn {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  text-align: center;
+}
+
 .hand-detect {
   transform-origin: left;
   transform: scale(1);

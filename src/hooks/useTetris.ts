@@ -18,9 +18,9 @@ import {
 import { MoveContext } from "../pages/GamePage";
 
 enum TickSpeed {
-  Normal = 800,
+  Normal = 1000,
   Sliding = 100,
-  Fast = 50,
+  Fast = 100,
 }
 
 export function useTetris() {

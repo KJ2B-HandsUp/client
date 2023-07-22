@@ -17,6 +17,7 @@ export default function Game() {
         ) : (
           <button onClick={startGame}>New Game</button>
         )}
+        <button>Share Video</button>
       </div>
     </>
   );

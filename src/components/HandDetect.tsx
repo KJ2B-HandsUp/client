@@ -6,6 +6,7 @@ import { drawCanvas } from "../utils/drawCanvas";
 import useInterval from "../hooks/useInterval";
 import React from "react";
 import { MoveContext } from "../pages/GamePage";
+import { Vector } from "./types";
 
 export default function HandDetect() {
   const moveContext = React.useContext(MoveContext);
@@ -139,12 +140,21 @@ function checkMotion(
   let totalMoveX = 0;
   let totalMoveY = 0;
   let result = "nothing";
-
-  currentHand[fingerNum];
+  let totalAngle = 0;
 
   fingerNum.map((idx) => {
     totalMoveX += currentHand[idx].x - prevHand[idx].x;
     totalMoveY += currentHand[idx].y - prevHand[idx].y;
+    totalAngle += calculateAngle(
+      {
+        x: currentHand[idx].x - currentHand[0].x,
+        y: currentHand[idx].y - currentHand[0].y,
+      },
+      {
+        x: prevHand[idx].x - prevHand[0].x,
+        y: prevHand[idx].y - prevHand[0].y,
+      },
+    );
   });
 
   if (totalMoveX > 0.4) {
@@ -155,10 +165,28 @@ function checkMotion(
 
   if (totalMoveY > 0.4) {
     result = "down";
-  } else if (totalMoveY < -0.4) {
+  }
+
+  if (totalAngle / fingerNum.length > 30) {
     result = "up";
   }
 
   //console.log(result);
   return result;
+}
+
+function calculateAngle(A: Vector, B: Vector): number {
+  const dotProduct: number = A.x * B.x + A.y * B.y;
+  const magnitudeA: number = Math.sqrt(A.x * A.x + A.y * A.y);
+  const magnitudeB: number = Math.sqrt(B.x * B.x + B.y * B.y);
+
+  const cosTheta: number = dotProduct / (magnitudeA * magnitudeB);
+
+  // acos function returns the angle in radians
+  const thetaInRadians: number = Math.acos(cosTheta);
+
+  // convert to degrees if needed
+  const thetaInDegrees: number = thetaInRadians * (180 / Math.PI);
+
+  return thetaInDegrees; // or return thetaInDegrees;
 }

@@ -75,3 +75,8 @@ export const SHAPES: ShapesObj = {
     ],
   },
 };
+
+export type Vector = {
+  x: number;
+  y: number;
+};
