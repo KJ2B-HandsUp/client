@@ -15,7 +15,9 @@
     "@mediapipe/hands": "^0.4.1675469240",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-webcam": "^7.1.1"
+    "react-router-dom": "^6.14.2",
+    "react-webcam": "^7.1.1",
+    "styled-components": "^6.0.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",

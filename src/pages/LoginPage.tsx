@@ -1,18 +1,22 @@
-import "../index.css";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
 
-type LoginProps = {
-  onLogined: React.Dispatch<React.SetStateAction<boolean>>;
-};
+const LoginPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 20px;
+`;
 
-export default function LoginPage({ onLogined }: LoginProps) {
+export default function LoginPage() {
   return (
-    <div className="loginBtn">
-      <h2>Login</h2>
-      <img
-        alt="카카오 로그인"
-        src="/kakao_login_medium.png"
-        onClick={() => onLogined(true)}
-      />
-    </div>
+    <LoginPageWrapper>
+      <h1>Put Your Hands Up</h1>
+      <NavLink to="/home">
+        <img alt="카카오 로그인" src="/kakao_login_medium.png" />
+      </NavLink>
+    </LoginPageWrapper>
   );
 }

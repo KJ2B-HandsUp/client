@@ -1,24 +1,9 @@
-.App {
-  display: grid;
-  grid-template-areas:
-    "title title title"
-    ". game controls";
-  grid-template-columns: repeat(3, 1fr);
-}
-
 .game-container {
   grid-area: game;
   position: relative;
   user-select: none;
   margin: auto;
   overflow: hidden;
-}
-
-.loginBtn {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  text-align: center;
 }
 
 .hand-detect {
@@ -33,18 +18,8 @@
   min-width: 0;
 }
 
-h1 {
-  text-align: center;
-  grid-area: title;
-}
-
-.controls {
-  grid-area: controls;
-}
-
 .board {
   border: 2px solid black;
-
   box-sizing: border-box;
 }
 
