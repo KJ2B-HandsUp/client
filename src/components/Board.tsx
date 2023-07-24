@@ -1,4 +1,4 @@
-import { CellOptions } from "./types";
+import { CellOptions } from "../types/types";
 import Cell from "./Cell";
 import { styled } from "styled-components";
 

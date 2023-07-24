@@ -6,7 +6,7 @@ import {
   SHAPES,
   CellOptions,
   EmptyCell,
-} from "../components/types";
+} from "../types/types";
 
 export const BOARD_WIDTH = 12;
 export const BOARD_HEIGHT = 20;

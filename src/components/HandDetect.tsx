@@ -6,7 +6,7 @@ import { drawCanvas } from "../utils/drawCanvas";
 import useInterval from "../hooks/useInterval";
 import React from "react";
 import { MoveContext } from "../pages/GamePage";
-import { Vector } from "./types";
+import { Vector } from "../types/types";
 
 const cameraViewHeight = 640;
 const cameraViewWidth = 400;

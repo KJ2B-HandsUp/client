@@ -1,23 +1,25 @@
 import { NavLink } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
 import styled from "styled-components";
+import tetris_gif from "/tetris.gif";
 
-const Side = styled.div`
-  position: fixed;
+const SideBarWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  position: fixed;
   background-color: #212529;
   border-right: 2px solid #e0e0e0;
-  flex-direction: column;
+  box-shadow: 0px 0px 10px 0px;
+  top: 0;
+  left: 0;
   width: 400px;
   height: 100vh;
-  box-shadow: 0px 0px 10px 0px;
   align-items: center;
   text-align: center;
   font-family: "Ramche";
-  z-index: 100000;
-  top: 0;
-  left: 0;
+  font-size: 40px;
   overflow: auto;
+  z-index: 100000;
 `;
 
 const TitleHeader = styled.div`
@@ -35,12 +37,8 @@ const TitleHeader = styled.div`
   border: 3px solid #ffffff;
 `;
 
-const SideBarWrapper = styled.div`
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  height: 100vh;
-  font-size: 40px;
+const SidebarFooter = styled.div`
+  margin-top: 50px;
 `;
 
 function Sidebar() {
@@ -52,27 +50,28 @@ function Sidebar() {
 
   return (
     <SideBarWrapper>
-      <Side>
-        <TitleHeader>Put Your Hands Up</TitleHeader>
-        {menus.map((menu, index) => {
-          return (
-            <NavLink
-              to={menu.path}
-              key={index}
-              style={({ isActive }) => {
-                return {
-                  fontWeight: isActive ? "bold" : "",
-                  color: isActive ? "white" : "gray",
-                  textDecoration: "none",
-                  marginTop: "30px",
-                };
-              }}
-            >
-              <SidebarItem menu={menu} />
-            </NavLink>
-          );
-        })}
-      </Side>
+      <TitleHeader>Put Your Hands Up</TitleHeader>
+      {menus.map((menu, index) => {
+        return (
+          <NavLink
+            to={menu.path}
+            key={index}
+            style={({ isActive }) => {
+              return {
+                fontWeight: isActive ? "bold" : "",
+                color: isActive ? "white" : "gray",
+                textDecoration: "none",
+                marginTop: "30px",
+              };
+            }}
+          >
+            <SidebarItem menu={menu} />
+          </NavLink>
+        );
+      })}
+      <SidebarFooter>
+        <img src="/tetris.gif" />
+      </SidebarFooter>
     </SideBarWrapper>
   );
 }

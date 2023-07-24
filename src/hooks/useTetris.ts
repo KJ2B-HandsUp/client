@@ -14,7 +14,7 @@ import {
   BoardShape,
   EmptyCell,
   SHAPES,
-} from "../components/types";
+} from "../types/types";
 import { MoveContext } from "../pages/GamePage";
 
 enum TickSpeed {

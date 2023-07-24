@@ -1,32 +1,24 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
+import { Room } from "../types/rooms";
 
 interface ModalProps {
+  roomInfo: Room | null;
   show: boolean;
   onHide: () => void;
 }
 
-export default function RoomJoinModal(props: ModalProps) {
+export default function RoomJoinModal({ roomInfo, show, onHide }: ModalProps) {
   return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+    <Modal onHide={onHide} show={show} centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
+          <h2>{roomInfo?.roomId} 에 입장하시겠습니까?</h2>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>Centered Modal</h4>
-        <p>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
-        </p>
+        <h3>{roomInfo?.description}</h3>
       </Modal.Body>
       <Modal.Footer>
         <Button>
