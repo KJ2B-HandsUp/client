@@ -4,7 +4,8 @@ import Row from "react-bootstrap/Row";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import tetris_banner from "/tetris_banner2.png";
-import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import RoomJoinModal from "../components/RoomJoinModal";
 
 type Room = {
   roomId: string;
@@ -47,6 +48,8 @@ const Banner = styled.div`
 `;
 
 export default function RoomListPage() {
+  const [modalShow, setModalShow] = useState(false);
+
   return (
     <RoomListPageWrapper>
       <Banner />
@@ -75,26 +78,25 @@ export default function RoomListPage() {
               </Card.Body>
 
               <Button
-                style={{ borderRadius: 0 }}
                 variant={colorList[idx % colorList.length].toLowerCase()}
+                style={{
+                  borderRadius: 0,
+                  color:
+                    colorList[idx % colorList.length].toLowerCase() === "light"
+                      ? "black"
+                      : "white",
+                }}
+                onClick={() => {
+                  setModalShow(true);
+                }}
               >
-                <NavLink
-                  to="/game"
-                  style={{
-                    color:
-                      colorList[idx % colorList.length].toLowerCase() ===
-                      "light"
-                        ? "black"
-                        : "white",
-                  }}
-                >
-                  Join
-                </NavLink>
+                Join
               </Button>
             </Card>
           </Col>
         ))}
       </Row>
+      <RoomJoinModal show={modalShow} onHide={() => setModalShow(false)} />
     </RoomListPageWrapper>
   );
 }

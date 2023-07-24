@@ -27,6 +27,12 @@ const TitleHeader = styled.div`
   margin-bottom: 50px;
   font-size: 50px;
   font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 180px;
+  border: 3px solid #ffffff;
 `;
 
 const SideBarWrapper = styled.div`

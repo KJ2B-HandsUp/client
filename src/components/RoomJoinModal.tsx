@@ -7,7 +7,7 @@ interface ModalProps {
   onHide: () => void;
 }
 
-export default function Modals(props: ModalProps) {
+export default function RoomJoinModal(props: ModalProps) {
   return (
     <Modal
       {...props}
@@ -29,9 +29,9 @@ export default function Modals(props: ModalProps) {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <NavLink to="/game">
-          <Button>Close</Button>
-        </NavLink>
+        <Button>
+          <NavLink to="/game">Join</NavLink>
+        </Button>
       </Modal.Footer>
     </Modal>
   );
