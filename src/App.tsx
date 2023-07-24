@@ -7,7 +7,9 @@ import {
 } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
+import GamePage from "./pages/GamePage";
 import "bootstrap/dist/css/bootstrap.css";
+import "./index.css";
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home/*" element={<MainPage />} />
+          <Route path="/game" element={<GamePage />} />
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>

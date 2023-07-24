@@ -51,8 +51,8 @@ export default function HandDetect() {
         onFrame: async () => {
           await hands.send({ image: webcamRef.current!.video! });
         },
-        width: cameraViewHeight,
-        height: cameraViewWidth,
+        width: cameraViewWidth,
+        height: cameraViewHeight,
       });
       camera.start();
     }

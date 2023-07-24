@@ -306,8 +306,10 @@ function addShapeToBoard(
     .forEach((row: boolean[], rowIndex: number) => {
       row.forEach((isSet: boolean, colIndex: number) => {
         if (isSet) {
-          board[droppingRow + rowIndex][droppingColumn + colIndex] =
-            droppingBlock;
+          if (board.length > 0) {
+            board[droppingRow + rowIndex][droppingColumn + colIndex] =
+              droppingBlock;
+          }
         }
       });
     });

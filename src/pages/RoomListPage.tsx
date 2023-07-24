@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import tetris_banner from "/tetris_banner2.png";
+import { NavLink } from "react-router-dom";
 
 type Room = {
   roomId: string;
@@ -65,17 +66,30 @@ export default function RoomListPage() {
                 marginLeft: 30,
                 marginBottom: 10,
                 overflow: "hidden",
+                boxShadow: "5px 5px 10px #f4aab9",
               }}
             >
               <Card.Header>{roomInfo.roomId}</Card.Header>
               <Card.Body>
                 <Card.Text>This is a 게임방입니다.</Card.Text>
               </Card.Body>
+
               <Button
                 style={{ borderRadius: 0 }}
                 variant={colorList[idx % colorList.length].toLowerCase()}
               >
-                Join
+                <NavLink
+                  to="/game"
+                  style={{
+                    color:
+                      colorList[idx % colorList.length].toLowerCase() ===
+                      "light"
+                        ? "black"
+                        : "white",
+                  }}
+                >
+                  Join
+                </NavLink>
               </Button>
             </Card>
           </Col>

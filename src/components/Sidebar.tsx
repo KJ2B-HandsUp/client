@@ -34,6 +34,7 @@ const SideBarWrapper = styled.div`
   left: 0;
   bottom: 0;
   height: 100vh;
+  font-size: 40px;
 `;
 
 function Sidebar() {
@@ -54,7 +55,6 @@ function Sidebar() {
               key={index}
               style={({ isActive }) => {
                 return {
-                  border: "2px solid white",
                   fontWeight: isActive ? "bold" : "",
                   color: isActive ? "white" : "gray",
                   textDecoration: "none",

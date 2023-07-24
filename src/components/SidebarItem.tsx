@@ -9,10 +9,8 @@ interface SidebarItemProps {
 }
 
 const SidebarItemWrapper = styled.div`
-  width: 300px;
-  height: 60px;
-  border-color: yellow;
-  border-radius: 1em;
+  width: 100px;
+  height: 80px;
   background-color: #212529;
   display: flex;
   justify-content: center;

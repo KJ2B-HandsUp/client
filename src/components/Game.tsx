@@ -1,16 +1,19 @@
 import Board from "./Board";
 import UpcomingBlocks from "./UpcommingBlocks";
 import { useTetris } from "../hooks/useTetris";
+import styled from "styled-components";
 
-import "../index.css";
+const GameWrapper = styled.div`
+  align-items: center;
+`;
 
 export default function Game() {
   const { board, startGame, isPlaying, score, upComingBlocks } = useTetris();
 
   return (
-    <>
+    <GameWrapper>
       <Board currentBoard={board} />
-      <div className="controls">
+      <div>
         <h2>Score: {score}</h2>
         {isPlaying ? (
           <UpcomingBlocks upcomingBlocks={upComingBlocks} />
@@ -19,6 +22,6 @@ export default function Game() {
         )}
         <button>Share Video</button>
       </div>
-    </>
+    </GameWrapper>
   );
 }
