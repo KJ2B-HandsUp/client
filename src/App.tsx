@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
+import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
   return (

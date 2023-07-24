@@ -8,19 +8,18 @@ import React from "react";
 import { MoveContext } from "../pages/GamePage";
 import { Vector } from "./types";
 
+const cameraViewHeight = 640;
+const cameraViewWidth = 400;
+
 export default function HandDetect() {
   const moveContext = React.useContext(MoveContext);
-  const moveType = moveContext?.moveType;
   const setMoveType = moveContext?.setMoveType;
 
   const webcamRef = useRef<Webcam>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const resultsRef = useRef<Results>();
   let prevPose: NormalizedLandmarkList;
 
-  /**
-   * @param results
-   */
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const onResults = useCallback((results: Results) => {
     resultsRef.current = results;
 
@@ -36,7 +35,7 @@ export default function HandDetect() {
     });
 
     hands.setOptions({
-      maxNumHands: 2,
+      maxNumHands: 1,
       modelComplexity: 1,
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5,
@@ -52,18 +51,12 @@ export default function HandDetect() {
         onFrame: async () => {
           await hands.send({ image: webcamRef.current!.video! });
         },
-        width: 1280,
-        height: 720,
+        width: cameraViewHeight,
+        height: cameraViewWidth,
       });
       camera.start();
     }
   }, [onResults]);
-
-  const OutputData = () => {
-    const results = resultsRef.current!;
-    console.log(results.multiHandLandmarks[0][4]);
-    console.log(results.multiHandedness[0]);
-  };
 
   useInterval(() => {
     if (resultsRef && resultsRef.current) {
@@ -82,22 +75,15 @@ export default function HandDetect() {
       <canvas
         ref={canvasRef}
         className="motion-data"
-        width={500}
-        height={700}
+        width={cameraViewWidth}
+        height={cameraViewHeight}
       />
       <Webcam
         audio={false}
         style={{ visibility: "hidden" }}
-        width={500}
-        height={700}
         ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        videoConstraints={{ width: 500, height: 500, facingMode: "user" }}
+        videoConstraints={{ facingMode: "user" }}
       />
-
-      <button className="detect-btn" onClick={OutputData}>
-        Output Data
-      </button>
     </div>
   );
 }

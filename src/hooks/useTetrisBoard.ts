@@ -133,8 +133,6 @@ function boardReducer(state: BoardState, action: Action): BoardState {
       };
     case "move":
       {
-        console.log(action.isPressingLeft);
-        console.log(action.isPressingRight);
         const rotatedShape = action.isRotating
           ? rotateBlock(newState.droppingShape)
           : newState.droppingShape;

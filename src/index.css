@@ -1,5 +1,15 @@
+@font-face {
+  font-family: "Ramche";
+  src: url("/Ramche.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Ramche";
+}
+
 .game-container {
-  grid-area: game;
   position: relative;
   user-select: none;
   margin: auto;
@@ -8,14 +18,10 @@
 
 .hand-detect {
   transform-origin: left;
-  transform: scale(1);
-  width: 500px;
-  aspect-ratio: 12/20;
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
-  min-width: 0;
 }
 
 .board {
@@ -28,7 +34,7 @@
 }
 
 .cell {
-  width: 35px;
+  width: 30px;
   aspect-ratio: 1;
   border: 1px solid black;
 }

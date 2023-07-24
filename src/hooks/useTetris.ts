@@ -297,6 +297,10 @@ function addShapeToBoard(
   droppingRow: number,
   droppingColumn: number,
 ) {
+  if (!board) {
+    console.log("board is not exit!");
+  }
+
   droppingShape
     .filter((row) => row.some((isSet) => isSet))
     .forEach((row: boolean[], rowIndex: number) => {

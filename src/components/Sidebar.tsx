@@ -3,11 +3,36 @@ import SidebarItem from "./SidebarItem";
 import styled from "styled-components";
 
 const Side = styled.div`
+  position: fixed;
   display: flex;
-  border-right: 1px solid #e0e0e0;
+  background-color: #212529;
+  border-right: 2px solid #e0e0e0;
   flex-direction: column;
+  width: 400px;
+  height: 100vh;
+  box-shadow: 0px 0px 10px 0px;
   align-items: center;
-  width: 300px;
+  text-align: center;
+  font-family: "Ramche";
+  z-index: 100000;
+  top: 0;
+  left: 0;
+  overflow: auto;
+`;
+
+const TitleHeader = styled.div`
+  italic: true;
+  color: #ffffff;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-size: 50px;
+  font-weight: 700;
+`;
+
+const SideBarWrapper = styled.div`
+  position: fixed;
+  left: 0;
+  bottom: 0;
   height: 100vh;
 `;
 
@@ -19,26 +44,30 @@ function Sidebar() {
   ];
 
   return (
-    <Side>
-      <h2>Put Your Hands Up</h2>
-      {menus.map((menu, index) => {
-        return (
-          <NavLink
-            to={menu.path}
-            key={index}
-            style={({ isActive }) => {
-              return {
-                fontWeight: isActive ? "bold" : "",
-                color: isActive ? "black" : "gray",
-                textDecoration: "none",
-              };
-            }}
-          >
-            <SidebarItem menu={menu} />
-          </NavLink>
-        );
-      })}
-    </Side>
+    <SideBarWrapper>
+      <Side>
+        <TitleHeader>Put Your Hands Up</TitleHeader>
+        {menus.map((menu, index) => {
+          return (
+            <NavLink
+              to={menu.path}
+              key={index}
+              style={({ isActive }) => {
+                return {
+                  border: "2px solid white",
+                  fontWeight: isActive ? "bold" : "",
+                  color: isActive ? "white" : "gray",
+                  textDecoration: "none",
+                  marginTop: "30px",
+                };
+              }}
+            >
+              <SidebarItem menu={menu} />
+            </NavLink>
+          );
+        })}
+      </Side>
+    </SideBarWrapper>
   );
 }
 
