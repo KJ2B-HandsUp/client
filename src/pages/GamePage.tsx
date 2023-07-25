@@ -18,7 +18,6 @@ export default function GamePage() {
 
   const getMedia = async () => {
     if (videoElement.current) {
-      console.log("done!");
       try {
         const stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
