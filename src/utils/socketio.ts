@@ -1,19 +1,11 @@
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import * as mediasoupClient from "mediasoup-client";
 import {
   DtlsParameters,
   RtpCapabilities,
   RtpParameters,
   Transport,
-  IceParameters,
-  IceCandidate,
-  SctpParameters,
-  AppData,
-  TransportListenIp,
-  TransportTuple,
-  ProducerOptions,
 } from "mediasoup/node/lib/types";
-import { TransportOptions } from "mediasoup-client/lib/types";
 import { Device } from "mediasoup-client";
 
 let device: Device;
@@ -21,7 +13,6 @@ let rtpCapabilities: RtpCapabilities;
 
 let producerTransport;
 let consumerTransports: Transport[] = [];
-let audioProducer;
 let videoProducer;
 
 const params = {
@@ -340,7 +331,7 @@ const connectRecvTransport = async (
 // socket.on("producer-closed")
 export const closeProducer = (remoteProducerId: string) => {
   const producerToClose = consumerTransports.find(
-    (transportData) => transportData.producerId === remoteProducerId,
+    (transportData) => transportData.appData.producerId === remoteProducerId,
   );
 
   if (!producerToClose) {
@@ -348,11 +339,10 @@ export const closeProducer = (remoteProducerId: string) => {
     return;
   }
 
-  producerToClose.consumerTransport.close();
-  producerToClose.consumer.close();
+  producerToClose.close();
 
   consumerTransports = consumerTransports.filter(
-    (transportData) => transportData.producerId !== remoteProducerId,
+    (transportData) => transportData.appData.producerId !== remoteProducerId,
   );
 
   // todo: remove video

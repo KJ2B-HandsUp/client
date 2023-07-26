@@ -1,10 +1,10 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
-import { Room } from "../types/roomType";
+import { RoomData } from "../types/roomType";
 
 interface ModalProps {
-  roomInfo: Room | null;
+  roomInfo: RoomData | null;
   show: boolean;
   onHide: () => void;
 }

@@ -1,6 +1,6 @@
 import Game from "../components/Game";
 import HandDetect from "../components/HandDetect";
-import { useState, useRef, useEffect, useMemo, createContext } from "react";
+import { useState, useRef, useMemo, createContext } from "react";
 import {
   signalNewConsumerTransport,
   closeProducer,
@@ -29,14 +29,13 @@ export default function GamePage() {
   const player1VideoRef = useRef<HTMLVideoElement>(null);
 
   const { roomId } = useParams();
-
+  const handleBeforeUnload = () => {
+    socket.emit("disconnect");
+  };
   useMemo(() => {
     if (socket == null) {
       socket = io("https://choijungle.shop/mediasoup");
 
-      const handleBeforeUnload = (event) => {
-        socket.emit("disconnect");
-      };
       window.addEventListener("beforeunload", handleBeforeUnload);
 
       socket.on("connection-success", ({ socketId }: { socketId: string }) => {

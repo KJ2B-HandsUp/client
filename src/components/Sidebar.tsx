@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
 import styled from "styled-components";
-import tetris_gif from "/tetris.gif";
 
 const SideBarWrapper = styled.div`
   display: flex;

@@ -139,7 +139,6 @@ export function useTetris() {
 
     let isPressingLeft = false;
     let isPressingRight = false;
-    let moveIntervalID: number | undefined;
 
     const updateMovementInterval = () => {
       dispatchBoardState({
