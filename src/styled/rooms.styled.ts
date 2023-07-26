@@ -1,6 +1,5 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 import tetris_banner from "/tetris_banner2.png";
-
 
 export const RoomListPageWrapper = styled.div`
   flex-direction: column;
@@ -17,3 +16,5 @@ export const Banner = styled.div`
   height: 900px;
   width: 1500px;
 `;
+
+export const RoomListWrapper = styled.div``;

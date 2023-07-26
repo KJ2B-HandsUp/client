@@ -19,7 +19,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home/*" element={<MainPage />} />
-          <Route path="/game" element={<GamePage />} />
+          <Route path="/game/:roomId" element={<GamePage />} />
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>

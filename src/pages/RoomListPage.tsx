@@ -1,19 +1,17 @@
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Button } from "react-bootstrap";
-import styled from "styled-components";
-import { useState, useEffect, useMemo } from "react";
-import { io } from "socket.io-client";
+import { Button, Form } from "react-bootstrap";
+import { useState, useMemo } from "react";
 import RoomJoinModal from "../components/RoomJoinModal";
-import { RoomData, RoomList } from "../types/roomType";
-import { Banner, RoomListPageWrapper } from "../styled/styled-components.js";
+import { RoomData } from "../types/roomType";
 import {
-  getLocalStream,
-  signalNewConsumerTransport,
-  closeProducer,
-} from "../utils/socketio";
-import fetchData from "../utils/fetchData";
+  Banner,
+  RoomListPageWrapper,
+  RoomListWrapper,
+} from "../styled/rooms.styled";
+import { useNavigate } from "react-router-dom";
+import { fetchData } from "../utils/fetchData";
 
 const colorList: string[] = [
   "Primary",
@@ -25,8 +23,6 @@ const colorList: string[] = [
   "Light",
 ];
 
-const RoomListWrapper = styled.div``;
-
 export default function RoomListPage() {
   const [modalShow, setModalShow] = useState(false);
   const [room, setRoom] = useState<RoomData | null>(null);
@@ -34,8 +30,20 @@ export default function RoomListPage() {
     { roomId: "room1", description: "This is Room 1!!!" },
     { roomId: "room2", description: "This is Room 2!!!" },
   ]);
+  const [newRoomId, setNewRoomId] = useState<string>("");
 
-  let socket;
+  const navigate = useNavigate();
+
+  const handleNewRoomIdChange = (e) => {
+    setNewRoomId(e.target.value);
+  };
+
+  const handleNewRoomIdSubmit = () => {
+    alert(`Room: ${newRoomId} created!`);
+    console.log(newRoomId);
+    navigate(`/game/${newRoomId}`);
+  };
+
   useMemo(() => {
     const tempRoomList: RoomData[] = [];
     fetchData()
@@ -52,14 +60,25 @@ export default function RoomListPage() {
         setRoomList(tempRoomList);
       })
       .catch((err) => console.error(err));
-
-    socket = io("https://choijungle.shop/mediasoup");
   }, []);
 
   return (
     <>
       <RoomListPageWrapper>
         <Banner />
+        <Form style={{ width: "200px", marginLeft: "300px" }}>
+          <Form.Group className="sm" controlId="formBasicPassword">
+            <Form.Label>Room ID</Form.Label>
+            <Form.Control
+              placeholder="Room ID"
+              value={newRoomId}
+              onChange={handleNewRoomIdChange}
+            />
+          </Form.Group>
+          <Button variant="primary" onClick={handleNewRoomIdSubmit}>
+            Submit
+          </Button>
+        </Form>
         <RoomListWrapper>
           <Row xs={1} md={2} className="g-4">
             {roomList?.map((roomInfo, idx) => (
