@@ -17,7 +17,8 @@ export default function HandDetect() {
 
   const webcamRef = useRef<Webcam>(null);
   const resultsRef = useRef<Results>();
-  let prevPose: NormalizedLandmarkList;
+  let prevRightPose: NormalizedLandmarkList;
+  let prevLeftPose: NormalizedLandmarkList;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const onResults = useCallback((results: Results) => {
@@ -35,7 +36,7 @@ export default function HandDetect() {
     });
 
     hands.setOptions({
-      maxNumHands: 1,
+      maxNumHands: 2,
       modelComplexity: 1,
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5,
@@ -59,16 +60,38 @@ export default function HandDetect() {
   }, [onResults]);
 
   useInterval(() => {
-    if (resultsRef && resultsRef.current) {
-      const results = resultsRef.current.multiHandLandmarks[0];
+    if (
+      resultsRef &&
+      resultsRef.current &&
+      resultsRef.current.multiHandedness.length == 2
+    ) {
+      const rightResults = resultsRef.current.multiHandLandmarks[1];
+      const leftResults = resultsRef.current.multiHandLandmarks[0];
+      let moveType = "nothing";
 
-      const moveType: string = checkMotion(prevPose, results);
-      if (setMoveType) {
-        setMoveType(moveType);
+      if (resultsRef.current.multiHandedness[0].label === "Right") {
+        moveType = checkRightMotion(prevLeftPose, leftResults);
+        if (setMoveType && moveType !== "nothing") {
+          setMoveType(moveType);
+          console.log(`Left is ${moveType} in HandDetect`);
+          console.log(leftResults);
+        }
+        prevLeftPose = leftResults;
       }
-      prevPose = results;
+      if (
+        moveType === "nothing" &&
+        resultsRef.current.multiHandedness[1].label === "Left"
+      ) {
+        moveType = checkLeftMotion(prevRightPose, rightResults);
+        if (setMoveType && moveType !== "nothing") {
+          setMoveType(moveType);
+          console.log(`Right is ${moveType} in HandDetect`);
+          console.log(rightResults);
+        }
+        prevRightPose = rightResults;
+      }
     }
-  }, 50);
+  }, 20);
 
   return (
     <div className="hand-detect">
@@ -88,7 +111,19 @@ export default function HandDetect() {
   );
 }
 
-function checkMotion(
+function calculateAngle(A: Vector, B: Vector): number {
+  const dotProduct: number = A.x * B.x + A.y * B.y;
+  const magnitudeA: number = Math.sqrt(A.x * A.x + A.y * A.y);
+  const magnitudeB: number = Math.sqrt(B.x * B.x + B.y * B.y);
+
+  const cosTheta: number = dotProduct / (magnitudeA * magnitudeB);
+  const thetaInRadians: number = Math.acos(cosTheta);
+  const thetaInDegrees: number = thetaInRadians * (180 / Math.PI);
+
+  return thetaInDegrees;
+}
+
+function checkRightMotion(
   prevHand: NormalizedLandmarkList,
   currentHand: NormalizedLandmarkList,
 ): string {
@@ -97,31 +132,6 @@ function checkMotion(
   }
 
   const fingerNum = [4, 8, 12, 16, 20];
-  const fingerX = fingerNum.map((idx) => currentHand[idx].x);
-  if (
-    Math.abs(
-      fingerX.reduce(function add(sum, currValue) {
-        return sum + currValue;
-      }, 0) /
-        fingerNum.length -
-        0.5,
-    ) > 0.2
-  ) {
-    return "nothing";
-  }
-
-  const fingerY = fingerNum.map((idx) => currentHand[idx].y);
-  if (
-    Math.abs(
-      fingerY.reduce(function add(sum, currValue) {
-        return sum + currValue;
-      }, 0) /
-        fingerNum.length -
-        0.5,
-    ) > 0.2
-  ) {
-    return "nothing";
-  }
 
   let totalMoveX = 0;
   let totalMoveY = 0;
@@ -143,36 +153,65 @@ function checkMotion(
     );
   });
 
-  if (totalMoveX > 0.4) {
-    result = "left";
-  } else if (totalMoveX < -0.4) {
+  if (totalMoveX < -0.3) {
     result = "right";
+    return result;
   }
 
   if (totalMoveY > 0.4) {
     result = "down";
+    return result;
   }
 
   if (totalAngle / fingerNum.length > 30) {
     result = "up";
   }
-
   //console.log(result);
   return result;
 }
 
-function calculateAngle(A: Vector, B: Vector): number {
-  const dotProduct: number = A.x * B.x + A.y * B.y;
-  const magnitudeA: number = Math.sqrt(A.x * A.x + A.y * A.y);
-  const magnitudeB: number = Math.sqrt(B.x * B.x + B.y * B.y);
+function checkLeftMotion(
+  prevHand: NormalizedLandmarkList,
+  currentHand: NormalizedLandmarkList,
+): string {
+  if (!(currentHand && prevHand)) {
+    return "nothing";
+  }
 
-  const cosTheta: number = dotProduct / (magnitudeA * magnitudeB);
+  const fingerNum = [4, 8, 12, 16, 20];
 
-  // acos function returns the angle in radians
-  const thetaInRadians: number = Math.acos(cosTheta);
+  let totalMoveX = 0;
+  let totalMoveY = 0;
+  let result = "nothing";
+  let totalAngle = 0;
 
-  // convert to degrees if needed
-  const thetaInDegrees: number = thetaInRadians * (180 / Math.PI);
+  fingerNum.map((idx) => {
+    totalMoveX += currentHand[idx].x - prevHand[idx].x;
+    totalMoveY += currentHand[idx].y - prevHand[idx].y;
+    totalAngle += calculateAngle(
+      {
+        x: currentHand[idx].x - currentHand[0].x,
+        y: currentHand[idx].y - currentHand[0].y,
+      },
+      {
+        x: prevHand[idx].x - prevHand[0].x,
+        y: prevHand[idx].y - prevHand[0].y,
+      },
+    );
+  });
 
-  return thetaInDegrees; // or return thetaInDegrees;
+  if (totalMoveX > 0.3) {
+    result = "left";
+    return result;
+  }
+  if (totalMoveY > 0.4) {
+    result = "down";
+    return result;
+  }
+
+  if (totalAngle / fingerNum.length > 30) {
+    result = "up";
+  }
+  //console.log(result);
+  return result;
 }

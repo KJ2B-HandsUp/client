@@ -3,22 +3,17 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
-import tetris_banner from "/tetris_banner2.png";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { io } from "socket.io-client";
 import RoomJoinModal from "../components/RoomJoinModal";
-import { Room } from "../types/rooms";
-
-const roomList: Room[] = [
-  { roomId: "room1", description: "This is Room 1!!!" },
-  { roomId: "room2", description: "This is Room 2!!!" },
-  { roomId: "room3", description: "This is Room 3!!!" },
-  { roomId: "room4", description: "This is Room 4!!!" },
-  { roomId: "room5", description: "This is Room 5!!!" },
-  { roomId: "room6", description: "This is Room 6!!!" },
-  { roomId: "room7", description: "This is Room 7!!!" },
-  { roomId: "room8", description: "This is Room 8!!!" },
-  { roomId: "room9", description: "This is Room 9!!!" },
-];
+import { RoomData, RoomList } from "../types/roomType";
+import { Banner, RoomListPageWrapper } from "../styled/styled-components.js";
+import {
+  getLocalStream,
+  signalNewConsumerTransport,
+  closeProducer,
+} from "../utils/socketio";
+import fetchData from "../utils/fetchData";
 
 const colorList: string[] = [
   "Primary",
@@ -30,27 +25,36 @@ const colorList: string[] = [
   "Light",
 ];
 
-const RoomListPageWrapper = styled.div`
-  flex-direction: column;
-  background-color: #000000;
-  background-attachment: fixed;
-  padding-left: 400px;
-  top: 0;
-`;
-
-const Banner = styled.div`
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${tetris_banner});
-  background-size: cover;
-  height: 900px;
-  width: 1500px;
-`;
-
 const RoomListWrapper = styled.div``;
 
 export default function RoomListPage() {
   const [modalShow, setModalShow] = useState(false);
-  const [room, setRoom] = useState<Room | null>(null);
+  const [room, setRoom] = useState<RoomData | null>(null);
+  const [roomList, setRoomList] = useState<RoomData[] | null>([
+    { roomId: "room1", description: "This is Room 1!!!" },
+    { roomId: "room2", description: "This is Room 2!!!" },
+  ]);
+
+  let socket;
+  useMemo(() => {
+    const tempRoomList: RoomData[] = [];
+    fetchData()
+      .then((res) => {
+        Object.entries(res).forEach(([key, value]) => {
+          console.log("Key: ", key, ", Value: ", value);
+          const { roomId, ...rest } = value;
+          tempRoomList.push({
+            roomId: key,
+            description: `This is room ${key}`,
+            ...rest,
+          });
+        });
+        setRoomList(tempRoomList);
+      })
+      .catch((err) => console.error(err));
+
+    socket = io("https://choijungle.shop/mediasoup");
+  }, []);
 
   return (
     <>
@@ -58,8 +62,8 @@ export default function RoomListPage() {
         <Banner />
         <RoomListWrapper>
           <Row xs={1} md={2} className="g-4">
-            {roomList.map((roomInfo, idx) => (
-              <Col>
+            {roomList?.map((roomInfo, idx) => (
+              <Col key={idx}>
                 <Card
                   key={idx}
                   border={colorList[idx % colorList.length].toLowerCase()}

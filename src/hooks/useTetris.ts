@@ -20,7 +20,7 @@ import { MoveContext } from "../pages/GamePage";
 enum TickSpeed {
   Normal = 1000,
   Sliding = 100,
-  Fast = 100,
+  Fast = 10,
 }
 
 export function useTetris() {
@@ -132,8 +132,6 @@ export function useTetris() {
     }
     gameTick();
   }, tickSpeed);
-  const prevMoveType = "nothing";
-
   useEffect(() => {
     if (!isPlaying) {
       return;
@@ -152,14 +150,11 @@ export function useTetris() {
     };
 
     if (moveType === "nothing") {
-      if (prevMoveType != "nothing") {
-        isPressingLeft = false;
-        isPressingRight = false;
-        updateMovementInterval();
-      }
+      isPressingLeft = false;
+      isPressingRight = false;
+      updateMovementInterval();
       return;
     }
-    console.log(moveType);
     switch (moveType) {
       case "left":
         isPressingLeft = true;
@@ -297,10 +292,6 @@ function addShapeToBoard(
   droppingRow: number,
   droppingColumn: number,
 ) {
-  if (!board) {
-    console.log("board is not exit!");
-  }
-
   droppingShape
     .filter((row) => row.some((isSet) => isSet))
     .forEach((row: boolean[], rowIndex: number) => {

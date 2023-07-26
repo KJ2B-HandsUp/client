@@ -9,6 +9,7 @@ interface Props {
 const BoardWrapper = styled.div`
   border: 2px solid black;
   box-sizing: border-box;
+  width: 400px;
 `;
 
 function Board({ currentBoard }: Props) {
