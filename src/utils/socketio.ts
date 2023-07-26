@@ -281,7 +281,12 @@ const getStream = (
       async ({ params }) => {
         console.log(`Consumer Params`);
         console.log(params);
-        const consumer = await consumerTransport.consume(params);
+        const consumer = await consumerTransport.consume({
+          id: params.id,
+          producerId: params.producerId,
+          kind: params.kind,
+          rtpParameters: params.rtpParameters,
+        });
 
         consumerTransports = [
           ...consumerTransports,
@@ -300,7 +305,9 @@ const getStream = (
         try {
           const { track } = consumer;
           const mediaStream = new MediaStream([track]);
+          console.log("here 1?");
           resolve(mediaStream);
+          console.log("here 1?");
         } catch (error) {
           reject(error);
         }

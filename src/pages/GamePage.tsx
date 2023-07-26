@@ -1,6 +1,6 @@
 import Game from "../components/Game";
 import HandDetect from "../components/HandDetect";
-import { useState, useRef, useMemo, createContext } from "react";
+import { useState, useRef, useEffect, createContext } from "react";
 import {
   signalNewConsumerTransport,
   closeProducer,
@@ -32,7 +32,8 @@ export default function GamePage() {
   const handleBeforeUnload = () => {
     socket.emit("disconnect");
   };
-  useMemo(() => {
+
+  useEffect(() => {
     if (socket == null) {
       socket = io("https://choijungle.shop/mediasoup");
 
@@ -70,6 +71,7 @@ export default function GamePage() {
               console.log("done");
               player1VideoRef.current.srcObject = player1Stream;
             }
+            console.log("qqqqqqqqqqqqqqqqqqqq");
           } catch (error) {
             console.error("Failed to signal new consumer transport:", error);
           }
