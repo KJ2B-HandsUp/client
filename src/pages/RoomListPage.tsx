@@ -2,7 +2,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Button, Form } from "react-bootstrap";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import RoomJoinModal from "../components/RoomJoinModal";
 import { RoomData } from "../types/roomType";
 import {
@@ -44,7 +44,7 @@ export default function RoomListPage() {
     navigate(`/game/${newRoomId}`);
   };
 
-  useMemo(() => {
+  useEffect(() => {
     const tempRoomList: RoomData[] = [];
     fetchData()
       .then((res) => {
@@ -96,7 +96,6 @@ export default function RoomListPage() {
                     border: "4px solid",
                     marginLeft: 30,
                     marginBottom: 10,
-                    overflow: "hidden",
                     boxShadow: "5px 5px 10px #f4aab9",
                   }}
                 >

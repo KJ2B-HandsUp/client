@@ -23,7 +23,7 @@ export default function LoginPage() {
             marginBottom: 50,
           }}
         >
-          Put Your Hands Up
+          손 들어
         </h1>
         <NavLink to="/home">
           <img alt="카카오 로그인" src="/kakao_login_medium.png" />

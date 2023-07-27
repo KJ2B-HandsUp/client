@@ -49,7 +49,7 @@ function Sidebar() {
 
   return (
     <SideBarWrapper>
-      <TitleHeader>Put Your Hands Up</TitleHeader>
+      <TitleHeader>손 들어</TitleHeader>
       {menus.map((menu, index) => {
         return (
           <NavLink

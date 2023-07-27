@@ -5,7 +5,7 @@ import {
   RtpCapabilities,
   RtpParameters,
   Transport,
-} from "mediasoup/node/lib/types";
+} from "mediasoup-client/lib/types";
 import { Device } from "mediasoup-client";
 
 let device: Device;
@@ -27,11 +27,6 @@ const params = {
       maxBitrate: 300000,
       scalabilityMode: "S1T3",
     },
-    {
-      rid: "r2",
-      maxBitrate: 900000,
-      scalabilityMode: "S1T3",
-    },
   ],
   codecOptions: {
     videoGoogleStartBitrate: 1000,
@@ -40,29 +35,42 @@ const params = {
 
 let videoParams: mediasoupClient.types.ProducerOptions;
 
-export const streamSuccess = (
+export const streamSuccess = async (
   stream: MediaStream,
   socket: Socket,
   roomName: string,
-): void => {
+): Promise<(MediaStream | undefined)[]> => {
   videoParams = { track: stream.getVideoTracks()[0], ...params };
-  joinRoom(socket, roomName);
+  return await joinRoom(socket, roomName);
 };
 
 interface JoinRoomData {
   rtpCapabilities: RtpCapabilities;
 }
 
-const joinRoom = (socket: Socket, roomName: string): void => {
-  socket.emit("joinRoom", { roomName }, (data: JoinRoomData) => {
-    console.log("Router RTP Capabilities...");
-    console.log(data.rtpCapabilities);
-    rtpCapabilities = data.rtpCapabilities;
-    createDevice(socket);
+const joinRoom = async (
+  socket: Socket,
+  roomName: string,
+): Promise<(MediaStream | undefined)[]> => {
+  return new Promise((resolve, reject) => {
+    socket.emit("joinRoom", { roomName }, async (data: JoinRoomData) => {
+      console.log("Router RTP Capabilities...");
+      console.log(data.rtpCapabilities);
+      rtpCapabilities = data.rtpCapabilities;
+      try {
+        const device = await createDevice(socket);
+        resolve(device);
+      } catch (error) {
+        console.error("Failed to create device:", error);
+        reject(error);
+      }
+    });
   });
 };
 
-const createDevice = async (socket: Socket): Promise<void> => {
+const createDevice = async (
+  socket: Socket,
+): Promise<(MediaStream | undefined)[]> => {
   try {
     device = new mediasoupClient.Device();
 
@@ -72,7 +80,7 @@ const createDevice = async (socket: Socket): Promise<void> => {
 
     console.log("Device RTP Capabilities", device.rtpCapabilities);
 
-    createSendTransport(socket);
+    return await createSendTransport(socket);
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -82,9 +90,13 @@ const createDevice = async (socket: Socket): Promise<void> => {
       console.log("An error occurred: ", error);
     }
   }
+
+  return [undefined];
 };
 
-const createSendTransport = async (socket: Socket) => {
+const createSendTransport = async (
+  socket: Socket,
+): Promise<(MediaStream | undefined)[]> => {
   let params;
   try {
     params = await new Promise((resolve, reject) => {
@@ -96,9 +108,10 @@ const createSendTransport = async (socket: Socket) => {
         }
       });
     });
+
     console.log(params.params);
     producerTransport = device.createSendTransport(params.params);
-    console.log("here??????");
+
     producerTransport.on(
       "connect",
       (
@@ -120,53 +133,59 @@ const createSendTransport = async (socket: Socket) => {
       },
     );
 
-    producerTransport.on(
-      "produce",
-      (
-        parameters: {
-          kind: string;
-          rtpParameters: RtpParameters;
-          appData: any;
-        },
-        callback: (arg0: { id: string }) => void,
-        errback: (error: Error) => void,
-      ) => {
-        console.log(parameters);
+    return new Promise((resolve, reject) => {
+      let producerList: (MediaStream | undefined)[] = []; // 값을 저장할 외부 변수
 
-        try {
-          socket.emit(
-            "transport-produce",
-            {
-              kind: parameters.kind,
-              rtpParameters: parameters.rtpParameters,
-              appData: parameters.appData,
-            },
-            ({
-              id,
-              producersExist,
-            }: {
-              id: string;
-              producersExist: boolean;
-            }) => {
-              callback({ id });
+      producerTransport.on(
+        "produce",
+        (
+          parameters: {
+            kind: string;
+            rtpParameters: RtpParameters;
+            appData: any;
+          },
+          callback: (arg0: { id: string }) => void,
+          errback: (error: Error) => void,
+        ) => {
+          console.log(parameters);
 
-              if (producersExist) {
-                getProducers(socket);
-              }
-            },
-          );
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            errback(error);
+          try {
+            socket.emit(
+              "transport-produce",
+              {
+                kind: parameters.kind,
+                rtpParameters: parameters.rtpParameters,
+                appData: parameters.appData,
+              },
+              async ({
+                id,
+                producersExist,
+              }: {
+                id: string;
+                producersExist: boolean;
+              }) => {
+                callback({ id });
+
+                if (producersExist) {
+                  producerList = await getProducers(socket);
+                  resolve(producerList);
+                }
+              },
+            );
+          } catch (error: unknown) {
+            if (error instanceof Error) {
+              reject(error);
+            }
           }
-        }
-      },
-    );
-
-    connectSendTransport();
+        },
+      );
+      connectSendTransport();
+    });
   } catch (error) {
     console.error(error);
   }
+
+  return [undefined];
 };
 
 const connectSendTransport = async (): Promise<void> => {
@@ -192,13 +211,28 @@ interface ParamsResponse {
   id: string;
 }
 
-const getProducers = (socket: Socket): void => {
-  socket.emit("getProducers", (producerIds: string[]) => {
-    console.log(producerIds);
-    producerIds.forEach((id) => {
-      signalNewConsumerTransport(id, socket);
+const getProducers = async (
+  socket: Socket,
+): Promise<(MediaStream | undefined)[]> => {
+  const result = await new Promise((resolve, reject) => {
+    socket.emit("getProducers", async (producerIds: string[]) => {
+      console.log(producerIds);
+      try {
+        const results: (MediaStream | undefined)[] = [];
+        for (const id of producerIds) {
+          const consumerTransport = await signalNewConsumerTransport(
+            id,
+            socket,
+          );
+          results.push(consumerTransport);
+        }
+        resolve(results);
+      } catch (error) {
+        reject(error);
+      }
     });
   });
+  return result;
 };
 
 const consumingTransports: string[] = [];
@@ -213,54 +247,58 @@ export const signalNewConsumerTransport = (
     }
     consumingTransports.push(remoteProducerId);
 
-    socket.emit("createWebRtcTransport", { consumer: true }, ({ params }) => {
-      console.log("PARAMS...");
-      console.log(params);
+    socket.emit(
+      "createWebRtcTransport",
+      { consumer: true },
+      async ({ params }) => {
+        console.log("PARAMS...");
+        console.log(params);
 
-      let consumerTransport: mediasoupClient.types.Transport;
-      try {
-        consumerTransport = device.createRecvTransport(params);
-      } catch (error) {
-        console.log(error);
-        return;
-      }
+        let consumerTransport: mediasoupClient.types.Transport;
+        try {
+          consumerTransport = device.createRecvTransport(params);
+        } catch (error) {
+          console.log(error);
+          return;
+        }
 
-      consumerTransport.on(
-        "connect",
-        (
-          {
-            dtlsParameters,
-          }: { dtlsParameters: mediasoupClient.types.DtlsParameters },
-          callback,
-          errback,
-        ) => {
-          try {
-            socket.emit("transport-recv-connect", {
+        consumerTransport.on(
+          "connect",
+          (
+            {
               dtlsParameters,
-              serverConsumerTransportId: params.id,
-            });
-            callback();
-          } catch (error: unknown) {
-            if (error instanceof Error) {
-              errback(error);
+            }: { dtlsParameters: mediasoupClient.types.DtlsParameters },
+            callback,
+            errback,
+          ) => {
+            try {
+              socket.emit("transport-recv-connect", {
+                dtlsParameters,
+                serverConsumerTransportId: params.id,
+              });
+              callback();
+            } catch (error: unknown) {
+              if (error instanceof Error) {
+                errback(error);
+              }
             }
-          }
-        },
-      );
+          },
+        );
 
-      connectRecvTransport(
-        consumerTransport,
-        remoteProducerId,
-        params.id,
-        socket,
-      )
-        .then((result) => {
-          resolve(result);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+        await connectRecvTransport(
+          consumerTransport,
+          remoteProducerId,
+          params.id,
+          socket,
+        )
+          .then((result) => {
+            resolve(result);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      },
+    );
   });
 };
 
@@ -301,7 +339,7 @@ const getStream = (
         socket.emit("consumer-resume", {
           serverConsumerId: params.serverConsumerId,
         });
-        console.log("here 1?");
+
         try {
           const { track } = consumer;
           const mediaStream = new MediaStream([track]);

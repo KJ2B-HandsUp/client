@@ -28,6 +28,9 @@ export default function GamePage() {
   const [moveType, setMoveType] = useState("null");
   const player1VideoRef = useRef<HTMLVideoElement>(null);
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const { roomId } = useParams();
   const handleBeforeUnload = () => {
     socket.emit("disconnect");
@@ -40,16 +43,47 @@ export default function GamePage() {
       window.addEventListener("beforeunload", handleBeforeUnload);
 
       socket.on("connection-success", ({ socketId }: { socketId: string }) => {
-        console.log("Connection success!");
-
         navigator.mediaDevices
           .getDisplayMedia({
             audio: false,
-            video: true,
+            video: {
+              width: { max: 640 },
+              height: { max: 480 },
+            },
           })
-          .then((stream) => {
-            if (roomId !== undefined) {
-              streamSuccess(stream, socket, roomId);
+          .then(async (stream) => {
+            if (videoRef.current && canvasRef.current) {
+              videoRef.current.srcObject = stream;
+              await videoRef.current.play();
+              // 캔버스에 0, 0에서 500, 500 사이의 영역만 그림
+              const ctx = canvasRef.current.getContext("2d");
+              const draw = () => {
+                ctx!.drawImage(
+                  videoRef.current,
+                  0,
+                  0,
+                  400,
+                  700,
+                  0,
+                  0,
+                  canvasRef.current!.width,
+                  canvasRef.current!.height,
+                );
+                requestAnimationFrame(draw);
+              };
+              draw();
+
+              // 결과를 새 비디오 스트림으로 만듬
+              const outputStream = canvasRef.current.captureStream();
+              if (roomId !== undefined) {
+                await streamSuccess(outputStream, socket, roomId).then(
+                  (mediaStreamList) => {
+                    if (player1VideoRef.current && mediaStreamList[0]) {
+                      player1VideoRef.current.srcObject = mediaStreamList[0];
+                    }
+                  },
+                );
+              }
             }
           })
           .catch((error: Error) => {
@@ -71,7 +105,6 @@ export default function GamePage() {
               console.log("done");
               player1VideoRef.current.srcObject = player1Stream;
             }
-            console.log("qqqqqqqqqqqqqqqqqqqq");
           } catch (error) {
             console.error("Failed to signal new consumer transport:", error);
           }
@@ -102,12 +135,14 @@ export default function GamePage() {
               <Game />
             </MoveContext.Provider>
           </GameContainer>
+          <video ref={videoRef} style={{ display: "none" }}></video>
+          <canvas ref={canvasRef} width={400} height={700}></canvas>
         </Col>
         <Col>
           <video
             ref={player1VideoRef}
-            width="500px"
-            height="500px"
+            width="400"
+            height="700px"
             autoPlay
             playsInline
             muted

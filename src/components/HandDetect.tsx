@@ -73,8 +73,6 @@ export default function HandDetect() {
         moveType = checkRightMotion(prevLeftPose, leftResults);
         if (setMoveType && moveType !== "nothing") {
           setMoveType(moveType);
-          console.log(`Left is ${moveType} in HandDetect`);
-          console.log(leftResults);
         }
         prevLeftPose = leftResults;
       }
@@ -85,8 +83,6 @@ export default function HandDetect() {
         moveType = checkLeftMotion(prevRightPose, rightResults);
         if (setMoveType && moveType !== "nothing") {
           setMoveType(moveType);
-          console.log(`Right is ${moveType} in HandDetect`);
-          console.log(rightResults);
         }
         prevRightPose = rightResults;
       }
