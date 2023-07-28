@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import tetris_banner from "/tetris_banner2.png";
 
 export const RoomListPageWrapper = styled.div`
   flex-direction: column;
@@ -9,9 +8,10 @@ export const RoomListPageWrapper = styled.div`
   top: 0;
 `;
 
+// todo: 배너 넣어야함
 export const Banner = styled.div`
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${tetris_banner});
+    url());
   background-size: cover;
   height: 900px;
   width: 1500px;

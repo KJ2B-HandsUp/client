@@ -69,7 +69,7 @@ function Sidebar() {
         );
       })}
       <SidebarFooter>
-        <img src="/tetris.gif" />
+        <div></div>
       </SidebarFooter>
     </SideBarWrapper>
   );
