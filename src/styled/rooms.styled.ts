@@ -4,7 +4,7 @@ export const RoomListPageWrapper = styled.div`
   flex-direction: column;
   background-color: #000000;
   background-attachment: fixed;
-  padding-left: 400px;
+  margin-left: 400px;
   top: 0;
 `;
 

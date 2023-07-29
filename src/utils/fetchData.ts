@@ -7,8 +7,7 @@ export async function fetchData(): Promise<RoomList> {
     console.log(jsonData);
     return jsonData;
   } catch (error) {
-    console.error(error);
-    throw error;
+    return {} as RoomList;
   }
 }
 

@@ -7,6 +7,7 @@ const GameWrapper = styled.div`
 `;
 
 export default function Game() {
+  console.log("game rendered");
   return (
     <GameWrapper>
       <Board row={4} column={6} />

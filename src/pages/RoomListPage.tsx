@@ -1,8 +1,5 @@
-import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { Button, Form } from "react-bootstrap";
-import { useState, useMemo, useEffect } from "react";
+import { Button, Form, Card, Col, Row } from "react-bootstrap";
+import { useState, useEffect, useCallback, useRef } from "react";
 import RoomJoinModal from "../components/RoomJoinModal";
 import { RoomData } from "../types/roomType";
 import {
@@ -30,26 +27,20 @@ export default function RoomListPage() {
     { roomId: "room1", description: "This is Room 1!!!" },
     { roomId: "room2", description: "This is Room 2!!!" },
   ]);
-  const [newRoomId, setNewRoomId] = useState<string>("");
 
   const navigate = useNavigate();
 
-  const handleNewRoomIdChange = (e) => {
-    setNewRoomId(e.target.value);
-  };
-
-  const handleNewRoomIdSubmit = () => {
-    alert(`Room: ${newRoomId} created!`);
-    console.log(newRoomId);
-    navigate(`/game/${newRoomId}`);
-  };
+  const newRoomId = useRef<HTMLInputElement>();
+  const handleNewRoomIdSubmit = useCallback(() => {
+    alert(`Room: ${newRoomId.current!.value} created!`);
+    navigate(`/game/${newRoomId.current!.value}`);
+  }, [newRoomId, navigate]);
 
   useEffect(() => {
     const tempRoomList: RoomData[] = [];
     fetchData()
       .then((res) => {
         Object.entries(res).forEach(([key, value]) => {
-          console.log("Key: ", key, ", Value: ", value);
           const { roomId, ...rest } = value;
           tempRoomList.push({
             roomId: key,
@@ -59,26 +50,23 @@ export default function RoomListPage() {
         });
         setRoomList(tempRoomList);
       })
-      .catch((err) => console.error(err));
+      .catch(() => {
+        console.log("data is nothing in server");
+      });
   }, []);
 
   return (
     <>
       <RoomListPageWrapper>
         <Banner />
-        <Form style={{ width: "200px", marginLeft: "300px" }}>
-          <Form.Group className="sm" controlId="formBasicPassword">
-            <Form.Label>Room ID</Form.Label>
-            <Form.Control
-              placeholder="Room ID"
-              value={newRoomId}
-              onChange={handleNewRoomIdChange}
-            />
-          </Form.Group>
+        <form>
+          <label>Room ID</label>
+          <input placeholder="Room ID" ref={newRoomId}></input>
           <Button variant="primary" onClick={handleNewRoomIdSubmit}>
-            Submit
+            Join
           </Button>
-        </Form>
+        </form>
+
         <RoomListWrapper>
           <Row xs={1} md={2} className="g-4">
             {roomList?.map((roomInfo, idx) => (
@@ -90,7 +78,7 @@ export default function RoomListPage() {
                   text="light"
                   style={{
                     fontFamily: "Ramche",
-                    width: "43rem",
+                    width: "30rem",
                     height: "15rem",
                     borderRadius: 20,
                     border: "4px solid",

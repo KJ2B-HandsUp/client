@@ -26,7 +26,6 @@
     "react-media-recorder": "^1.6.6",
     "react-router-dom": "^6.14.2",
     "react-webcam": "^7.1.1",
-    "recoil": "^0.7.7",
     "socket.io": "^4.7.1",
     "socket.io-client": "^4.7.1",
     "styled-components": "^6.0.5"

@@ -5,3 +5,11 @@ export const GameContainer = styled.div`
   user-select: none;
   margin: auto;
 `;
+
+export const MyCameraView = styled.div`
+  transform-origin: left;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+`;

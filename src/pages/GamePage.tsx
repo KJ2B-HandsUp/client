@@ -26,7 +26,7 @@ let socket: Socket;
 
 export default function GamePage() {
   const [moveType, setMoveType] = useState("null");
-
+  console.log("gamepage rendered");
   const playersVideoRef = useRef<HTMLVideoElement>(null);
 
   const { roomId } = useParams();
