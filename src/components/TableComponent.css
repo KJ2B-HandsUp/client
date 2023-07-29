@@ -1,0 +1,25 @@
+.gridTable {
+  border-collapse: collapse;
+}
+
+.gridTable td {
+  border: 1px solid black;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  vertical-align: middle;
+  transition: background-color 0.5s;
+}
+
+.gridTable td.flash {
+  animation: flash 0.5s;
+}
+
+@keyframes flash {
+  0% {
+    background-color: red;
+  }
+  100% {
+    background-color: transparent;
+  }
+}

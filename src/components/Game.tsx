@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Board } from "./Board";
 
 const GameWrapper = styled.div`
   align-items: center;
@@ -8,15 +9,9 @@ const GameWrapper = styled.div`
 export default function Game() {
   return (
     <GameWrapper>
-      <div>
-        <h2>Score: {score}</h2>
-        {isPlaying ? (
-          <></>
-        ) : (
-          <button onClick={startGame}>New Game</button>
-        )}
-        <button>Share Video</button>
-      </div>
+      <Board row={4} column={6} />
+      <h2>Score: 0</h2>
+      <button>New Game</button>
     </GameWrapper>
   );
 }
