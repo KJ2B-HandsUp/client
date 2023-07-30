@@ -1,27 +1,33 @@
-import { useCallback, useState } from "react";
-import "./TableComponent.css";
+import { useCallback, useState, useContext } from "react";
+import { TableProps } from "../types/table";
+import { GridCell, GridTable } from "../styled/tables.styled";
+import { GameContext } from "../pages/GamePage";
+import { CLICK_BLOCK } from "../types/game.type";
 
-interface TableProps {
-  row: number;
-  column: number;
-}
-
-export function Board({ row, column }: TableProps) {
+export function Board({ turn, id, row, column }: TableProps) {
   const [clickedCell, setClickedCell] = useState<{
     row: number;
     col: number;
   } | null>(null);
 
-  const handleCellClick = useCallback((rowIndex: number, colIndex: number) => {
-    console.log(
-      `You clicked cell at row: ${rowIndex + 1}, col: ${colIndex + 1}`,
-    );
-    setClickedCell({ row: rowIndex, col: colIndex });
+  const { started, dispatch } = useContext(GameContext);
 
-    setTimeout(() => {
-      setClickedCell(null);
-    }, 500); // Reset after 0.5 seconds (500 milliseconds)
-  }, []);
+  const handleCellClick = useCallback(
+    (rowIndex: number, colIndex: number) => {
+      //console.log(`You clicked cell at row: ${rowIndex + 1}, col: ${colIndex + 1}`);
+      setClickedCell({ row: rowIndex, col: colIndex });
+      dispatch({
+        type: CLICK_BLOCK,
+        clickedBlock: { row: rowIndex, column: colIndex },
+        userId: id,
+      });
+
+      setTimeout(() => {
+        setClickedCell(null);
+      }, 500); // Reset after 0.5 seconds (500 milliseconds)
+    },
+    [dispatch, id],
+  );
 
   const renderRow = (rowIndex: number) => {
     return (
@@ -38,21 +44,25 @@ export function Board({ row, column }: TableProps) {
       clickedCell?.row === rowIndex && clickedCell?.col === colIndex;
 
     return (
-      <td
+      <GridCell
         key={colIndex}
         onClick={() => handleCellClick(rowIndex, colIndex)}
         className={isClicked ? "flash" : ""}
       >
-        Cell {rowIndex + 1}, {colIndex + 1}
-      </td>
+        Cell {rowIndex}, {colIndex}
+      </GridCell>
     );
   };
 
   return (
-    <table className="gridTable">
-      <tbody>
-        {Array.from({ length: column }, (_, index) => renderRow(index))}
-      </tbody>
-    </table>
+    <>
+      {started && turn == id && (
+        <GridTable>
+          <tbody>
+            {Array.from({ length: column }, (_, index) => renderRow(index))}
+          </tbody>
+        </GridTable>
+      )}
+    </>
   );
 }

@@ -11,7 +11,7 @@ const SideBarWrapper = styled.div`
   box-shadow: 0px 0px 10px 0px;
   top: 0;
   left: 0;
-  width: 400px;
+  width: 25vw;
   height: 100vh;
   align-items: center;
   text-align: center;
@@ -31,8 +31,8 @@ const TitleHeader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 300px;
-  height: 180px;
+  width: 18vw;
+  height: 15vh;
   border: 3px solid #ffffff;
 `;
 

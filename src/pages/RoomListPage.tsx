@@ -1,11 +1,11 @@
-import { Button, Form, Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { useState, useEffect, useCallback, useRef } from "react";
 import RoomJoinModal from "../components/RoomJoinModal";
 import { RoomData } from "../types/roomType";
 import {
-  Banner,
   RoomListPageWrapper,
   RoomListWrapper,
+  FormWrapper,
 } from "../styled/rooms.styled";
 import { useNavigate } from "react-router-dom";
 import { fetchData } from "../utils/fetchData";
@@ -40,15 +40,17 @@ export default function RoomListPage() {
     const tempRoomList: RoomData[] = [];
     fetchData()
       .then((res) => {
-        Object.entries(res).forEach(([key, value]) => {
-          const { roomId, ...rest } = value;
-          tempRoomList.push({
-            roomId: key,
-            description: `This is room ${key}`,
-            ...rest,
+        if (Object.keys(res).length > 0) {
+          Object.entries(res).forEach(([key, value]) => {
+            const { roomId, ...rest } = value;
+            tempRoomList.push({
+              roomId: key,
+              description: `This is room ${key}`,
+              ...rest,
+            });
           });
-        });
-        setRoomList(tempRoomList);
+          setRoomList(tempRoomList);
+        }
       })
       .catch(() => {
         console.log("data is nothing in server");
@@ -58,14 +60,13 @@ export default function RoomListPage() {
   return (
     <>
       <RoomListPageWrapper>
-        <Banner />
-        <form>
+        <FormWrapper>
           <label>Room ID</label>
           <input placeholder="Room ID" ref={newRoomId}></input>
           <Button variant="primary" onClick={handleNewRoomIdSubmit}>
             Join
           </Button>
-        </form>
+        </FormWrapper>
 
         <RoomListWrapper>
           <Row xs={1} md={2} className="g-4">
@@ -78,13 +79,13 @@ export default function RoomListPage() {
                   text="light"
                   style={{
                     fontFamily: "Ramche",
-                    width: "30rem",
+                    width: "20rem",
                     height: "15rem",
                     borderRadius: 20,
                     border: "4px solid",
-                    marginLeft: 30,
-                    marginBottom: 10,
+                    margin: "50px",
                     boxShadow: "5px 5px 10px #f4aab9",
+                    overflow: "clip",
                   }}
                 >
                   <Card.Header>
