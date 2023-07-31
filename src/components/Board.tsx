@@ -11,6 +11,7 @@ export function Board({ turn, id, row, column }: TableProps) {
   } | null>(null);
 
   const { started, dispatch } = useContext(GameContext);
+  console.log("board is is: ", id, " ", turn);
 
   const handleCellClick = useCallback(
     (rowIndex: number, colIndex: number) => {

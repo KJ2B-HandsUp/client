@@ -7,12 +7,13 @@ import {
   Transport,
 } from "mediasoup-client/lib/types";
 import { Device } from "mediasoup-client";
+import { MediaDataType } from "../types/game.type";
 
 let device: Device;
 let rtpCapabilities: RtpCapabilities;
 
 let producerTransport;
-let consumerTransports: Transport[] = [];
+let consumerTransportList: Transport[] = [];
 let videoProducer;
 
 const params = {
@@ -39,7 +40,7 @@ export const streamSuccess = async (
   stream: MediaStream,
   socket: Socket,
   roomName: string,
-): Promise<(MediaStream | undefined)[]> => {
+): Promise<(MediaDataType | undefined)[]> => {
   videoParams = { track: stream.getVideoTracks()[0], ...params };
   return await joinRoom(socket, roomName);
 };
@@ -51,7 +52,7 @@ interface JoinRoomData {
 const joinRoom = async (
   socket: Socket,
   roomName: string,
-): Promise<(MediaStream | undefined)[]> => {
+): Promise<(MediaDataType | undefined)[]> => {
   return new Promise((resolve, reject) => {
     socket.emit("joinRoom", { roomName }, async (data: JoinRoomData) => {
       console.log("Router RTP Capabilities...");
@@ -70,7 +71,7 @@ const joinRoom = async (
 
 const createDevice = async (
   socket: Socket,
-): Promise<(MediaStream | undefined)[]> => {
+): Promise<(MediaDataType | undefined)[]> => {
   try {
     device = new mediasoupClient.Device();
 
@@ -96,7 +97,7 @@ const createDevice = async (
 
 const createSendTransport = async (
   socket: Socket,
-): Promise<(MediaStream | undefined)[]> => {
+): Promise<(MediaDataType | undefined)[]> => {
   let params;
   try {
     params = await new Promise((resolve, reject) => {
@@ -134,7 +135,7 @@ const createSendTransport = async (
     );
 
     return new Promise((resolve, reject) => {
-      let producerList: (MediaStream | undefined)[] = []; // 값을 저장할 외부 변수
+      let producerList: (MediaDataType | undefined)[] = []; // 값을 저장할 외부 변수
 
       producerTransport.on(
         "produce",
@@ -206,25 +207,20 @@ const connectSendTransport = async (): Promise<void> => {
   }
 };
 
-interface ParamsResponse {
-  error?: string;
-  id: string;
-}
-
 const getProducers = async (
   socket: Socket,
-): Promise<(MediaStream | undefined)[]> => {
+): Promise<(MediaDataType | undefined)[]> => {
   const result = await new Promise((resolve, reject) => {
     socket.emit("getProducers", async (producerIds: string[]) => {
       console.log(producerIds);
       try {
-        const results: (MediaStream | undefined)[] = [];
+        const results: (MediaDataType | undefined)[] = [];
         for (const id of producerIds) {
           const consumerTransport = await signalNewConsumerTransport(
             id,
             socket,
           );
-          results.push(consumerTransport);
+          results.push({ producerId: id, mediaStream: consumerTransport! });
         }
         resolve(results);
       } catch (error) {
@@ -302,58 +298,6 @@ export const signalNewConsumerTransport = (
   });
 };
 
-const getStream = (
-  consumerTransport: Transport<mediasoupClient.types.AppData>,
-  remoteProducerId: string,
-  serverConsumerTransportId: string,
-  socket: Socket,
-): Promise<MediaStream> => {
-  return new Promise((resolve, reject) => {
-    socket.emit(
-      "consume",
-      {
-        rtpCapabilities: device.rtpCapabilities,
-        remoteProducerId,
-        serverConsumerTransportId,
-      },
-      async ({ params }) => {
-        console.log(`Consumer Params`);
-        console.log(params);
-        const consumer = await consumerTransport.consume({
-          id: params.id,
-          producerId: params.producerId,
-          kind: params.kind,
-          rtpParameters: params.rtpParameters,
-        });
-
-        consumerTransports = [
-          ...consumerTransports,
-          {
-            consumerTransport,
-            serverConsumerTransportId: params.id,
-            producerId: remoteProducerId,
-            consumer,
-          },
-        ];
-
-        socket.emit("consumer-resume", {
-          serverConsumerId: params.serverConsumerId,
-        });
-
-        try {
-          const { track } = consumer;
-          const mediaStream = new MediaStream([track]);
-          console.log("here 1?");
-          resolve(mediaStream);
-          console.log("here 1?");
-        } catch (error) {
-          reject(error);
-        }
-      },
-    );
-  });
-};
-
 const connectRecvTransport = async (
   consumerTransport: Transport<mediasoupClient.types.AppData>,
   remoteProducerId: string,
@@ -373,9 +317,53 @@ const connectRecvTransport = async (
   }
 };
 
+const getStream = (
+  consumerTransport: Transport<mediasoupClient.types.AppData>,
+  remoteProducerId: string,
+  serverConsumerTransportId: string,
+  socket: Socket,
+): Promise<MediaStream> => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "consume",
+      {
+        rtpCapabilities: device.rtpCapabilities,
+        remoteProducerId,
+        serverConsumerTransportId,
+      },
+      async ({ params }) => {
+        console.log(`Consumer Params`);
+        console.log(params);
+        const consumer = await consumerTransport.consume(params);
+
+        consumerTransportList.push(consumerTransport);
+
+        socket.emit("consumer-resume", {
+          serverConsumerId: params.serverConsumerId,
+        });
+
+        try {
+          const { track } = consumer;
+          const mediaStream = new MediaStream([track]);
+          console.log("here 1?");
+          resolve(mediaStream);
+        } catch (error) {
+          reject(error);
+        }
+      },
+    );
+  });
+};
+
 // socket.on("producer-closed")
 export const closeProducer = (remoteProducerId: string) => {
-  const producerToClose = consumerTransports.find(
+  consumerTransportList.forEach((transportData, index) => {
+    console.log(
+      `consumerTransportList[${index}].appData:`,
+      transportData.appData,
+    );
+  });
+  const producerToClose = consumerTransportList.find(
     (transportData) => transportData.appData.producerId === remoteProducerId,
   );
 
@@ -386,7 +374,7 @@ export const closeProducer = (remoteProducerId: string) => {
 
   producerToClose.close();
 
-  consumerTransports = consumerTransports.filter(
+  consumerTransportList = consumerTransportList.filter(
     (transportData) => transportData.appData.producerId !== remoteProducerId,
   );
 

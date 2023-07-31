@@ -6,18 +6,24 @@ import { RoomData } from "../types/roomType";
 interface ModalProps {
   roomInfo: RoomData | null;
   show: boolean;
+  winner: string;
   onHide: () => void;
 }
 
-export default function RoomJoinModal({ roomInfo, show, onHide }: ModalProps) {
+export default function GameStartModal({
+  roomInfo,
+  show,
+  winner,
+  onHide,
+}: ModalProps) {
   return (
     <Modal onHide={onHide} show={show} centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <h2>{roomInfo?.roomId} 에 입장하시겠습니까?</h2>
+          <h2>게임 종료</h2>
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>{roomInfo?.description}</Modal.Body>
+      <Modal.Body>Winner: ${winner}</Modal.Body>
       <Modal.Footer>
         <Button>
           <NavLink to={`/game/${roomInfo?.roomId}`}>Join</NavLink>

@@ -5,11 +5,11 @@ import {
   useReducer,
   useMemo,
   createContext,
-  memo,
+  useState,
 } from "react";
 import {
-  signalNewConsumerTransport,
   closeProducer,
+  signalNewConsumerTransport,
   streamSuccess,
 } from "../utils/socketio";
 import { io, Socket } from "socket.io-client";
@@ -18,19 +18,22 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useParams } from "react-router-dom";
 import MyGame from "../components/MyGame";
-import OtherUserGame from "../components/OtherUserGame";
 import {
+  UserType,
   StateType,
   ActionType,
   GameDispatch,
   START_GAME,
   CHANGE_TURN,
   CLICK_BLOCK,
+  ADD_PLAYER,
 } from "../types/game.type";
+import { CardListContainer } from "../styled/game.styled";
+import OtherVideoList from "../components/OtherVideoList";
 
 const initalState: StateType = {
   started: false,
-  userNum: 2,
+  playersNum: 1,
   turn: 0,
   endTurn: false,
   blockNum: 1,
@@ -85,13 +88,18 @@ const reducer = (state: StateType, action: ActionType): StateType => {
       console.log("change turn");
       return {
         ...state,
-        turn: (state.turn + 1) % state.userNum,
+        turn: (state.turn + 1) % state.playersNum,
         endTurn: false,
         blockNum: state.blockNum + 1,
         blockList: [],
         prevBlockList: [...state.blockList],
       };
     }
+    case ADD_PLAYER:
+      return {
+        ...state,
+        playersNum: state.playersNum + action.num,
+      };
     default:
       return state;
   }
@@ -102,16 +110,18 @@ export const GameContext = createContext<GameDispatch>({
   dispatch: () => {},
 });
 
+let userList: UserType[] = [];
+
 function GamePage() {
   //console.log("gamepage rendered");
 
   const [state, dispatch] = useReducer(reducer, initalState);
-  const { turn, started, endTurn, winner } = state;
-
-  const playersVideoRef = useRef<HTMLVideoElement>(null);
+  const { playersNum, turn, started, endTurn, winner } = state;
 
   const { roomId } = useParams();
   const socket = useRef<Socket>();
+  const dataSocket = useRef<Socket>();
+
   const handleBeforeUnload = useCallback(() => {
     socket.current!.emit("disconnect");
   }, []);
@@ -129,7 +139,7 @@ function GamePage() {
   }, []);
 
   useEffect(() => {
-    if (socket.current != undefined) {
+    if (socket.current == undefined) {
       socket.current = io("https://choijungle.shop/mediasoup");
 
       window.addEventListener("beforeunload", handleBeforeUnload);
@@ -137,16 +147,31 @@ function GamePage() {
       socket.current.on("connection-success", () => {
         navigator.mediaDevices
           .getUserMedia({
-            audio: false,
-            video: true,
+            video: {
+              frameRate: { ideal: 15, max: 20 },
+              width: 500,
+              height: 500,
+            },
           })
           .then(async (stream) => {
             if (roomId !== undefined) {
+              console.log("done?1");
+              console.log(stream);
               await streamSuccess(stream, socket.current!, roomId).then(
                 (mediaStreamList) => {
-                  if (playersVideoRef.current && mediaStreamList[0]) {
-                    playersVideoRef.current.srcObject = mediaStreamList[0];
-                  }
+                  console.log(mediaStreamList);
+                  mediaStreamList.map((mediaData, idx) => {
+                    if (mediaData) {
+                      console.log("Success: get new producer video list");
+                      console.log(mediaData);
+                      userList.push({
+                        id: playersNum + idx,
+                        name: mediaData.producerId,
+                        stream: mediaData.mediaStream,
+                      });
+                    }
+                  });
+                  dispatch({ type: ADD_PLAYER, num: mediaStreamList.length });
                 },
               );
             }
@@ -160,12 +185,19 @@ function GamePage() {
         "new-producer",
         async ({ producerId }: { producerId: string }) => {
           try {
-            const player1Stream = await signalNewConsumerTransport(
+            const mediaStream = await signalNewConsumerTransport(
               producerId,
               socket.current!,
             );
-            if (playersVideoRef.current && player1Stream) {
-              playersVideoRef.current.srcObject = player1Stream;
+
+            if (mediaStream) {
+              console.log("Success: get new producer video");
+              userList.push({
+                id: playersNum,
+                name: producerId,
+                stream: mediaStream,
+              });
+              dispatch({ type: ADD_PLAYER, num: 1 });
             }
           } catch (error) {
             console.error("Failed to signal new consumer transport:", error);
@@ -177,19 +209,34 @@ function GamePage() {
         "producer-closed",
         ({ remoteProducerId }: { remoteProducerId: string }): void => {
           closeProducer(remoteProducerId);
+          userList = userList.filter((user) => user.name !== remoteProducerId);
+          dispatch({ type: ADD_PLAYER, num: -1 });
         },
       );
-    }
 
-    if (endTurn) {
-      dispatch({ type: CHANGE_TURN });
-    }
+      dataSocket.current = io("https://choijungle.shop/data");
 
+      dataSocket.current.on("connection-success", () => {
+        console.log(`dataSocket: connection-success`);
+      });
+
+      dataSocket.current.emit("get_game_data", { message: "hello" });
+
+      dataSocket.current.on("send_game_data", (res) => {
+        console.log("get: ", res);
+      });
+    }
     // Clean up
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [handleBeforeUnload, roomId, endTurn]);
+  }, [handleBeforeUnload, roomId, playersNum]);
+
+  useEffect(() => {
+    if (endTurn) {
+      dispatch({ type: CHANGE_TURN });
+    }
+  }, [endTurn]);
 
   return (
     <>
@@ -201,12 +248,17 @@ function GamePage() {
               <MyGame turn={turn} id={0} row={4} column={4} />
             </Col>
             <Col>
-              <OtherUserGame turn={turn} id={1} row={4} column={4} />
+              <CardListContainer>
+                <OtherVideoList
+                  turn={turn}
+                  users={userList}
+                  userNum={playersNum - 1}
+                />
+              </CardListContainer>
             </Col>
           </Row>
         </Container>
       </GameContext.Provider>
-      {winner > -1 ? <div>Winner: ${winner}</div> : null}
     </>
   );
 }
