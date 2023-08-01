@@ -5,12 +5,12 @@ import { TableProps, GameProps } from "../types/table";
 import { memo } from "react";
 
 function MyGame({ turn, id, row, column }: TableProps) {
-  console.log("my game rendered");
+  //console.log("my game rendered");
 
   return (
     <GameContainer>
       <HandDetect />
-      <Board turn={turn} id={id} row={row} column={column} />
+      {turn == id && <Board turn={turn} id={id} row={row} column={column} />}
     </GameContainer>
   );
 }

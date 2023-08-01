@@ -31,11 +31,11 @@ function OtherVideoList({
 
   // 비디오 ref에 스트림을 할당
   useEffect(() => {
-    users.forEach(async (user) => {
+    users.forEach((user) => {
       const videoRef = videoRefs[user.id];
       if (videoRef && videoRef.current) {
         videoRef.current.srcObject = user.stream || null;
-        await videoRef.current.play();
+        videoRef.current.play();
       }
     });
   }, [users, videoRefs]);
@@ -50,15 +50,17 @@ function OtherVideoList({
               key={idx}
               ref={videoRefs[user.id]}
               style={{
-                width: "20rem",
-                height: "20rem",
+                width: "30rem",
+                height: "30rem",
                 border: "2px solid",
                 zIndex: 100,
                 transform: "scaleX(-1)",
               }}
             />
           </MyCameraView>
-          <Board turn={turn} id={user.id} row={4} column={4} />
+          {turn == user.id && (
+            <Board turn={turn} id={user.id} row={4} column={4} />
+          )}
         </GameContainer>
       ))}
     </>

@@ -11,6 +11,8 @@ const flash = keyframes`
 
 export const GridTable = styled.table`
   border-collapse: collapse;
+  width: 500px;
+  height: 500px;
 `;
 
 export const GridCell = styled.td`

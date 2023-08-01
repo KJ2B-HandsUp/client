@@ -1,17 +1,18 @@
-import { useCallback, useState, useContext } from "react";
+import { useCallback, useState, useContext, useEffect } from "react";
 import { TableProps } from "../types/table";
 import { GridCell, GridTable } from "../styled/tables.styled";
 import { GameContext } from "../pages/GamePage";
 import { CLICK_BLOCK } from "../types/game.type";
 
-export function Board({ turn, id, row, column }: TableProps) {
+export function Board({ id, row, column }: TableProps) {
   const [clickedCell, setClickedCell] = useState<{
     row: number;
     col: number;
   } | null>(null);
 
-  const { started, dispatch } = useContext(GameContext);
-  console.log("board is is: ", id, " ", turn);
+  const { started, dispatch, trigerClick, clickedBlock } =
+    useContext(GameContext);
+  //console.log("board is is: ", id);
 
   const handleCellClick = useCallback(
     (rowIndex: number, colIndex: number) => {
@@ -19,8 +20,8 @@ export function Board({ turn, id, row, column }: TableProps) {
       setClickedCell({ row: rowIndex, col: colIndex });
       dispatch({
         type: CLICK_BLOCK,
-        clickedBlock: { row: rowIndex, column: colIndex },
         userId: id,
+        clickedBlock: { rowIndex: rowIndex, colIndex: colIndex },
       });
 
       setTimeout(() => {
@@ -29,6 +30,12 @@ export function Board({ turn, id, row, column }: TableProps) {
     },
     [dispatch, id],
   );
+
+  useEffect(() => {
+    if (trigerClick) {
+      handleCellClick(clickedBlock.rowIndex, clickedBlock.colIndex);
+    }
+  }, [handleCellClick, trigerClick]);
 
   const renderRow = (rowIndex: number) => {
     return (
@@ -57,7 +64,7 @@ export function Board({ turn, id, row, column }: TableProps) {
 
   return (
     <>
-      {started && turn == id && (
+      {started && (
         <GridTable>
           <tbody>
             {Array.from({ length: column }, (_, index) => renderRow(index))}

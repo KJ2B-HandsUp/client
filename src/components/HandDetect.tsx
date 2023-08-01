@@ -100,8 +100,8 @@ export default function HandDetect() {
       <canvas
         ref={canvasRef}
         className="motion-data"
-        width={CAMERA_VIEW_WIDTH}
-        height={CAMERA_VIEW_HEIGHT}
+        width="500px"
+        height="500px"
         style={{
           border: "2px solid",
         }}

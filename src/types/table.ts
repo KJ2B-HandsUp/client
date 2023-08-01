@@ -1,7 +1,7 @@
 import { RefObject } from "react";
 
 export interface TableProps {
-  turn: number;
+  turn?: number;
   id: number;
   row: number;
   column: number;

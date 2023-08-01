@@ -3,8 +3,8 @@ import styled from "styled-components";
 export const GameContainer = styled.div`
   position: relative;
   user-select: none;
-  width: 20rem;
-  height: 20rem;
+  width: 500px;
+  height: 500px;
   padding: 16px;
   text-align: center;
 `;
