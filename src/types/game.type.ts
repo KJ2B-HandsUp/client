@@ -5,9 +5,6 @@ export const ADD_PLAYER = "ADD_PLAYER";
 export const OTHER_PLAYER_CLICK = "OTHER_PLAYER_CLICK";
 export const OTHER_CHANGE_TURN = "OTHER_CHANGE_TURN";
 
-export const CAMERA_VIEW_WIDTH = "500rem";
-export const CAMERA_VIEW_HEIGHT = "500rem";
-
 export type TransferDataType = {
   type: string;
   data?: object;

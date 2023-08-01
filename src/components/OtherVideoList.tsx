@@ -1,7 +1,12 @@
 import React, { useState, useEffect, memo } from "react";
 import { UserType } from "../types/game.type";
 import { Board } from "../components/Board";
-import { GameContainer, MyCameraView } from "../styled/game.styled";
+import {
+  GameContainer,
+  MyCameraView,
+  CAMERA_VIEW_WIDTH,
+  CAMERA_VIEW_HEIGHT,
+} from "../styled/game.styled";
 
 function OtherVideoList({
   turn,
@@ -12,8 +17,6 @@ function OtherVideoList({
   users: UserType[];
   userNum: number;
 }) {
-  console.log(users);
-  console.log(userNum);
   const [videoRefs, setVideoRefs] = useState<
     Record<string, React.RefObject<HTMLVideoElement>>
   >({});
@@ -50,10 +53,9 @@ function OtherVideoList({
               key={idx}
               ref={videoRefs[user.id]}
               style={{
-                width: "30rem",
-                height: "30rem",
+                width: CAMERA_VIEW_WIDTH,
+                height: CAMERA_VIEW_HEIGHT,
                 border: "2px solid",
-                zIndex: 100,
                 transform: "scaleX(-1)",
               }}
             />

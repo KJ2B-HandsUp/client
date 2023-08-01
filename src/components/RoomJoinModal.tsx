@@ -20,7 +20,9 @@ export default function RoomJoinModal({ roomInfo, show, onHide }: ModalProps) {
       <Modal.Body>{roomInfo?.description}</Modal.Body>
       <Modal.Footer>
         <Button>
-          <NavLink to={`/game/${roomInfo?.roomId}`}>Join</NavLink>
+          <NavLink to={`/game/${roomInfo?.roomId}`} style={{ color: "white" }}>
+            Join
+          </NavLink>
         </Button>
       </Modal.Footer>
     </Modal>

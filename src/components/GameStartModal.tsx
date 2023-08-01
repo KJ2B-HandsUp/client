@@ -22,7 +22,9 @@ export default function GameStartModal({ show, onStartGame }: ModalProps) {
       <Modal.Footer>
         <Button onClick={onStartGame}>New Game</Button>
         <Button>
-          <NavLink to={`/home/roomlist`}>홈으로</NavLink>
+          <NavLink to={`/home/roomlist`} style={{ color: "white" }}>
+            홈으로
+          </NavLink>
         </Button>
       </Modal.Footer>
     </Modal>

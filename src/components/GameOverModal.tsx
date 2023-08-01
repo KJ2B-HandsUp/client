@@ -26,7 +26,9 @@ export default function GameOverModal({
       <Modal.Body>Winner: ${winner}</Modal.Body>
       <Modal.Footer>
         <Button>
-          <NavLink to={`/home/roomlist`}>Go Home</NavLink>
+          <NavLink to={`/home/roomlist`} style={{ color: "white" }}>
+            Go Home
+          </NavLink>
         </Button>
         <Button onClick={onStartGame}>New Game</Button>
       </Modal.Footer>

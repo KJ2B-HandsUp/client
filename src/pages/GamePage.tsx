@@ -12,9 +12,6 @@ import {
   streamSuccess,
 } from "../utils/socketio";
 import { io, Socket } from "socket.io-client";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { useParams } from "react-router-dom";
 import MyGame from "../components/MyGame";
 import {
@@ -30,7 +27,11 @@ import {
   OTHER_PLAYER_CLICK,
   OTHER_CHANGE_TURN,
 } from "../types/game.type";
-import { CardListContainer } from "../styled/game.styled";
+import {
+  CardListContainer,
+  CAMERA_VIEW_WIDTH,
+  CAMERA_VIEW_HEIGHT,
+} from "../styled/game.styled";
 import OtherVideoList from "../components/OtherVideoList";
 import GameOverModal from "../components/GameOverModal";
 import GameStartModal from "../components/GameStartModal";
@@ -201,8 +202,8 @@ function GamePage() {
           .getUserMedia({
             video: {
               frameRate: { ideal: 15, max: 20 },
-              width: 500,
-              height: 500,
+              width: 600,
+              height: 600,
             },
           })
           .then(async (stream) => {
@@ -320,23 +321,14 @@ function GamePage() {
   return (
     <>
       <GameContext.Provider value={value}>
-        <Container fluid="md">
-          <button onClick={handleNewGame}>New Game</button>
-          <Row xs={1} md={2} className="g-4">
-            <Col>
-              <MyGame turn={turn} id={myId} row={4} column={4} />
-            </Col>
-            <Col>
-              <CardListContainer>
-                <OtherVideoList
-                  turn={turn}
-                  users={userList}
-                  userNum={playersNum - 1}
-                />
-              </CardListContainer>
-            </Col>
-          </Row>
-        </Container>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <MyGame turn={turn} id={myId} row={4} column={4} />
+          <OtherVideoList
+            turn={turn}
+            users={userList}
+            userNum={playersNum - 1}
+          />
+        </div>
       </GameContext.Provider>
       <GameStartModal show={start} onStartGame={handleNewGame} />
       <GameOverModal
