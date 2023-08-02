@@ -8,6 +8,7 @@ import {
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import GamePage from "./pages/GamePage";
+import SoloGamePage from "./pages/sologame/SoloGamePage";
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home/*" element={<MainPage />} />
           <Route path="/game/:roomId" element={<GamePage />} />
+          <Route path="/sologame/:roomId" element={<SoloGamePage />} />
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>

@@ -9,7 +9,14 @@ interface ModalProps {
   onHide: () => void;
 }
 
+let roomMode = "game";
+
 export default function RoomJoinModal({ roomInfo, show, onHide }: ModalProps) {
+  console.log("roomjoinmodal rendered");
+  if (roomInfo && roomInfo.roomId.toLowerCase().includes("solo")) {
+    roomMode = "sologame";
+    console.log("solo mode!!");
+  }
   return (
     <Modal onHide={onHide} show={show} centered>
       <Modal.Header closeButton>
@@ -20,7 +27,10 @@ export default function RoomJoinModal({ roomInfo, show, onHide }: ModalProps) {
       <Modal.Body>{roomInfo?.description}</Modal.Body>
       <Modal.Footer>
         <Button>
-          <NavLink to={`/game/${roomInfo?.roomId}`} style={{ color: "white" }}>
+          <NavLink
+            to={`/${roomMode}/${roomInfo?.roomId}`}
+            style={{ color: "white" }}
+          >
             Join
           </NavLink>
         </Button>

@@ -51,7 +51,6 @@ const initalState: StateType = {
 };
 
 let dataSocket: Socket;
-
 const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case START_GAME:
@@ -156,8 +155,10 @@ const reducer = (state: StateType, action: ActionType): StateType => {
 };
 
 export const GameContext = createContext<GameDispatch>({
-  started: false,
-  dispatch: () => {},
+  start: false,
+  dispatch: () => {
+    /* default implementation or no-op */
+  },
   trigerClick: false,
   clickedBlock: { rowIndex: -1, colIndex: -1 },
 });
@@ -309,7 +310,7 @@ function GamePage() {
 
   const value = useMemo(
     () => ({
-      started: start,
+      start: start,
       dispatch: dispatch,
       trigerClick: trigerClick,
       clickedBlock: clickedBlock,

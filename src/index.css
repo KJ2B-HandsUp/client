@@ -1,10 +1,15 @@
 @font-face {
-  font-family: "Ramche";
-  src: url("/Ramche.ttf") format("truetype");
+  font-family: "establishRetrosansOTF";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/establishRetrosansOTF.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
-  font-family: "Ramche";
+  font-family: "establishRetrosansOTF";
+  background-color: #212529;
+  background-attachment: local;
+  width: 100vw;
+  height: 100vh;
 }

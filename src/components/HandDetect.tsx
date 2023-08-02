@@ -6,27 +6,36 @@ import { drawCanvas } from "../utils/drawCanvas";
 import { MyCameraView } from "../styled/game.styled";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
 
-const MAX_DISTANCE = 50;
+const MAX_DISTANCE = 30;
 let ctx: CanvasRenderingContext2D | null = null;
-let wasFingersTogether = false;
+const wasFingersTogether = [false, false];
+let rectLeft = 0;
 
 export default function HandDetect() {
   const webcamRef = useRef<Webcam>(null);
   const resultsRef = useRef<Results>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const myRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (myRef.current) {
+      rectLeft = myRef.current.getBoundingClientRect().left;
+      console.log("rectLeft: ", rectLeft);
+    }
+  }, []);
+
   const resizeCanvas = useCallback(() => {
     if (canvasRef.current) {
       canvasRef.current.width = window.innerWidth * 0.5;
-      canvasRef.current.height = window.innerHeight * 0.8;
+      canvasRef.current.height = window.innerHeight * 0.85;
     }
   }, []);
 
   const simulateClick = useCallback((x: number, y: number) => {
     // 좌표를 실제 픽셀 값으로 변환할 수 있습니다. (옵션)
     const element = document.elementFromPoint(
-      canvasRef.current.width - x * canvasRef.current.width,
-      y * canvasRef.current.height,
+      canvasRef.current!.width - x * canvasRef.current!.width + rectLeft,
+      y * canvasRef.current!.height,
     );
 
     // 클릭 이벤트를 생성하고 발생시킵니다.
@@ -87,14 +96,14 @@ export default function HandDetect() {
           }
         }
 
-        if (isFingersTogether && !wasFingersTogether) {
+        if (isFingersTogether && !wasFingersTogether[i]) {
           console.log("All fingers are together", distance);
           simulateClick(averagePoint.x, averagePoint.y);
-        } else if (!isFingersTogether && wasFingersTogether) {
+        } else if (!isFingersTogether && wasFingersTogether[i]) {
           console.log("Fingers are apart");
         }
 
-        wasFingersTogether = isFingersTogether; // 현재 상태를 추적
+        wasFingersTogether[i] = isFingersTogether; // 현재 상태를 추적
       }
     },
     [simulateClick],
@@ -114,7 +123,7 @@ export default function HandDetect() {
         maxNumHands: 2,
         modelComplexity: 0,
         minDetectionConfidence: 0.7,
-        minTrackingConfidence: 0.3,
+        minTrackingConfidence: 0.5,
       });
       hands.onResults(onResults);
 
@@ -147,7 +156,7 @@ export default function HandDetect() {
   });
 
   return (
-    <MyCameraView>
+    <MyCameraView ref={myRef}>
       <canvas
         ref={canvasRef}
         style={{
@@ -164,7 +173,7 @@ export default function HandDetect() {
         videoConstraints={{
           facingMode: "user",
           width: 600,
-          height: 600,
+          height: 800,
         }}
       />
     </MyCameraView>

@@ -3,6 +3,7 @@ import { TableProps } from "../types/table";
 import { GridCell, GridTable } from "../styled/tables.styled";
 import { GameContext } from "../pages/GamePage";
 import { CLICK_BLOCK } from "../types/game.type";
+import { colorList, mp3List } from "../styled/game.styled";
 
 export function Board({ id, row, column }: TableProps) {
   const [clickedCell, setClickedCell] = useState<{
@@ -10,14 +11,18 @@ export function Board({ id, row, column }: TableProps) {
     col: number;
   } | null>(null);
 
-  const { started, dispatch, trigerClick, clickedBlock } =
+  const { start, dispatch, trigerClick, clickedBlock } =
     useContext(GameContext);
-  //console.log("board is is: ", id);
 
   const handleCellClick = useCallback(
     (rowIndex: number, colIndex: number) => {
       //console.log(`You clicked cell at row: ${rowIndex + 1}, col: ${colIndex + 1}`);
+      const audio = new Audio(
+        `/dpmaudio/dubstep_club_${mp3List[rowIndex][colIndex]}.wav`,
+      );
+      audio.play();
       setClickedCell({ row: rowIndex, col: colIndex });
+
       dispatch({
         type: CLICK_BLOCK,
         userId: id,
@@ -56,15 +61,14 @@ export function Board({ id, row, column }: TableProps) {
         key={colIndex}
         onClick={() => handleCellClick(rowIndex, colIndex)}
         className={isClicked ? "flash" : ""}
-      >
-        Cell {rowIndex}, {colIndex}
-      </GridCell>
+        flashcolor={colorList[colIndex]}
+      />
     );
   };
 
   return (
     <>
-      {started && (
+      {start && (
         <GridTable>
           <tbody>
             {Array.from({ length: column }, (_, index) => renderRow(index))}

@@ -12,6 +12,7 @@ export interface RoomData {
   roomId: string;
   router?: Router;
   peers?: string[];
+  peersNum?: number;
   roomType?: string;
   description?: string;
 }

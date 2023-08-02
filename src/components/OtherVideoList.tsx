@@ -63,6 +63,8 @@ function OtherVideoList({
           {turn == user.id && (
             <Board turn={turn} id={user.id} row={4} column={4} />
           )}
+          <h2>Player ID: ${user.id}</h2>
+          {turn == user.id && <h3>Your Turn!</h3>}
         </GameContainer>
       ))}
     </>

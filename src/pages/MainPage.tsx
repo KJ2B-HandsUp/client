@@ -6,7 +6,10 @@ import Sidebar from "../components/Sidebar";
 import { styled } from "styled-components";
 
 const MainPageWrapper = styled.div`
+  flex-direction: column;
   display: flex;
+  height: 100%;
+  width: 100vw;
 `;
 
 const CenterWrapper = styled.div`

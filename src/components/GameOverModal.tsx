@@ -17,20 +17,22 @@ export default function GameOverModal({
   onStartGame,
 }: ModalProps) {
   return (
-    <Modal show={show} centered>
-      <Modal.Header closeButton>
+    <Modal show={show} centered animation={false}>
+      <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
           <h2>Game Over</h2>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>Winner: ${winner}</Modal.Body>
       <Modal.Footer>
+        <Button variant="outline-primary" onClick={onStartGame}>
+          New Game
+        </Button>
         <Button>
           <NavLink to={`/home/roomlist`} style={{ color: "white" }}>
             Go Home
           </NavLink>
         </Button>
-        <Button onClick={onStartGame}>New Game</Button>
       </Modal.Footer>
     </Modal>
   );

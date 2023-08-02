@@ -49,7 +49,7 @@ export type ActionType =
   | { type: "OTHER_CHANGE_TURN" };
 
 export type GameDispatch = {
-  started: boolean;
+  start: boolean;
   dispatch: (action: ActionType) => void;
   trigerClick: boolean;
   clickedBlock: BlockType;

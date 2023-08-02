@@ -12,18 +12,20 @@ interface ModalProps {
 
 export default function GameStartModal({ show, onStartGame }: ModalProps) {
   return (
-    <Modal show={!show} centered>
-      <Modal.Header closeButton>
+    <Modal show={!show} centered animation={false}>
+      <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
           <h2>Start Game</h2>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>게임을 시작하시겠습니다?</Modal.Body>
       <Modal.Footer>
-        <Button onClick={onStartGame}>New Game</Button>
+        <Button variant="outline-primary" onClick={onStartGame}>
+          New Game
+        </Button>
         <Button>
           <NavLink to={`/home/roomlist`} style={{ color: "white" }}>
-            홈으로
+            Go Home
           </NavLink>
         </Button>
       </Modal.Footer>
