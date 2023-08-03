@@ -97,7 +97,7 @@ export default function HandDetect() {
         }
 
         if (isFingersTogether && !wasFingersTogether[i]) {
-          console.log("All fingers are together", distance);
+          //console.log("All fingers are together", distance);
           simulateClick(averagePoint.x, averagePoint.y);
         } else if (!isFingersTogether && wasFingersTogether[i]) {
           console.log("Fingers are apart");

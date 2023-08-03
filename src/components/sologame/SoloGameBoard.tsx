@@ -12,7 +12,6 @@ export function SoloGameBoard({ id, row, column }: TableProps) {
   } | null>(null);
   const { start, dispatch, trigerClick, clickedBlock } =
     useContext(SoloGameContext);
-  console.log("start: ", start);
 
   const handleCellClick = useCallback(
     async (rowIndex: number, colIndex: number) => {

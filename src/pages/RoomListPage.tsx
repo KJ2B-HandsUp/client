@@ -101,8 +101,10 @@ function RoomListPage() {
                     }`,
                   }}
                   onClick={() => {
-                    setRoom(roomInfo);
-                    setModalShow(true);
+                    if (roomInfo.roomId !== "Empty") {
+                      setRoom(roomInfo);
+                      setModalShow(true);
+                    }
                   }}
                 >
                   <Card.Header>
