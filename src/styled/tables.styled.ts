@@ -11,9 +11,16 @@ export const GridTable = styled.table`
 const flash = keyframes`
   0% {
     background-color: currentColor;
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
   }
   100% {
     background-color: transparent;
+    opacity: 0;
+    transform: scale(1);
   }
 `;
 
@@ -24,6 +31,7 @@ export const GridCell = styled.td`
   vertical-align: middle;
   transition: background-color 0.5s;
   color: ${(props) => props.flashcolor};
+  cursor: pointer;
 
   &.flash {
     animation: ${flash} 0.5s;

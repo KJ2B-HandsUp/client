@@ -20,7 +20,7 @@ import { colorList } from "../styled/game.styled";
 
 const emptyRoom: RoomData = {
   roomId: "Empty",
-  description: "빈 방입니다.",
+  description: "",
   peersNum: -1,
 };
 const initialRoomList: RoomData[] = [
@@ -43,18 +43,14 @@ function RoomListPage() {
   const navigate = useNavigate();
 
   const newRoomId = useRef<HTMLInputElement>();
-  const handleNewRoomIdSubmit = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault();
-      alert(`[${newRoomId.current!.value}] 방이 생성되었습니다 :)`);
-      let gameMode = "game";
-      if (newRoomId.current!.value.toLowerCase().includes("solo")) {
-        gameMode = "sologame";
-      }
-      navigate(`/${gameMode}/${newRoomId.current!.value}`);
-    },
-    [newRoomId, navigate],
-  );
+  const handleNewRoomIdSubmit = useCallback(() => {
+    alert(`[${newRoomId.current!.value}] 방이 생성되었습니다 :)`);
+    let gameMode = "game";
+    if (newRoomId.current!.value.toLowerCase().includes("solo")) {
+      gameMode = "sologame";
+    }
+    navigate(`/${gameMode}/${newRoomId.current!.value}`);
+  }, [newRoomId, navigate]);
 
   useEffect(() => {
     const tempRoomList: RoomData[] = [];
@@ -83,10 +79,10 @@ function RoomListPage() {
   return (
     <>
       <RoomListPageWrapper>
-        <FormWrapper>
+        <FormWrapper onSubmit={handleNewRoomIdSubmit}>
           <input placeholder="Room ID" ref={newRoomId}></input>
-          <Button variant="primary" onSubmit={handleNewRoomIdSubmit}>
-            Join
+          <Button variant="primary" type="submit">
+            Create
           </Button>
         </FormWrapper>
 
@@ -116,7 +112,11 @@ function RoomListPage() {
                     <Card.Text>{roomInfo.description}</Card.Text>
                   </Card.Body>
                   <Card.Footer>
-                    <Card.Text>현재인원 {roomInfo.peersNum}</Card.Text>
+                    <Card.Text>
+                      {roomInfo.roomId == "Empty"
+                        ? ""
+                        : `현재인원 ${roomInfo.peersNum!}`}
+                    </Card.Text>
                   </Card.Footer>
                 </Card>
               </Col>
