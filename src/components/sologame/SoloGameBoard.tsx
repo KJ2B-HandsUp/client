@@ -5,6 +5,17 @@ import { SoloGameContext } from "../../pages/sologame/SoloGamePage";
 import { CLICK_BLOCK } from "../../types/game.type";
 import { colorList, mp3List } from "../../styled/game.styled";
 
+const audioList: HTMLAudioElement[][] = [];
+for (let rowIndex = 0; rowIndex < mp3List.length; rowIndex++) {
+  const tempList = [];
+  for (let colIndex = 0; colIndex < mp3List[0].length; colIndex++) {
+    tempList.push(
+      new Audio(`/dpmaudio/dubstep_club_${mp3List[rowIndex][colIndex]}.wav`),
+    );
+  }
+  audioList.push([...tempList]);
+}
+
 export function SoloGameBoard({ id, row, column }: TableProps) {
   const [clickedCell, setClickedCell] = useState<{
     row: number;
@@ -14,12 +25,12 @@ export function SoloGameBoard({ id, row, column }: TableProps) {
     useContext(SoloGameContext);
 
   const handleCellClick = useCallback(
-    async (rowIndex: number, colIndex: number) => {
+    (rowIndex: number, colIndex: number) => {
       //console.log(`You clicked cell at row: ${rowIndex + 1}, col: ${colIndex + 1}`);
-      const audio = new Audio(
-        `/dpmaudio/dubstep_club_${mp3List[rowIndex][colIndex]}.wav`,
-      );
-      await audio.play();
+      const audio = audioList[rowIndex][colIndex];
+      audio.pause();
+      audio.currentTime = 0;
+      audio.play();
       setClickedCell({ row: rowIndex, col: colIndex });
 
       dispatch({

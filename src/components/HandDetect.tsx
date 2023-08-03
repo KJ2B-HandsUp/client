@@ -6,10 +6,10 @@ import { drawCanvas } from "../utils/drawCanvas";
 import { MyCameraView } from "../styled/game.styled";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
 
-const MAX_DISTANCE = 30;
 let ctx: CanvasRenderingContext2D | null = null;
-const wasFingersTogether = [false, false];
 let rectLeft = 0;
+const threshold = 0.035;
+type HandType = "left" | "right";
 
 export default function HandDetect() {
   const webcamRef = useRef<Webcam>(null);
@@ -20,7 +20,6 @@ export default function HandDetect() {
   useEffect(() => {
     if (myRef.current) {
       rectLeft = myRef.current.getBoundingClientRect().left;
-      console.log("rectLeft: ", rectLeft);
     }
   }, []);
 
@@ -49,7 +48,10 @@ export default function HandDetect() {
     }
   }, []);
 
-  // 현재 상태를 나타내는 변수
+  const previousZRef = useRef<Record<HandType, number | null>>({
+    left: null,
+    right: null,
+  });
 
   const onResults = useCallback(
     (results: Results) => {
@@ -60,50 +62,34 @@ export default function HandDetect() {
       }
 
       drawCanvas(ctx, results);
+      if (
+        results.multiHandLandmarks.length == 2 &&
+        results.multiHandedness[0].label !== results.multiHandedness[1].label
+      ) {
+        results.multiHandLandmarks?.forEach((landmarks, index) => {
+          const handType = results.multiHandedness?.[
+            index
+          ]?.label.toLowerCase() as HandType;
 
-      for (let i = 0; i < results.multiHandLandmarks.length; i++) {
-        const handLandmarks = results.multiHandLandmarks[i];
-        const fingerTips = [
-          handLandmarks[4], // 엄지 손가락 끝
-          handLandmarks[8], // 검지 손가락 끝
-          handLandmarks[12], // 중지 손가락 끝
-          handLandmarks[16], // 약지 손가락 끝
-          handLandmarks[20], // 새끼 손가락 끝
-        ];
+          // 가정: 검지 손가락은 랜드마크 배열의 인덱스 8에 해당함
+          const indexFingerLandmark = landmarks[8];
+          const zValue = indexFingerLandmark.z;
 
-        const averagePoint = fingerTips.reduce(
-          (acc, curr) => {
-            acc.x += curr.x;
-            acc.y += curr.y;
-            return acc;
-          },
-          { x: 0, y: 0 },
-        );
-        let distance;
-        averagePoint.x /= 5;
-        averagePoint.y /= 5;
-        let isFingersTogether = true;
-        for (const fingerTip of fingerTips) {
-          distance =
-            Math.sqrt(
-              Math.pow(fingerTip.x - averagePoint.x, 2) +
-                Math.pow(fingerTip.y - averagePoint.y, 2),
-            ) * 1000;
-
-          if (distance > MAX_DISTANCE) {
-            isFingersTogether = false;
-            break;
+          if (
+            typeof zValue === "number" &&
+            previousZRef.current[handType] !== null
+          ) {
+            if (threshold < previousZRef.current[handType]! - zValue) {
+              // console.log(
+              //   `Index finger coordinates: x=${indexFingerLandmark.x}, y=${indexFingerLandmark.y}, z=${zValue}`,
+              // );
+              // console.log("prev zValue: ", previousZRef.current[handType]!);
+              simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
+            }
           }
-        }
 
-        if (isFingersTogether && !wasFingersTogether[i]) {
-          //console.log("All fingers are together", distance);
-          simulateClick(averagePoint.x, averagePoint.y);
-        } else if (!isFingersTogether && wasFingersTogether[i]) {
-          console.log("Fingers are apart");
-        }
-
-        wasFingersTogether[i] = isFingersTogether; // 현재 상태를 추적
+          previousZRef.current[handType] = zValue;
+        });
       }
     },
     [simulateClick],
@@ -132,7 +118,7 @@ export default function HandDetect() {
           await hands.send({ image: webcamRef.current!.video! });
         },
         width: 600,
-        height: 600,
+        height: 800,
       });
 
       await camera.start();

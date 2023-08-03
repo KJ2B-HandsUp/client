@@ -8,7 +8,7 @@ interface GameStartModalProps {
   show: boolean;
   winner?: string;
   onStartGame: () => void;
-  handleBeforeUnload: () => void;
+  handleBeforeUnload?: () => void;
 }
 
 export default function GameStartModal({
