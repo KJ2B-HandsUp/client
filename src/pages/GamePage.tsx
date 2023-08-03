@@ -331,11 +331,12 @@ function GamePage() {
           />
         </div>
       </GameContext.Provider>
-      <GameStartModal show={start} onStartGame={handleNewGame} />
+      <GameStartModal show={start} onStartGame={handleNewGame} handleBeforeUnload={handleBeforeUnload}/>
       <GameOverModal
         show={end}
         winner={winner.toString()}
         onStartGame={handleNewGame}
+        handleBeforeUnload={handleBeforeUnload}
       />
     </>
   );

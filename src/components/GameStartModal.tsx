@@ -3,14 +3,19 @@ import Modal from "react-bootstrap/Modal";
 import { RoomData } from "../types/roomType";
 import { NavLink } from "react-router-dom";
 
-interface ModalProps {
+interface GameStartModalProps {
   roomInfo?: RoomData | null;
   show: boolean;
   winner?: string;
   onStartGame: () => void;
+  handleBeforeUnload: () => void;
 }
 
-export default function GameStartModal({ show, onStartGame }: ModalProps) {
+export default function GameStartModal({
+  show,
+  onStartGame,
+  handleBeforeUnload,
+}: GameStartModalProps) {
   return (
     <Modal show={!show} centered animation={false}>
       <Modal.Header>
@@ -24,7 +29,11 @@ export default function GameStartModal({ show, onStartGame }: ModalProps) {
           New Game
         </Button>
         <Button>
-          <NavLink to={`/home/roomlist`} style={{ color: "white" }}>
+          <NavLink
+            to={`/home/roomlist`}
+            style={{ color: "white" }}
+            onClick={handleBeforeUnload}
+          >
             Go Home
           </NavLink>
         </Button>
