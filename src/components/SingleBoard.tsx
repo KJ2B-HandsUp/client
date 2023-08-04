@@ -1,26 +1,16 @@
-import { useCallback, useState, useContext, useEffect } from "react";
+import { useCallback, useState, memo } from "react";
 import { GameProps } from "../types/table";
 import { GridCell, GridTable } from "../styled/tables.styled";
-import { GameContext } from "../pages/GamePage";
-import { CLICK_BLOCK } from "../types/game.type";
 import { colorList } from "../styled/game.styled";
 import { audioList } from "../utils/audio";
 
-export function Board({ userId, row, column }: GameProps) {
+function SingleBoard({ row, column }: GameProps) {
   const [cellFlash, setCellFlash] = useState(
     Array.from({ length: row }, () => Array(column).fill(false) as boolean[]),
   );
 
-  const { dispatch, trigerClick, clickedBlock } = useContext(GameContext);
-
   const handleCellClick = useCallback(
     (rowIndex: number, colIndex: number) => {
-      dispatch({
-        type: CLICK_BLOCK,
-        userId: userId!,
-        clickedBlock: { rowIndex: rowIndex, colIndex: colIndex },
-      });
-
       // 클릭한 셀의 애니메이션 상태를 true로 설정
       const newCellFlash = cellFlash.map((row, i) =>
         i === rowIndex
@@ -43,24 +33,16 @@ export function Board({ userId, row, column }: GameProps) {
         setCellFlash([...newCellFlash]);
       }, 100);
     },
-    [dispatch, userId, cellFlash],
+    [cellFlash],
   );
 
-  useEffect(() => {
-    if (trigerClick) {
-      handleCellClick(clickedBlock.rowIndex, clickedBlock.colIndex);
-    }
-  }, [handleCellClick, trigerClick]);
-
-  const renderRow = (rowIndex: number) => {
-    return (
-      <tr key={rowIndex}>
-        {Array.from({ length: row }, (_, colIndex) =>
-          renderCell(rowIndex, colIndex),
-        )}
-      </tr>
-    );
-  };
+  const renderRow = (rowIndex: number) => (
+    <tr key={rowIndex}>
+      {Array.from({ length: column }, (_, colIndex) =>
+        renderCell(rowIndex, colIndex),
+      )}
+    </tr>
+  );
 
   const renderCell = (rowIndex: number, colIndex: number) => (
     <GridCell
@@ -79,3 +61,5 @@ export function Board({ userId, row, column }: GameProps) {
     </GridTable>
   );
 }
+
+export const MemoizedSingleBoard = memo(SingleBoard);

@@ -5,28 +5,26 @@ import { Hands, Results } from "@mediapipe/hands";
 import { drawCanvas } from "../utils/drawCanvas";
 import { MyCameraView } from "../styled/game.styled";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
+import { HandType } from "../types/game.type";
 
 let ctx: CanvasRenderingContext2D | null = null;
 let rectLeft = 0;
-const threshold = 0.035;
-type HandType = "left" | "right";
+const threshold = 5;
 
-export default function HandDetect() {
+export default function HandDetectionVideo() {
   const webcamRef = useRef<Webcam>(null);
   const resultsRef = useRef<Results>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const myRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
+  const resizeCanvas = useCallback(() => {
     if (myRef.current) {
       rectLeft = myRef.current.getBoundingClientRect().left;
     }
-  }, []);
-
-  const resizeCanvas = useCallback(() => {
     if (canvasRef.current) {
-      canvasRef.current.width = window.innerWidth * 0.5;
-      canvasRef.current.height = window.innerHeight * 0.85;
+      canvasRef.current.width = window.innerWidth * (CAMERA_VIEW_WIDTH / 100);
+      canvasRef.current.height =
+        window.innerHeight * (CAMERA_VIEW_HEIGHT / 100);
     }
   }, []);
 
@@ -71,24 +69,22 @@ export default function HandDetect() {
             index
           ]?.label.toLowerCase() as HandType;
 
-          // 가정: 검지 손가락은 랜드마크 배열의 인덱스 8에 해당함
           const indexFingerLandmark = landmarks[8];
-          const zValue = indexFingerLandmark.z;
-
-          if (
-            typeof zValue === "number" &&
-            previousZRef.current[handType] !== null
-          ) {
-            if (threshold < previousZRef.current[handType]! - zValue) {
-              // console.log(
-              //   `Index finger coordinates: x=${indexFingerLandmark.x}, y=${indexFingerLandmark.y}, z=${zValue}`,
-              // );
-              // console.log("prev zValue: ", previousZRef.current[handType]!);
-              simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
+          if (indexFingerLandmark && "z" in indexFingerLandmark) {
+            const zValue = indexFingerLandmark.z * 100;
+            if (
+              typeof zValue === "number" &&
+              previousZRef.current[handType] != null &&
+              previousZRef.current[handType]! > -0.01 &&
+              zValue < 0
+            ) {
+              if (previousZRef.current[handType]! - zValue > threshold) {
+                simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
+              }
             }
-          }
 
-          previousZRef.current[handType] = zValue;
+            previousZRef.current[handType] = zValue;
+          }
         });
       }
     },
@@ -96,7 +92,7 @@ export default function HandDetect() {
   );
 
   const startHandDetection = useCallback(async () => {
-    if (webcamRef.current != null && webcamRef.current.video != null) {
+    if (webcamRef.current != null && "video" in webcamRef.current) {
       const hands = new Hands({
         locateFile: (file) => {
           return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@latest/${file}`;
@@ -109,11 +105,11 @@ export default function HandDetect() {
         maxNumHands: 2,
         modelComplexity: 0,
         minDetectionConfidence: 0.7,
-        minTrackingConfidence: 0.5,
+        minTrackingConfidence: 0.7,
       });
       hands.onResults(onResults);
 
-      const camera = new Camera(webcamRef.current.video, {
+      const camera = new Camera(webcamRef.current.video!, {
         onFrame: async () => {
           await hands.send({ image: webcamRef.current!.video! });
         },
@@ -131,11 +127,7 @@ export default function HandDetect() {
 
   useEffect(() => {
     resizeCanvas();
-
-    // 창 크기가 변경될 때마다 크기 조정
     window.addEventListener("resize", resizeCanvas);
-
-    // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
       window.removeEventListener("resize", resizeCanvas);
     };

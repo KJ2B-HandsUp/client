@@ -13,7 +13,7 @@ import {
 } from "../utils/socketio";
 import { io, Socket } from "socket.io-client";
 import { useParams } from "react-router-dom";
-import MyGame from "../components/MyGame";
+import { MemoizedMyGame } from "../components/MyGame";
 import {
   TransferDataType,
   UserType,
@@ -27,14 +27,9 @@ import {
   OTHER_PLAYER_CLICK,
   OTHER_CHANGE_TURN,
 } from "../types/game.type";
-import {
-  CardListContainer,
-  CAMERA_VIEW_WIDTH,
-  CAMERA_VIEW_HEIGHT,
-} from "../styled/game.styled";
-import OtherVideoList from "../components/OtherVideoList";
-import GameOverModal from "../components/GameOverModal";
-import GameStartModal from "../components/GameStartModal";
+import { MemoizedOtherUsersVideoView } from "../components/OtherUsersVideoView";
+import { MemoizedGameOverModal } from "../components/GameOverModal";
+import { MemoizedGameStartModal } from "../components/GameStartModal";
 
 const initalState: StateType = {
   start: false,
@@ -166,9 +161,7 @@ export const GameContext = createContext<GameDispatch>({
 let userList: UserType[] = [];
 let myId = 1;
 
-function GamePage() {
-  //console.log("gamepage rendered");
-
+export default function GamePage() {
   const [state, dispatch] = useReducer(reducer, initalState);
   const {
     playersNum,
@@ -204,7 +197,7 @@ function GamePage() {
             video: {
               frameRate: { ideal: 15, max: 20 },
               width: 600,
-              height: 600,
+              height: 700,
             },
           })
           .then(async (stream) => {
@@ -218,7 +211,7 @@ function GamePage() {
                       console.log("Success: get new producer video list");
                       console.log(mediaData);
                       userList.push({
-                        id: idx + 1,
+                        userId: idx + 1,
                         name: mediaData.producerId,
                         stream: mediaData.mediaStream,
                       });
@@ -247,7 +240,7 @@ function GamePage() {
             if (mediaStream) {
               console.log("Success: get new producer video");
               userList.push({
-                id: playersNum + 1,
+                userId: playersNum + 1,
                 name: producerId,
                 stream: mediaStream,
               });
@@ -322,17 +315,21 @@ function GamePage() {
   return (
     <>
       <GameContext.Provider value={value}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <MyGame turn={turn} id={myId} row={4} column={4} />
-          <OtherVideoList
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <MemoizedMyGame turn={turn} userId={myId} row={3} column={4} />
+          <MemoizedOtherUsersVideoView
             turn={turn}
             users={userList}
             userNum={playersNum - 1}
           />
         </div>
       </GameContext.Provider>
-      <GameStartModal show={start} onStartGame={handleNewGame} handleBeforeUnload={handleBeforeUnload}/>
-      <GameOverModal
+      <MemoizedGameStartModal
+        show={start}
+        onStartGame={handleNewGame}
+        handleBeforeUnload={handleBeforeUnload}
+      />
+      <MemoizedGameOverModal
         show={end}
         winner={winner.toString()}
         onStartGame={handleNewGame}
@@ -341,5 +338,3 @@ function GamePage() {
     </>
   );
 }
-
-export default GamePage;

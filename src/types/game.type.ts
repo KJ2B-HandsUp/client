@@ -1,3 +1,5 @@
+import { RoomData } from "./roomType";
+
 export const START_GAME = "START_GAME";
 export const CLICK_BLOCK = "CLICK_BLOCK";
 export const CHANGE_TURN = "CHANGE_TURN";
@@ -7,11 +9,12 @@ export const OTHER_CHANGE_TURN = "OTHER_CHANGE_TURN";
 
 export type TransferDataType = {
   type: string;
-  data?: object;
+  userId: number;
+  clickedBlock: BlockType;
 };
 
 export type UserType = {
-  id: number;
+  userId: number;
   name: string;
   stream?: MediaStream;
 };
@@ -54,3 +57,13 @@ export type GameDispatch = {
   trigerClick: boolean;
   clickedBlock: BlockType;
 };
+
+export type GameModalProps = {
+  show: boolean;
+  roomInfo?: RoomData | null;
+  winner?: string;
+  onStartGame: () => void;
+  handleBeforeUnload?: () => void;
+};
+
+export type HandType = "left" | "right";

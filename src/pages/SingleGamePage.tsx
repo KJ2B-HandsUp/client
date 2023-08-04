@@ -1,13 +1,14 @@
-import { useCallback, useReducer, useMemo, createContext, memo } from "react";
-import SoloMyGame from "../../components/sologame/SoloMyGame";
+import { useCallback, useReducer, useMemo, createContext } from "react";
+import { MemoizedSingleMyGame } from "../components/SingleMyGame";
 import {
   StateType,
   ActionType,
   GameDispatch,
   START_GAME,
   CLICK_BLOCK,
-} from "../../types/game.type";
-import GameStartModal from "../../components/GameStartModal";
+} from "../types/game.type";
+import { MemoizedGameStartModal } from "../components/GameStartModal";
+import { GamePageWrapper } from "../styled/game.styled";
 
 const initalState: StateType = {
   start: false,
@@ -45,7 +46,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
   }
 };
 
-export const SoloGameContext = createContext<GameDispatch>({
+export const SingleGameContext = createContext<GameDispatch>({
   start: false,
   dispatch: () => {
     /* default implementation or no-op */
@@ -56,9 +57,7 @@ export const SoloGameContext = createContext<GameDispatch>({
 
 const myId = 1;
 
-function SoloGamePage() {
-  // console.log("sologamepage rendered");
-
+export default function SingleGamePage() {
   const [state, dispatch] = useReducer(reducer, initalState);
   const { turn, start, trigerClick, clickedBlock } = state;
 
@@ -73,19 +72,15 @@ function SoloGamePage() {
       trigerClick: trigerClick,
       clickedBlock: clickedBlock,
     }),
-    [start, trigerClick],
+    [start, trigerClick, clickedBlock],
   );
 
   return (
-    <>
-      <SoloGameContext.Provider value={value}>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <SoloMyGame turn={turn} id={myId} row={4} column={4} />
-        </div>
-      </SoloGameContext.Provider>
-      <GameStartModal show={start} onStartGame={handleNewGame} />
-    </>
+    <GamePageWrapper>
+      <SingleGameContext.Provider value={value}>
+        <MemoizedSingleMyGame turn={turn} userId={myId} row={4} column={3} />
+      </SingleGameContext.Provider>
+      <MemoizedGameStartModal show={start} onStartGame={handleNewGame} />
+    </GamePageWrapper>
   );
 }
-
-export default memo(SoloGamePage);

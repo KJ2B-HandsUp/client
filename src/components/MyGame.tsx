@@ -1,18 +1,29 @@
 import { Board } from "./Board";
-import { GameContainer, PlayerIdContainer } from "../styled/game.styled";
-import HandDetect from "./HandDetect";
-import { TableProps } from "../types/table";
-import { memo } from "react";
+import {
+  GameWrapper,
+  PlayerIdContainer,
+  BoardWrapper,
+} from "../styled/game.styled";
+import HandDetectionVideo from "./HandDetectionVideo";
+import { GameProps } from "../types/table";
+import { memo, useContext } from "react";
+import { SingleGameContext } from "../pages/SingleGamePage";
 
-function MyGame({ turn, id, row, column }: TableProps) {
+function MyGame({ turn, userId, row, column }: GameProps) {
+  const { start } = useContext(SingleGameContext);
+
   return (
-    <GameContainer>
-      {<HandDetect />}
-      {turn == id && <Board turn={turn} id={id} row={row} column={column} />}
-      <PlayerIdContainer>Player ID: {id}</PlayerIdContainer>
-      {turn == id && <h3 color="red">Your Turn!</h3>}
-    </GameContainer>
+    <GameWrapper>
+      <BoardWrapper>
+        {<HandDetectionVideo />}
+        {turn == userId && (
+          <Board turn={turn} userId={userId} row={row} column={column} />
+        )}
+      </BoardWrapper>
+      <PlayerIdContainer>Player ID: {userId}</PlayerIdContainer>
+      {start && turn == userId && <h2 color="red">Your Turn!</h2>}
+    </GameWrapper>
   );
 }
 
-export default memo(MyGame);
+export const MemoizedMyGame = memo(MyGame);

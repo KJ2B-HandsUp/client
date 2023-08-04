@@ -1,21 +1,14 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { RoomData } from "../types/roomType";
 import { NavLink } from "react-router-dom";
+import { memo } from "react";
+import { GameModalProps } from "../types/game.type";
 
-interface GameStartModalProps {
-  roomInfo?: RoomData | null;
-  show: boolean;
-  winner?: string;
-  onStartGame: () => void;
-  handleBeforeUnload?: () => void;
-}
-
-export default function GameStartModal({
+function GameStartModal({
   show,
   onStartGame,
   handleBeforeUnload,
-}: GameStartModalProps) {
+}: GameModalProps) {
   return (
     <Modal show={!show} centered animation={false}>
       <Modal.Header>
@@ -23,7 +16,12 @@ export default function GameStartModal({
           <h2>Start Game</h2>
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>게임을 시작하시겠습니다?</Modal.Body>
+      <Modal.Body>
+        게임을 시작하시겠습니까?
+        <br />
+        <br />
+        <p>Tip: F11을 누르시면 쾌적한 환경에서 플레이하실 수 있습니다:)</p>
+      </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-primary" onClick={onStartGame}>
           New Game
@@ -41,3 +39,5 @@ export default function GameStartModal({
     </Modal>
   );
 }
+
+export const MemoizedGameStartModal = memo(GameStartModal);

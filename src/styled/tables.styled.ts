@@ -3,34 +3,30 @@ import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
 
 export const GridTable = styled.table`
   border-collapse: separate;
-  border-spacing: 5px;
-  width: ${CAMERA_VIEW_WIDTH};
-  height: ${CAMERA_VIEW_HEIGHT};
+  border-spacing: 10px;
+  width: ${CAMERA_VIEW_WIDTH - 10}vw;
+  height: ${CAMERA_VIEW_HEIGHT - 10}vh;
 `;
 
 const flash = keyframes`
   0% {
     background-color: currentColor;
-    opacity: 0;
-    transform: scale(0);
-  }
-  50% {
     opacity: 1;
   }
   100% {
-    background-color: transparent;
-    opacity: 0;
-    transform: scale(1);
+    background-color: black;
+    opacity: 0.4;
   }
 `;
 
 export const GridCell = styled.td`
   border: 2px solid ${(props) => props.flashcolor};
-  border-radius: 15px;
   text-align: center;
   vertical-align: middle;
   transition: background-color 0.5s;
   color: ${(props) => props.flashcolor};
+  background-color: black;
+  opacity: 0.4;
   cursor: pointer;
 
   &.flash {

@@ -16,12 +16,12 @@ export const drawCanvas = (ctx: CanvasRenderingContext2D, results: Results) => {
   if (results.multiHandLandmarks) {
     for (const landmarks of results.multiHandLandmarks) {
       drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
-        color: "#00FF00",
-        lineWidth: 5,
+        color: "#ffffff",
+        lineWidth: 10,
       });
       drawLandmarks(ctx, landmarks, {
-        color: "#FF0000",
-        lineWidth: 1,
+        color: "#ffffff",
+        lineWidth: 5,
         radius: 5,
       });
     }

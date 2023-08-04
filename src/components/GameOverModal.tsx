@@ -1,23 +1,15 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
-import { RoomData } from "../types/roomType";
+import { memo } from "react";
+import { GameModalProps } from "../types/game.type";
 
-interface GameOverModalProps {
-  roomInfo?: RoomData | null;
-  show: boolean;
-  winner: string;
-
-  onStartGame: () => void;
-  handleBeforeUnload: () => void;
-}
-
-export default function GameOverModal({
+function GameOverModal({
   show,
   winner,
   onStartGame,
   handleBeforeUnload,
-}: GameOverModalProps) {
+}: GameModalProps) {
   return (
     <Modal show={show} centered animation={false}>
       <Modal.Header>
@@ -43,3 +35,5 @@ export default function GameOverModal({
     </Modal>
   );
 }
+
+export const MemoizedGameOverModal = memo(GameOverModal);

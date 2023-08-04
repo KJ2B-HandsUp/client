@@ -1,12 +1,5 @@
 import { Button, Card, Col, Row } from "react-bootstrap";
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  FormEvent,
-  memo,
-} from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import RoomJoinModal from "../components/RoomJoinModal";
 import { RoomData } from "../types/roomType";
 import {
@@ -31,26 +24,26 @@ const initialRoomList: RoomData[] = [
   { roomId: "soloroom2", description: "솔로 모드 입니다 :)", peersNum: 0 },
   { roomId: "soloroom3", description: "솔로 모드 입니다 :)", peersNum: 0 },
 ];
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 6; i++) {
   initialRoomList.push(emptyRoom);
 }
 
-function RoomListPage() {
+export default function RoomListPage() {
   const [modalShow, setModalShow] = useState(false);
   const [room, setRoom] = useState<RoomData | null>(null);
   const [roomList, setRoomList] = useState<RoomData[]>(initialRoomList);
 
   const navigate = useNavigate();
 
-  const newRoomId = useRef<HTMLInputElement>();
-  const handleNewRoomIdSubmit = useCallback(() => {
-    alert(`[${newRoomId.current!.value}] 방이 생성되었습니다 :)`);
+  const newRoomNameRef = useRef<HTMLInputElement>(null);
+  const handlenewRoomNameRefSubmit = useCallback(() => {
+    alert(`[${newRoomNameRef.current!.value}] 방이 생성되었습니다 :)`);
     let gameMode = "game";
-    if (newRoomId.current!.value.toLowerCase().includes("solo")) {
+    if (newRoomNameRef.current!.value.toLowerCase().includes("solo")) {
       gameMode = "sologame";
     }
-    navigate(`/${gameMode}/${newRoomId.current!.value}`);
-  }, [newRoomId, navigate]);
+    navigate(`/${gameMode}/${newRoomNameRef.current!.value}`);
+  }, [newRoomNameRef, navigate]);
 
   useEffect(() => {
     const tempRoomList: RoomData[] = [];
@@ -65,7 +58,7 @@ function RoomListPage() {
               peersNum: peersNum,
             });
           });
-          for (let i = 0; i < 16 - peersNum; i++) {
+          for (let i = 0; i < 12 - peersNum; i++) {
             tempRoomList.push(emptyRoom);
           }
           setRoomList(tempRoomList);
@@ -79,15 +72,15 @@ function RoomListPage() {
   return (
     <>
       <RoomListPageWrapper>
-        <FormWrapper onSubmit={handleNewRoomIdSubmit}>
-          <input placeholder="Room ID" ref={newRoomId}></input>
+        <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>
+          <input placeholder="Room ID" ref={newRoomNameRef}></input>
           <Button variant="primary" type="submit">
             Create
           </Button>
         </FormWrapper>
 
         <RoomListWrapper>
-          <Row xs={4} md={4} className="g-5">
+          <Row xs={4} md={3} className="g-5">
             {roomList?.map((roomInfo, idx) => (
               <Col key={idx}>
                 <Card
@@ -134,5 +127,3 @@ function RoomListPage() {
     </>
   );
 }
-
-export default memo(RoomListPage);
