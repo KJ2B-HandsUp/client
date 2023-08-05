@@ -1,9 +1,15 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import RoomListPage from "./RoomListPage";
 import RankingPage from "./RankingPage";
-import SettingPage from "./SettingPage";
-import Sidebar from "../components/Sidebar";
+import HomePage from "./HomePage";
+import TutorialPage from "./TutorialPage";
+
 import { styled } from "styled-components";
+import { SidebarItemType } from "../types/sidebar.type";
+import { VideoBackground, TitleWrapper } from "../styled/login.styled";
+import { AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
+import PageMotionWrapper from "../motions/PageMotionWrapper";
 
 const MainPageWrapper = styled.div`
   flex-direction: column;
@@ -19,26 +25,46 @@ const CenterWrapper = styled.div`
   width: 100vw;
 `;
 
+export const pageItems: SidebarItemType[] = [
+  { name: "Home", path: "home", components: <HomePage /> },
+  { name: "RoomList", path: "roomlist", components: <RoomListPage /> },
+  { name: "Ranking", path: "ranking", components: <RankingPage /> },
+  { name: "Tutorial", path: "tutorial", components: <TutorialPage /> },
+];
+
 export default function MainPage() {
+  const location = useLocation();
+
   return (
-    <MainPageWrapper>
-      <Sidebar />
-      <CenterWrapper>
-        <Routes>
-          <Route path="/roomlist" element={<RoomListPage />} />
-          <Route path="/ranking" element={<RankingPage />} />
-          <Route path="/setting" element={<SettingPage />} />
-          <Route
-            path="*"
-            element={
-              <div>
-                <h2>404 Page not found</h2>
-              </div>
-            }
-          />
-          <Route path="/" element={<Navigate to="roomlist" />} />
-        </Routes>
-      </CenterWrapper>
-    </MainPageWrapper>
+    <>
+      <VideoBackground autoPlay loop muted playsInline>
+        <source src="/back.mp4" type="video/mp4" />
+      </VideoBackground>
+      <MainPageWrapper>
+        <header>
+          <TitleWrapper>Hands Up!</TitleWrapper>
+        </header>
+        <CenterWrapper>
+          <Routes key={location.pathname}>
+            {pageItems.map((item, idx) => (
+              <Route
+                path={`/${item.path}`}
+                key={idx}
+                element={item.components}
+              />
+            ))}
+            <Route
+              path="*"
+              element={
+                <div>
+                  <h2>404 Page not found</h2>
+                </div>
+              }
+            />
+            <Route path="/" element={<Navigate to="home" />} />
+          </Routes>
+        </CenterWrapper>
+      </MainPageWrapper>
+    </>
   );
 }

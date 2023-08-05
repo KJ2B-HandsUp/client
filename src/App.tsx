@@ -18,7 +18,7 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/home/*" element={<MainPage />} />
+          <Route path="/main/*" element={<MainPage />} />
           <Route path="/game/:roomId" element={<GamePage />} />
           <Route path="/sologame/:roomId" element={<SoloGamePage />} />
           <Route path="/" element={<Navigate to="/login" />} />

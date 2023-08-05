@@ -1,15 +1,13 @@
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { useState, useEffect, useCallback, useRef } from "react";
 import RoomJoinModal from "../components/RoomJoinModal";
 import { RoomData } from "../types/roomType";
-import {
-  RoomListPageWrapper,
-  RoomListWrapper,
-  FormWrapper,
-} from "../styled/rooms.styled";
+import { RoomListPageWrapper, FormWrapper } from "../styled/rooms.styled";
 import { useNavigate } from "react-router-dom";
 import { fetchData } from "../utils/fetchData";
 import { colorList } from "../styled/game.styled";
+import { TopLeftButton } from "../styled/home.styled";
+import { AiOutlineHome } from "react-icons/ai";
 
 const emptyRoom: RoomData = {
   roomId: "Empty",
@@ -72,6 +70,9 @@ export default function RoomListPage() {
   return (
     <>
       <RoomListPageWrapper>
+        <TopLeftButton to="/main">
+          <AiOutlineHome size="30" color="black" />
+        </TopLeftButton>
         <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>
           <input placeholder="Room ID" ref={newRoomNameRef}></input>
           <Button variant="primary" type="submit">
@@ -79,45 +80,53 @@ export default function RoomListPage() {
           </Button>
         </FormWrapper>
 
-        <RoomListWrapper>
-          <Row xs={4} md={3} className="g-5">
-            {roomList?.map((roomInfo, idx) => (
-              <Col key={idx}>
-                <Card
-                  key={idx}
-                  style={{
-                    width: "15rem",
-                    height: "15rem",
-                    borderRadius: 15,
-                    boxShadow: `5px 5px 10px ${
-                      colorList[idx % colorList.length]
-                    }`,
-                  }}
-                  onClick={() => {
-                    if (roomInfo.roomId !== "Empty") {
-                      setRoom(roomInfo);
-                      setModalShow(true);
-                    }
-                  }}
-                >
-                  <Card.Header>
-                    <h3>{roomInfo.roomId}</h3>
-                  </Card.Header>
-                  <Card.Body>
-                    <Card.Text>{roomInfo.description}</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <Card.Text>
-                      {roomInfo.roomId == "Empty"
-                        ? ""
-                        : `현재인원 ${roomInfo.peersNum!}`}
-                    </Card.Text>
-                  </Card.Footer>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </RoomListWrapper>
+        <table style={{ borderCollapse: "separate", borderSpacing: "30px" }}>
+          <tbody>
+            {Array(4)
+              .fill(0)
+              .map((_, rowIndex) => (
+                <tr key={rowIndex}>
+                  {roomList
+                    ?.slice(rowIndex * 3, rowIndex * 3 + 3)
+                    .map((roomInfo, idx) => (
+                      <td key={idx}>
+                        <Card
+                          style={{
+                            width: "20rem",
+                            height: "20rem",
+                            opacity: 0.8,
+                            boxShadow: `5px 5px 10px ${
+                              colorList[(rowIndex * 3 + idx) % colorList.length]
+                            }`,
+                          }}
+                          onClick={() => {
+                            if (roomInfo.roomId !== "Empty") {
+                              setRoom(roomInfo);
+                              setModalShow(true);
+                            }
+                          }}
+                        >
+                          <Card.Header>
+                            <h3>{roomInfo.roomId}</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            <Card.Text>{roomInfo.description}</Card.Text>
+                          </Card.Body>
+                          <Card.Footer>
+                            <Card.Text>
+                              {roomInfo.roomId == "Empty"
+                                ? ""
+                                : `현재인원 ${roomInfo.peersNum!}`}
+                            </Card.Text>
+                          </Card.Footer>
+                        </Card>
+                      </td>
+                    ))}
+                </tr>
+              ))}
+          </tbody>
+        </table>
+
         <RoomJoinModal
           roomInfo={room}
           show={modalShow}

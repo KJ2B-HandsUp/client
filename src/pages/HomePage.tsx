@@ -1,7 +1,12 @@
+import { HomePageWrapper } from "../styled/home.styled";
+import { pageItems } from "./MainPage";
+import Sidebar from "../components/Sidebar";
+
 export default function HomePage() {
   return (
     <>
-      <h2>This is Home Page.</h2>
+      <Sidebar items={pageItems.slice(1)} />
+      <HomePageWrapper></HomePageWrapper>
     </>
   );
 }

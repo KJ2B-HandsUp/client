@@ -1,31 +1,31 @@
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import {
+  LoginPageWrapper,
+  VideoBackground,
+  TitleWrapper,
+} from "../styled/login.styled";
+import Sidebar from "../components/Sidebar";
+import { SidebarItemType } from "../types/sidebar.type";
 
-const LoginPageWrapper = styled.div`
-  display: flex;
-  background-color: #212529;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  gap: 20px;
-`;
+const items: SidebarItemType[] = [
+  {
+    name: "Login",
+    path: "login",
+  },
+];
 
 export default function LoginPage() {
   return (
     <>
+      <VideoBackground autoPlay loop muted playsInline>
+        <source src="/back.mp4" type="video/mp4" />
+      </VideoBackground>
+      <Sidebar items={items} />
       <LoginPageWrapper>
-        <h1
-          style={{
-            fontFamily: "Ramche",
-            color: "#ffffff",
-            fontWeight: 700,
-            marginBottom: 50,
-          }}
-        >
-          손 들어
-        </h1>
-        <NavLink to="/home">
+        <header>
+          <TitleWrapper>Hands Up!</TitleWrapper>
+        </header>
+        <NavLink to="/main">
           <img alt="카카오 로그인" src="/kakao_login_medium.png" />
         </NavLink>
       </LoginPageWrapper>
