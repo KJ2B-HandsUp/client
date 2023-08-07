@@ -13,10 +13,8 @@ function Sidebar({ items }: SidebarProps) {
             to={`/main/${item.path}`}
             key={index}
             onClick={playBtnAudio}
-            style={({ isActive }) => {
-              return {
-                textDecoration: "none",
-              };
+            style={{
+              textDecoration: "none",
             }}
           >
             <SidebarItem menu={item} />

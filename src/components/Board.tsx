@@ -7,7 +7,6 @@ import { colorList } from "../styled/game.styled";
 import { audioList } from "../utils/audio";
 
 function bfs(
-  grid: number[][],
   row: number,
   col: number,
   visited: boolean[][],
@@ -22,13 +21,12 @@ function bfs(
     [0, -1],
   ];
   const queue: number[][] = [];
-  const newFlash = [...grid];
   let seconds = 100;
   queue.push([row, col]);
   visited[row][col] = true;
 
   while (queue.length > 0) {
-    const [currentRow, currentCol]: number[] = queue.shift();
+    const [currentRow, currentCol]: number[] = queue.shift()!;
     const visitedCell: number[][] = [];
     for (const direction of directions) {
       const newRow = currentRow + direction[0];
@@ -97,7 +95,7 @@ export function Board({ userId, row, column }: GameProps) {
       const visited = Array(4)
         .fill(false)
         .map(() => Array(3).fill(false) as boolean[]);
-      bfs(newFlash, rowIndex, colIndex, visited, setCellFlash);
+      bfs(rowIndex, colIndex, visited, setCellFlash);
     },
     [dispatch, userId, cellFlash],
   );

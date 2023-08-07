@@ -14,6 +14,7 @@ export const UserImage = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  border: 5px solid white;
   margin-bottom: 10px;
 `;
 

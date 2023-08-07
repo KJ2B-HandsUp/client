@@ -176,6 +176,7 @@ const createSendTransport = async (
           } catch (error: unknown) {
             if (error instanceof Error) {
               reject(error);
+              errback(error);
             }
           }
         },
@@ -210,24 +211,26 @@ const connectSendTransport = async (): Promise<void> => {
 const getProducers = async (
   socket: Socket,
 ): Promise<(MediaDataType | undefined)[]> => {
-  const result = await new Promise((resolve, reject) => {
-    socket.emit("getProducers", async (producerIds: string[]) => {
-      console.log(producerIds);
-      try {
-        const results: (MediaDataType | undefined)[] = [];
-        for (const id of producerIds) {
-          const consumerTransport = await signalNewConsumerTransport(
-            id,
-            socket,
-          );
-          results.push({ producerId: id, mediaStream: consumerTransport! });
+  const result = await new Promise<(MediaDataType | undefined)[]>(
+    (resolve, reject) => {
+      socket.emit("getProducers", async (producerIds: string[]) => {
+        console.log(producerIds);
+        try {
+          const results: (MediaDataType | undefined)[] = [];
+          for (const id of producerIds) {
+            const consumerTransport = await signalNewConsumerTransport(
+              id,
+              socket,
+            );
+            results.push({ producerId: id, mediaStream: consumerTransport! });
+          }
+          resolve(results);
+        } catch (error) {
+          reject(error);
         }
-        resolve(results);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
+      });
+    },
+  );
   return result;
 };
 

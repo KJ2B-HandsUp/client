@@ -57,7 +57,7 @@ export default function RoomListPage() {
       .then((res) => {
         const peersNum = Object.keys(res).length;
         if (peersNum > 0) {
-          Object.entries(res).forEach(([key, value]) => {
+          Object.keys(res).forEach((key) => {
             tempRoomList.push({
               roomId: key,
               description: `[${key}] 방입니다!`,

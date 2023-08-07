@@ -10,7 +10,7 @@ import { memo, useContext } from "react";
 import { SingleGameContext } from "../pages/SingleGamePage";
 
 function MyGame({ turn, userId, row, column }: GameProps) {
-  const { start, gameover } = useContext(SingleGameContext);
+  const { start } = useContext(SingleGameContext);
   console.log("MyGame rendered", turn);
   return (
     <GameWrapper>

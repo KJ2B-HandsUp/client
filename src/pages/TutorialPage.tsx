@@ -83,6 +83,9 @@ export default function TutorialPage() {
             style={{
               display: "flex",
               flexDirection: "column",
+              backgroundColor: "black",
+              padding: "30px",
+              borderRadius: "5%",
             }}
           >
             <h1>튜토리얼</h1>
