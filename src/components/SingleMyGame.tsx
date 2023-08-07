@@ -10,7 +10,7 @@ function SingleMyGame({ turn, userId, row, column }: GameProps) {
 
   return (
     <GameWrapper>
-      {<HandDetectionVideo />}
+      <HandDetectionVideo />
       {start && turn == userId && (
         <MemoizedSingleBoard
           turn={turn}

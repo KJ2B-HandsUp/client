@@ -2,7 +2,6 @@ import { styled } from "styled-components";
 import { NavLink } from "react-router-dom";
 
 export const HomePageWrapper = styled.div`
-  margin-top: 15vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -12,9 +11,7 @@ export const HomePageWrapper = styled.div`
 `;
 
 export const TopLeftButton = styled(NavLink)`
-  position: fixed;
-  top: 40px;
-  left: 40px;
+  position: relative;
   padding: 20px;
   background-color: #ffffff;
   opacity: 0.8;

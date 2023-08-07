@@ -1,4 +1,4 @@
-import { Button, Card } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useState, useEffect, useCallback, useRef } from "react";
 import RoomJoinModal from "../components/RoomJoinModal";
 import { RoomData } from "../types/roomType";
@@ -8,6 +8,7 @@ import { fetchData } from "../utils/fetchData";
 import { colorList } from "../styled/game.styled";
 import { TopLeftButton } from "../styled/home.styled";
 import { AiOutlineHome } from "react-icons/ai";
+import { motion } from "framer-motion";
 
 const emptyRoom: RoomData = {
   roomId: "Empty",
@@ -25,6 +26,12 @@ const initialRoomList: RoomData[] = [
 for (let i = 0; i < 6; i++) {
   initialRoomList.push(emptyRoom);
 }
+
+const spring = {
+  type: "spring",
+  damping: 10,
+  stiffness: 100,
+};
 
 export default function RoomListPage() {
   const [modalShow, setModalShow] = useState(false);
@@ -90,11 +97,19 @@ export default function RoomListPage() {
                     ?.slice(rowIndex * 3, rowIndex * 3 + 3)
                     .map((roomInfo, idx) => (
                       <td key={idx}>
-                        <Card
+                        <motion.div
+                          transition={spring}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.8 }}
                           style={{
-                            width: "20rem",
-                            height: "20rem",
+                            backgroundColor: "white",
                             opacity: 0.8,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            textAlign: "center",
+                            width: "18rem",
+                            height: "18rem",
                             boxShadow: `5px 5px 10px ${
                               colorList[(rowIndex * 3 + idx) % colorList.length]
                             }`,
@@ -106,20 +121,14 @@ export default function RoomListPage() {
                             }
                           }}
                         >
-                          <Card.Header>
-                            <h3>{roomInfo.roomId}</h3>
-                          </Card.Header>
-                          <Card.Body>
-                            <Card.Text>{roomInfo.description}</Card.Text>
-                          </Card.Body>
-                          <Card.Footer>
-                            <Card.Text>
-                              {roomInfo.roomId == "Empty"
-                                ? ""
-                                : `현재인원 ${roomInfo.peersNum!}`}
-                            </Card.Text>
-                          </Card.Footer>
-                        </Card>
+                          <h3>{roomInfo.roomId}</h3>
+                          {roomInfo.description}
+                          <p>
+                            {roomInfo.roomId == "Empty"
+                              ? ""
+                              : `현재인원 ${roomInfo.peersNum!}`}
+                          </p>
+                        </motion.div>
                       </td>
                     ))}
                 </tr>
@@ -130,7 +139,9 @@ export default function RoomListPage() {
         <RoomJoinModal
           roomInfo={room}
           show={modalShow}
-          onHide={() => setModalShow(false)}
+          onHide={() => {
+            setModalShow(false);
+          }}
         />
       </RoomListPageWrapper>
     </>

@@ -15,7 +15,8 @@ export type TransferDataType = {
 
 export type UserType = {
   userId: number;
-  name: string;
+  nickname?: string;
+  profile_image_url?: string;
   stream?: MediaStream;
 };
 
@@ -56,6 +57,7 @@ export type GameDispatch = {
   dispatch: (action: ActionType) => void;
   trigerClick: boolean;
   clickedBlock: BlockType;
+  gameover?: boolean;
 };
 
 export type GameModalProps = {

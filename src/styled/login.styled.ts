@@ -5,7 +5,7 @@ export const LoginPageWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  height: 100vh;
 `;
 
 export const VideoBackground = styled.video`

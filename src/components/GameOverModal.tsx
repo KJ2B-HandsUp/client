@@ -17,14 +17,14 @@ function GameOverModal({
           <h2>Game Over</h2>
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>Winner: ${winner}</Modal.Body>
+      <Modal.Body>Winner: {winner}</Modal.Body>
       <Modal.Footer>
         <Button variant="outline-primary" onClick={onStartGame}>
           New Game
         </Button>
         <Button>
           <NavLink
-            to={`/home/roomlist`}
+            to={`/main/roomlist`}
             style={{ color: "white" }}
             onClick={handleBeforeUnload}
           >

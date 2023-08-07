@@ -67,10 +67,13 @@ function OtherUsersVideoView({
                 style={{
                   position: "absolute",
                   transform: "scaleX(-1)",
+                  width: `${CAMERA_VIEW_WIDTH}vw`,
+                  height: `${CAMERA_VIEW_HEIGHT}vh`,
+                  border: "5px solid #ffffff",
                 }}
               />
             </MyCameraView>
-            {start && turn == user.userId && (
+            {((start && turn == user.userId) || turn == -1) && (
               <Board turn={turn} userId={user.userId} row={3} column={4} />
             )}
           </BoardWrapper>

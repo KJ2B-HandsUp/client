@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const RoomListPageWrapper = styled.div`
-  margin-top: 15vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

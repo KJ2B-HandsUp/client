@@ -9,6 +9,7 @@ import { HandType } from "../types/game.type";
 
 let ctx: CanvasRenderingContext2D | null = null;
 let rectLeft = 0;
+let rectTop = 0;
 const threshold = 5;
 
 export default function HandDetectionVideo() {
@@ -20,6 +21,7 @@ export default function HandDetectionVideo() {
   const resizeCanvas = useCallback(() => {
     if (myRef.current) {
       rectLeft = myRef.current.getBoundingClientRect().left;
+      rectTop = myRef.current.getBoundingClientRect().top;
     }
     if (canvasRef.current) {
       canvasRef.current.width = window.innerWidth * (CAMERA_VIEW_WIDTH / 100);
@@ -32,7 +34,7 @@ export default function HandDetectionVideo() {
     // 좌표를 실제 픽셀 값으로 변환할 수 있습니다. (옵션)
     const element = document.elementFromPoint(
       canvasRef.current!.width - x * canvasRef.current!.width + rectLeft,
-      y * canvasRef.current!.height,
+      y * canvasRef.current!.height + rectTop,
     );
 
     // 클릭 이벤트를 생성하고 발생시킵니다.
@@ -140,7 +142,9 @@ export default function HandDetectionVideo() {
         style={{
           top: 0,
           left: 0,
-          border: "2px solid",
+          width: `${CAMERA_VIEW_WIDTH}vw`,
+          height: `${CAMERA_VIEW_HEIGHT}vh`,
+          border: "5px solid #ffffff",
         }}
       />
 

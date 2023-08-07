@@ -5,6 +5,7 @@ import {
   useReducer,
   useMemo,
   createContext,
+  useState,
 } from "react";
 import {
   closeProducer,
@@ -30,6 +31,7 @@ import {
 import { MemoizedOtherUsersVideoView } from "../components/OtherUsersVideoView";
 import { MemoizedGameOverModal } from "../components/GameOverModal";
 import { MemoizedGameStartModal } from "../components/GameStartModal";
+import { GamePageWrapper } from "../styled/game.styled";
 
 const initalState: StateType = {
   start: false,
@@ -156,12 +158,15 @@ export const GameContext = createContext<GameDispatch>({
   },
   trigerClick: false,
   clickedBlock: { rowIndex: -1, colIndex: -1 },
+  gameover: false,
 });
 
 let userList: UserType[] = [];
 let myId = 1;
 
 export default function GamePage() {
+  console.log("GamePage rendered");
+
   const [state, dispatch] = useReducer(reducer, initalState);
   const {
     playersNum,
@@ -176,12 +181,14 @@ export default function GamePage() {
 
   const { roomId } = useParams();
   const socket = useRef<Socket>();
+  const [gameOverState, setGameOverState] = useState(false);
 
   const handleBeforeUnload = useCallback(() => {
     socket.current!.emit("disconnect");
   }, []);
 
   const handleNewGame = useCallback(() => {
+    setGameOverState(false);
     dispatch({ type: START_GAME });
   }, []);
 
@@ -202,17 +209,16 @@ export default function GamePage() {
           })
           .then(async (stream) => {
             if (roomId !== undefined) {
-              console.log(stream);
               await streamSuccess(stream, socket.current!, roomId).then(
                 (mediaStreamList) => {
                   console.log(mediaStreamList);
                   mediaStreamList.map((mediaData, idx) => {
                     if (mediaData) {
-                      console.log("Success: get new producer video list");
-                      console.log(mediaData);
+                      // console.log("Success: get new producer video list");
+                      // console.log(mediaData);
                       userList.push({
                         userId: idx + 1,
-                        name: mediaData.producerId,
+                        nickname: mediaData.producerId,
                         stream: mediaData.mediaStream,
                       });
                     }
@@ -238,10 +244,10 @@ export default function GamePage() {
             );
 
             if (mediaStream) {
-              console.log("Success: get new producer video");
+              // console.log("Success: get new producer video");
               userList.push({
                 userId: playersNum + 1,
-                name: producerId,
+                nickname: producerId,
                 stream: mediaStream,
               });
               dispatch({ type: ADD_PLAYER, num: 1 });
@@ -256,7 +262,9 @@ export default function GamePage() {
         "producer-closed",
         ({ remoteProducerId }: { remoteProducerId: string }): void => {
           closeProducer(remoteProducerId);
-          userList = userList.filter((user) => user.name !== remoteProducerId);
+          userList = userList.filter(
+            (user) => user.nickname !== remoteProducerId,
+          );
           dispatch({ type: ADD_PLAYER, num: -1 });
         },
       );
@@ -268,10 +276,9 @@ export default function GamePage() {
       });
 
       dataSocket.on("send_game_data", (res: { data: TransferDataType }) => {
-        console.log(res.data);
         switch (res.data.type) {
           case "START":
-            dispatch({ type: START_GAME });
+            handleNewGame();
             break;
           case "TURN":
             dispatch({ type: OTHER_CHANGE_TURN });
@@ -297,9 +304,16 @@ export default function GamePage() {
 
   useEffect(() => {
     if (endTurn) {
-      dispatch({ type: CHANGE_TURN });
+      setTimeout(() => {
+        dispatch({ type: CHANGE_TURN });
+      }, 1000);
     }
-  }, [endTurn]);
+    if (end) {
+      setTimeout(() => {
+        setGameOverState(true);
+      }, 2000);
+    }
+  }, [endTurn, end]);
 
   const value = useMemo(
     () => ({
@@ -307,30 +321,31 @@ export default function GamePage() {
       dispatch: dispatch,
       trigerClick: trigerClick,
       clickedBlock: clickedBlock,
+      gameover: end,
     }),
-    [start, trigerClick],
+    [start, trigerClick, end],
   );
-  //console.log("myId: ", myId);
-  console.log("current turn: ", turn, " myId: ", myId);
+  // console.log("myId: ", myId);
+  // console.log("current turn: ", turn, " myId: ", myId);
   return (
     <>
       <GameContext.Provider value={value}>
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <GamePageWrapper>
           <MemoizedMyGame turn={turn} userId={myId} row={3} column={4} />
           <MemoizedOtherUsersVideoView
             turn={turn}
             users={userList}
             userNum={playersNum - 1}
           />
-        </div>
+        </GamePageWrapper>
       </GameContext.Provider>
       <MemoizedGameStartModal
-        show={start}
+        show={start || end}
         onStartGame={handleNewGame}
         handleBeforeUnload={handleBeforeUnload}
       />
       <MemoizedGameOverModal
-        show={end}
+        show={gameOverState}
         winner={winner.toString()}
         onStartGame={handleNewGame}
         handleBeforeUnload={handleBeforeUnload}

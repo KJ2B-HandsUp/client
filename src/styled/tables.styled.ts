@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
+import { motion } from "framer-motion";
 
 export const GridTable = styled.table`
   border-collapse: separate;
@@ -14,22 +15,29 @@ const flash = keyframes`
     opacity: 1;
   }
   100% {
-    background-color: black;
+    background-color: white;
     opacity: 0.4;
   }
 `;
 
-export const GridCell = styled.td`
-  border: 2px solid ${(props) => props.flashcolor};
+export const GridCell = styled(motion.td)<{ flashcolor: string }>`
+  position: relative;
+  border: 4px solid ${(props) => props.flashcolor};
   text-align: center;
   vertical-align: middle;
-  transition: background-color 0.5s;
   color: ${(props) => props.flashcolor};
-  background-color: black;
-  opacity: 0.4;
+  background-color: white;
+  opacity: 0.5;
   cursor: pointer;
 
   &.flash {
     animation: ${flash} 0.5s;
+  }
+
+  &.gameover {
+    border: 4px solid black;
+    background-color: white;
+    opacity: 1;
+    z-index: 1000;
   }
 `;

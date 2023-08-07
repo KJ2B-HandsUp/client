@@ -28,7 +28,7 @@ function GameStartModal({
         </Button>
         <Button>
           <NavLink
-            to={`/home/roomlist`}
+            to={`/main/roomlist`}
             style={{ color: "white" }}
             onClick={handleBeforeUnload}
           >

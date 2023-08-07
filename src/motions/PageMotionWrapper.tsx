@@ -6,6 +6,7 @@ export default function PageMotionWrapper({ children }) {
       initial={animate.initial}
       animate={animate.animate}
       exit={animate.exit}
+      transition={{ duration: 0.5, type: "spring" }}
     >
       {children}
     </motion.div>
@@ -14,15 +15,15 @@ export default function PageMotionWrapper({ children }) {
 
 const animate = {
   initial: {
-    transform: `translateY(100px)`,
+    y: 500,
     opacity: 0,
   },
   animate: {
-    transform: `translateY(0px)`,
+    y: 0,
     opacity: 1,
   },
   exit: {
-    transform: `translateY(-100px)`,
+    y: 500,
     opacity: 0,
   },
 };

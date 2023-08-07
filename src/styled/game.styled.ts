@@ -7,18 +7,24 @@ export const colorList = ["red", "orange", "blue", "violet"];
 
 export const GamePageWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  width: 100vw;
+  height: 90vh;
 `;
 
 export const GameWrapper = styled.div`
   position: relative;
-  user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const BoardWrapper = styled.div`
   width: ${CAMERA_VIEW_WIDTH}vw;
   height: ${CAMERA_VIEW_HEIGHT}vh;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,11 +33,8 @@ export const BoardWrapper = styled.div`
 export const MyCameraView = styled.div`
   overflow: hidden;
   position: absolute;
-  top: 0;
-  left: 0;
   width: ${CAMERA_VIEW_WIDTH}vw;
   height: ${CAMERA_VIEW_HEIGHT}vh;
-  border: "2px solid white";
 `;
 
 export const CardListContainer = styled.div`
