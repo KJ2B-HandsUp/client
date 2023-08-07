@@ -1,26 +1,25 @@
 import { TutorialPageWrapper } from "../styled/tutorial.styled";
 import { TopLeftButton } from "../styled/home.styled";
 import { AiOutlineHome } from "react-icons/ai";
-import { useCallback, useReducer, useMemo, createContext } from "react";
+import { useReducer, useMemo } from "react";
 import { MemoizedSingleMyGame } from "../components/SingleMyGame";
 import {
   StateType,
   ActionType,
-  GameDispatch,
   START_GAME,
   CLICK_BLOCK,
 } from "../types/game.type";
-import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
 import { SingleGameContext } from "./SingleGamePage";
+import { playBtnAudio } from "../utils/audio";
 
 const initalState: StateType = {
-  start: false,
+  start: true,
   end: false,
   playersNum: 1,
-  turn: 0,
+  turn: 1,
   endTurn: false,
-  blockNum: 1,
+  blockNum: 0,
   blockList: [],
   prevBlockList: [],
   winner: -1,
@@ -56,10 +55,6 @@ export default function TutorialPage() {
   const [state, dispatch] = useReducer(reducer, initalState);
   const { turn, start, trigerClick, clickedBlock } = state;
 
-  const handleNewGame = useCallback(() => {
-    dispatch({ type: START_GAME });
-  }, []);
-
   const value = useMemo(
     () => ({
       start: start,
@@ -72,7 +67,7 @@ export default function TutorialPage() {
   return (
     <>
       <TutorialPageWrapper>
-        <TopLeftButton to="/main">
+        <TopLeftButton to="/main" onClick={playBtnAudio}>
           <AiOutlineHome size="30" color="black" />
         </TopLeftButton>
         <GamePageWrapper>
@@ -109,7 +104,6 @@ export default function TutorialPage() {
             <h2>싱글 모드</h2>
             <p>혼자서 런치패드를 조작할 수 있는 모드입니다.</p>
           </div>
-          <MemoizedGameStartModal show={start} onStartGame={handleNewGame} />
         </GamePageWrapper>
       </TutorialPageWrapper>
     </>

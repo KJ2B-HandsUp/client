@@ -9,6 +9,7 @@ import { colorList } from "../styled/game.styled";
 import { TopLeftButton } from "../styled/home.styled";
 import { AiOutlineHome } from "react-icons/ai";
 import { motion } from "framer-motion";
+import { playBtnAudio } from "../utils/audio";
 
 const emptyRoom: RoomData = {
   roomId: "Empty",
@@ -77,7 +78,7 @@ export default function RoomListPage() {
   return (
     <>
       <RoomListPageWrapper>
-        <TopLeftButton to="/main">
+        <TopLeftButton to="/main" onClick={playBtnAudio}>
           <AiOutlineHome size="30" color="black" />
         </TopLeftButton>
         <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>

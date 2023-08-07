@@ -6,6 +6,7 @@ import {
 } from "../styled/login.styled";
 import Sidebar from "../components/Sidebar";
 import { SidebarItemType } from "../types/sidebar.type";
+import { playBtnAudio } from "../utils/audio";
 
 const items: SidebarItemType[] = [
   {
@@ -33,7 +34,7 @@ export default function LoginPage() {
           <TitleWrapper>Hands Up!</TitleWrapper>
         </header>
         <button onClick={requestLogin}>카카오 로그인</button>
-        <NavLink to="/main">
+        <NavLink to="/main" onClick={playBtnAudio}>
           <img alt="카카오 로그인" src="/kakao_login_medium.png" />
         </NavLink>
       </LoginPageWrapper>

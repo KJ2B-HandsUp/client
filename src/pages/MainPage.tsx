@@ -7,12 +7,13 @@ import TutorialPage from "./TutorialPage";
 
 import { styled } from "styled-components";
 import { SidebarItemType } from "../types/sidebar.type";
-import { VideoBackground, TitleWrapper } from "../styled/login.styled";
+import { VideoBackground } from "../styled/login.styled";
 import { AnimatePresence } from "framer-motion";
 import PageMotionWrapper from "../motions/PageMotionWrapper";
 import axios from "axios";
 import { UserType } from "../types/game.type";
 import { MemoizedUserProfile } from "../components/UserProfile";
+import { bgmAudio, playBtnAudio } from "../utils/audio";
 
 const MainPageWrapper = styled.div`
   flex-direction: column;
@@ -65,7 +66,16 @@ export default function MainPage() {
   }
 
   useEffect(() => {
+    // 로그인 유저 정보
     getUserProfile();
+
+    // 기본 브금
+    bgmAudio.loop = true; // 무한 반복 설정
+    bgmAudio.play(); // 음원 재생 시작
+
+    return () => {
+      bgmAudio.pause(); // 컴포넌트 언마운트 시 음원 정지
+    };
   }, []);
 
   return (

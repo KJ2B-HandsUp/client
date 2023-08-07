@@ -15,3 +15,16 @@ for (let rowIndex = 0; rowIndex < mp3List.length; rowIndex++) {
   }
   audioList.push([...tempList]);
 }
+
+export const bgmAudio = new Audio("/mp3/stereo_madness.mp3");
+
+const btnAudio = new Audio("/mp3/warp1.mp3");
+
+export function playBtnAudio() {
+  btnAudio.currentTime = 0;
+  btnAudio.play();
+}
+
+export function pauseBtnAudio() {
+  btnAudio.pause();
+}

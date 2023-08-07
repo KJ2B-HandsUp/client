@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
 import { SidebarWrapper } from "../styled/sidebar.styled";
 import { SidebarProps } from "../types/sidebar.type";
+import { playBtnAudio } from "../utils/audio";
 
 function Sidebar({ items }: SidebarProps) {
   return (
@@ -11,6 +12,7 @@ function Sidebar({ items }: SidebarProps) {
           <NavLink
             to={`/main/${item.path}`}
             key={index}
+            onClick={playBtnAudio}
             style={({ isActive }) => {
               return {
                 textDecoration: "none",
