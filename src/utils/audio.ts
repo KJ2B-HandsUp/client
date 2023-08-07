@@ -1,11 +1,11 @@
-const mp3List = [
+export const mp3List = [
   ["a_arp_01", "a_bass_01", "b_stab_01", "a_vox_01"],
   ["b_arp_01", "a_bass_02", "b_stab_02", "a_kick_01"],
   ["a_bassfill_01", "a_bass_03", "a_piano_01", "a_snare_01"],
   ["b_bassfill_01", "a_bass_04", "b_lead_01", "b_snare_01"],
 ];
 
-const mp3List2 = [
+export const mp3List2 = [
   ["a_bass_03", "a_bass_04", "a_bassfill_01"],
   ["a_bass_01", "a_bass_02", "a_stab_01"],
   ["a_arp_01", "a_piano_01", "a_vox_01"],
