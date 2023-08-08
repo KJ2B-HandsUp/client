@@ -36,7 +36,7 @@ export const GridCell = styled(motion.td)<{ flashcolor: string }>`
 
   &.gameover {
     border: 4px solid black;
-    background-color: white;
+    background-color: black;
     opacity: 1;
     z-index: 1000;
   }

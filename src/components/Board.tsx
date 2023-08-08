@@ -109,7 +109,7 @@ export function Board({ userId, row, column }: GameProps) {
   const renderRow = (rowIndex: number) => {
     return (
       <tr key={rowIndex}>
-        {Array.from({ length: row }, (_, colIndex) =>
+        {Array.from({ length: column }, (_, colIndex) =>
           renderCell(rowIndex, colIndex),
         )}
       </tr>

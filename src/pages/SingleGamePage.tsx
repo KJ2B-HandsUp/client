@@ -1,4 +1,10 @@
-import { useCallback, useReducer, useMemo, createContext } from "react";
+import {
+  useCallback,
+  useReducer,
+  useMemo,
+  createContext,
+  useEffect,
+} from "react";
 import { MemoizedSingleMyGame } from "../components/SingleMyGame";
 import {
   StateType,
@@ -9,6 +15,7 @@ import {
 } from "../types/game.type";
 import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
+import { bgmAudio } from "../utils/audio";
 
 const initalState: StateType = {
   start: false,
@@ -74,6 +81,19 @@ export default function SingleGamePage() {
     }),
     [start, trigerClick, clickedBlock],
   );
+
+  useEffect(() => {
+    async function fetch() {
+      // 기본 브금
+      bgmAudio.loop = true; // 무한 반복 설정
+      await bgmAudio.play(); // 음원 재생 시작
+    }
+    fetch();
+
+    return () => {
+      bgmAudio.pause(); // 컴포넌트 언마운트 시 음원 정지
+    };
+  }, []);
 
   return (
     <GamePageWrapper>

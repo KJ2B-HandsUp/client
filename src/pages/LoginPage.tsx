@@ -4,11 +4,11 @@ import {
   VideoBackground,
   TitleWrapper,
 } from "../styled/login.styled";
-import Sidebar from "../components/Sidebar";
+//import Sidebar from "../components/Sidebar";
 import { SidebarItemType } from "../types/sidebar.type";
 import { playBtnAudio } from "../utils/audio";
 
-const items: SidebarItemType[] = [
+export const items: SidebarItemType[] = [
   {
     name: "Login",
     path: "login",
@@ -18,20 +18,24 @@ const items: SidebarItemType[] = [
 export default function LoginPage() {
   const requestLogin = async () => {
     const response = await fetch(
-      `${import.meta.env.MEDIASERVER_IP}/authorize`,
+      `${import.meta.env.VITE_MEDIASERVER_IP}/authorize`,
       {
         method: "GET",
       },
     );
+    console.log(response);
     const data = await response.json();
     window.location.href = data.redirectUrl;
   };
+
   return (
     <>
       <VideoBackground autoPlay loop muted playsInline>
         <source src="/back.mp4" type="video/mp4" />
       </VideoBackground>
-      <Sidebar items={items} />
+      {
+        //<Sidebar items={items} />
+      }
       <LoginPageWrapper>
         <header>
           <TitleWrapper>Hands Up!</TitleWrapper>

@@ -32,6 +32,7 @@ import { MemoizedOtherUsersVideoView } from "../components/OtherUsersVideoView";
 import { MemoizedGameOverModal } from "../components/GameOverModal";
 import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
+import { bgmAudio } from "../utils/audio";
 
 const initalState: StateType = {
   start: false,
@@ -296,9 +297,18 @@ export default function GamePage() {
         }
       });
     }
+
+    async function fetch() {
+      // 기본 브금
+      bgmAudio.loop = true; // 무한 반복 설정
+      await bgmAudio.play(); // 음원 재생 시작
+    }
+    fetch();
+
     // Clean up
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      bgmAudio.pause();
     };
   }, []);
 
@@ -331,7 +341,7 @@ export default function GamePage() {
     <>
       <GameContext.Provider value={value}>
         <GamePageWrapper>
-          <MemoizedMyGame turn={turn} userId={myId} row={3} column={4} />
+          <MemoizedMyGame turn={turn} userId={myId} row={4} column={3} />
           <MemoizedOtherUsersVideoView
             turn={turn}
             users={userList}
