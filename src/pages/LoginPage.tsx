@@ -18,7 +18,7 @@ export const items: SidebarItemType[] = [
 export default function LoginPage() {
   const requestLogin = async () => {
     const response = await fetch(
-      `${import.meta.env.VITE_MEDIASERVER_IP}/authorize`,
+      `${import.meta.env.VITE_LOGINSERVER_IP}/authorize`,
       {
         method: "GET",
       },

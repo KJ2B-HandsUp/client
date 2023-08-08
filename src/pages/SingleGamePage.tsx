@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useReducer,
-  useMemo,
-  createContext,
-  useEffect,
-} from "react";
+import { useReducer, useMemo, createContext, useEffect } from "react";
 import { MemoizedSingleMyGame } from "../components/SingleMyGame";
 import {
   StateType,
@@ -13,17 +7,21 @@ import {
   START_GAME,
   CLICK_BLOCK,
 } from "../types/game.type";
-import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
 import { bgmAudio } from "../utils/audio";
+import { TopLeftButton } from "../styled/home.styled";
+import { playBtnAudio } from "../utils/audio";
+import { AiOutlineHome } from "react-icons/ai";
+import { NavLink } from "react-router-dom";
+import { TutorialPageWrapper } from "../styled/tutorial.styled";
 
 const initalState: StateType = {
-  start: false,
+  start: true,
   end: false,
   playersNum: 1,
-  turn: 0,
+  turn: 1,
   endTurn: false,
-  blockNum: 1,
+  blockNum: 0,
   blockList: [],
   prevBlockList: [],
   winner: -1,
@@ -67,11 +65,6 @@ const myId = 1;
 export default function SingleGamePage() {
   const [state, dispatch] = useReducer(reducer, initalState);
   const { turn, start, trigerClick, clickedBlock } = state;
-
-  const handleNewGame = useCallback(() => {
-    dispatch({ type: START_GAME });
-  }, []);
-
   const value = useMemo(
     () => ({
       start: start,
@@ -96,11 +89,41 @@ export default function SingleGamePage() {
   }, []);
 
   return (
-    <GamePageWrapper>
-      <SingleGameContext.Provider value={value}>
-        <MemoizedSingleMyGame turn={turn} userId={myId} row={4} column={3} />
-      </SingleGameContext.Provider>
-      <MemoizedGameStartModal show={start} onStartGame={handleNewGame} />
-    </GamePageWrapper>
+    <TutorialPageWrapper>
+      <TopLeftButton to="/main" onClick={playBtnAudio}>
+        <AiOutlineHome size="30" color="black" />
+      </TopLeftButton>
+      <GamePageWrapper>
+        <SingleGameContext.Provider value={value}>
+          <MemoizedSingleMyGame turn={turn} userId={myId} row={4} column={3} />
+        </SingleGameContext.Provider>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "white",
+            color: "black",
+            padding: "30px",
+            borderRadius: "2%",
+          }}
+        >
+          <h1>가상 런치패드 소개</h1>
+          <br />
+          <h2>게임 방식</h2>
+          <p>화면을 치는 모션으로 런치패드를 칠 수 있습니다.</p>
+          <br />
+
+          <br />
+          <button>
+            <NavLink
+              to={`/main`}
+              style={{ color: "black", textDecoration: "none" }}
+            >
+              Home
+            </NavLink>
+          </button>
+        </div>
+      </GamePageWrapper>
+    </TutorialPageWrapper>
   );
 }

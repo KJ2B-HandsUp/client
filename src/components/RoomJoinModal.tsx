@@ -29,7 +29,7 @@ export default function RoomJoinModal({ roomInfo, show, onHide }: ModalProps) {
         <Button>
           <NavLink
             to={`/${roomMode}/${roomInfo?.roomId}`}
-            style={{ color: "white" }}
+            style={{ color: "white", textDecoration: "none" }}
           >
             Join
           </NavLink>

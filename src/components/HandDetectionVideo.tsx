@@ -16,11 +16,11 @@ export default function HandDetectionVideo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const myRef = useRef<HTMLDivElement>(null);
-  const resizeCanvas = useCallback((y_gap) => {
+  const resizeCanvas = useCallback(() => {
     if (myRef.current) {
       console.log(myRef.current);
       rectLeft = myRef.current.getBoundingClientRect().left;
-      rectTop = myRef.current.getBoundingClientRect().top - y_gap;
+      rectTop = myRef.current.getBoundingClientRect().top;
       console.log("myRef.current exists ", rectLeft, rectTop);
     }
     if (canvasRef.current) {
@@ -32,7 +32,6 @@ export default function HandDetectionVideo() {
 
   const simulateClick = useCallback((x: number, y: number) => {
     // 좌표를 실제 픽셀 값으로 변환할 수 있습니다. (옵션)
-    console.log(rectLeft, rectTop);
     const element = document.elementFromPoint(
       (1 - x) * canvasRef.current!.width + rectLeft,
       y * canvasRef.current!.height + rectTop,
@@ -55,14 +54,16 @@ export default function HandDetectionVideo() {
   });
 
   useEffect(() => {
-    resizeCanvas(500);
-    window.addEventListener("resize", () => {
-      resizeCanvas(0);
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    const resizeEvent = new Event("resize", {
+      bubbles: true,
+      cancelable: false,
     });
+
+    window.dispatchEvent(resizeEvent);
     return () => {
-      window.removeEventListener("resize", () => {
-        resizeCanvas(0);
-      });
+      window.removeEventListener("resize", resizeCanvas);
     };
   }, [resizeCanvas]);
 

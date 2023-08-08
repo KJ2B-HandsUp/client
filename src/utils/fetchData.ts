@@ -2,7 +2,9 @@ import { RoomList } from "../types/roomType";
 
 export async function fetchData(): Promise<RoomList> {
   try {
-    const response = await fetch("https://choijungle.shop/testdata");
+    const response = await fetch(
+      `${import.meta.env.VITE_MEDIASERVER_IP}/testdata`,
+    );
     const jsonData: RoomList = (await response.json()) as RoomList;
     console.log(jsonData);
     return jsonData;
@@ -12,7 +14,7 @@ export async function fetchData(): Promise<RoomList> {
 }
 
 export function sendData(type) {
-  const apiUrl = "https://choijungle.shop/testdata2";
+  const apiUrl = `${import.meta.env.VITE_MEDIASERVER_IP}/testdata2`;
 
   fetch(apiUrl, {
     method: "POST",
