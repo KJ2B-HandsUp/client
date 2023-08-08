@@ -66,12 +66,15 @@ export default function MainPage() {
   }
 
   useEffect(() => {
-    // 로그인 유저 정보
-    getUserProfile();
+    async function fetch() {
+      // 로그인 유저 정보
+      getUserProfile();
 
-    // 기본 브금
-    bgmAudio.loop = true; // 무한 반복 설정
-    bgmAudio.play(); // 음원 재생 시작
+      // 기본 브금
+      bgmAudio.loop = true; // 무한 반복 설정
+      await bgmAudio.play(); // 음원 재생 시작
+    }
+    fetch();
 
     return () => {
       bgmAudio.pause(); // 컴포넌트 언마운트 시 음원 정지

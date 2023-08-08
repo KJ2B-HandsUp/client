@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
 import Webcam from "react-webcam";
-import { Camera } from "@mediapipe/camera_utils";
-import { Hands, Results } from "@mediapipe/hands";
 import { drawCanvas } from "../utils/drawCanvas";
 import { MyCameraView } from "../styled/game.styled";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
@@ -14,7 +12,7 @@ const threshold = 5;
 
 export default function HandDetectionVideo() {
   const webcamRef = useRef<Webcam>(null);
-  const resultsRef = useRef<Results>();
+  const resultsRef = useRef<Window["Results"]>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const myRef = useRef<HTMLDivElement>(null);
@@ -54,7 +52,7 @@ export default function HandDetectionVideo() {
   });
 
   const onResults = useCallback(
-    (results: Results) => {
+    (results: Window["Results"]) => {
       resultsRef.current = results;
 
       if (ctx === null) {
@@ -95,7 +93,7 @@ export default function HandDetectionVideo() {
 
   const startHandDetection = useCallback(async () => {
     if (webcamRef.current != null && "video" in webcamRef.current) {
-      const hands = new Hands({
+      const hands = new window.Hands({
         locateFile: (file) => {
           return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@latest/${file}`;
         },
@@ -111,7 +109,7 @@ export default function HandDetectionVideo() {
       });
       hands.onResults(onResults);
 
-      const camera = new Camera(webcamRef.current.video!, {
+      const camera = new window.Camera(webcamRef.current.video!, {
         onFrame: async () => {
           await hands.send({ image: webcamRef.current!.video! });
         },

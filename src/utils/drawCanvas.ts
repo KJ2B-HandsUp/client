@@ -1,7 +1,7 @@
-import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import { HAND_CONNECTIONS, Results } from "@mediapipe/hands";
-
-export const drawCanvas = (ctx: CanvasRenderingContext2D, results: Results) => {
+export const drawCanvas = (
+  ctx: CanvasRenderingContext2D,
+  results: Window["Results"],
+) => {
   const width = ctx.canvas.width;
   const height = ctx.canvas.height;
 
@@ -15,11 +15,11 @@ export const drawCanvas = (ctx: CanvasRenderingContext2D, results: Results) => {
 
   if (results.multiHandLandmarks) {
     for (const landmarks of results.multiHandLandmarks) {
-      drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
+      window.drawConnectors(ctx, landmarks, window.HAND_CONNECTIONS, {
         color: "#ffffff",
         lineWidth: 10,
       });
-      drawLandmarks(ctx, landmarks, {
+      window.drawLandmarks(ctx, landmarks, {
         color: "#ffffff",
         lineWidth: 5,
         radius: 5,

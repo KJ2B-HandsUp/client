@@ -19,7 +19,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "typeRoots": ["global"]
   },
   "includes": ["src", "**/*.tsx", "**/*.ts", "**/*.js", "next-env.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

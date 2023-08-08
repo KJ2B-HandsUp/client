@@ -1,5 +1,5 @@
 {
-  "name": "fe",
+  "name": "HandsUp-fe",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,14 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "start": "cd server && node server.js"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@mediapipe/camera_utils": "^0.3.1675466862",
-    "@mediapipe/drawing_utils": "^0.3.1675466124",
-    "@mediapipe/hands": "^0.4.1675469240",
-    "@mediapipe/tasks-vision": "^0.10.3",
     "@types/express": "^4.17.17",
     "@types/node": "^20.4.5",
     "axios": "^1.4.0",
