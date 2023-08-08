@@ -17,9 +17,12 @@ const items: SidebarItemType[] = [
 
 export default function LoginPage() {
   const requestLogin = async () => {
-    const response = await fetch("http://localhost:4000/authorize", {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${import.meta.env.MEDIASERVER_IP}/authorize`,
+      {
+        method: "GET",
+      },
+    );
     const data = await response.json();
     window.location.href = data.redirectUrl;
   };

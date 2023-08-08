@@ -19,7 +19,7 @@ function bfs(
     [0, -1],
   ];
   const queue: number[][] = [];
-  let seconds = 100;
+  let seconds = 60;
   queue.push([row, col]);
   visited[row][col] = true;
 
@@ -52,7 +52,7 @@ function bfs(
       });
       setCellFlash(newNewFlash);
     }, seconds);
-    seconds += 100;
+    seconds += 60;
   }
 
   setTimeout(() => {
@@ -61,7 +61,7 @@ function bfs(
       () => Array(3).fill(0) as number[],
     );
     setCellFlash(newNewFlash);
-  }, 600);
+  }, 400);
 }
 
 function SingleBoard({ row, column }: GameProps) {
