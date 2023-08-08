@@ -106,7 +106,7 @@ function SingleBoard({ row, column }: GameProps) {
       animate={
         cellFlash[rowIndex][colIndex] >= 1
           ? {
-              scale: [0.8, 1.2, 0.8, 1],
+              scale: [0.9, 1.1, 0.9, 1],
             }
           : {}
       }

@@ -16,10 +16,12 @@ export default function HandDetectionVideo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const myRef = useRef<HTMLDivElement>(null);
-  const resizeCanvas = useCallback(() => {
+  const resizeCanvas = useCallback((y_gap) => {
     if (myRef.current) {
+      console.log(myRef.current);
       rectLeft = myRef.current.getBoundingClientRect().left;
-      rectTop = myRef.current.getBoundingClientRect().top;
+      rectTop = myRef.current.getBoundingClientRect().top - y_gap;
+      console.log("myRef.current exists ", rectLeft, rectTop);
     }
     if (canvasRef.current) {
       canvasRef.current.width = window.innerWidth * (CAMERA_VIEW_WIDTH / 100);
@@ -30,8 +32,9 @@ export default function HandDetectionVideo() {
 
   const simulateClick = useCallback((x: number, y: number) => {
     // 좌표를 실제 픽셀 값으로 변환할 수 있습니다. (옵션)
+    console.log(rectLeft, rectTop);
     const element = document.elementFromPoint(
-      canvasRef.current!.width - x * canvasRef.current!.width + rectLeft,
+      (1 - x) * canvasRef.current!.width + rectLeft,
       y * canvasRef.current!.height + rectTop,
     );
 
@@ -50,6 +53,18 @@ export default function HandDetectionVideo() {
     left: null,
     right: null,
   });
+
+  useEffect(() => {
+    resizeCanvas(500);
+    window.addEventListener("resize", () => {
+      resizeCanvas(0);
+    });
+    return () => {
+      window.removeEventListener("resize", () => {
+        resizeCanvas(0);
+      });
+    };
+  }, [resizeCanvas]);
 
   const onResults = useCallback(
     (results: Window["Results"]) => {
@@ -124,14 +139,6 @@ export default function HandDetectionVideo() {
   useEffect(() => {
     startHandDetection();
   }, [startHandDetection]);
-
-  useEffect(() => {
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-    };
-  });
 
   return (
     <MyCameraView ref={myRef}>
