@@ -74,7 +74,7 @@ function OtherUsersVideoView({
               />
             </MyCameraView>
             {((start && turn == user.userId) || turn == -1) && (
-              <Board turn={turn} userId={user.userId} row={3} column={4} />
+              <Board turn={turn} userId={user.userId} row={4} column={3} />
             )}
           </BoardWrapper>
           <PlayerIdContainer>Player ID: {user.userId}</PlayerIdContainer>
