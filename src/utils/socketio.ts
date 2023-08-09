@@ -15,6 +15,7 @@ let rtpCapabilities: RtpCapabilities;
 let producerTransport;
 let consumerTransportList: Transport[] = [];
 let videoProducer;
+let audioProducer;
 
 const params = {
   encodings: [
@@ -35,12 +36,14 @@ const params = {
 };
 
 let videoParams: mediasoupClient.types.ProducerOptions;
+let audioParams: mediasoupClient.types.ProducerOptions;
 
 export const streamSuccess = async (
   stream: MediaStream,
   socket: Socket,
   roomName: string,
 ): Promise<(MediaDataType | undefined)[]> => {
+  audioParams = { track: stream.getAudioTracks()[0], ...audioParams };
   videoParams = { track: stream.getVideoTracks()[0], ...params };
   return await joinRoom(socket, roomName);
 };
@@ -124,7 +127,7 @@ const createSendTransport = async (
           socket.emit("transport-connect", {
             dtlsParameters,
           });
-
+          console.log("130반줄");
           callback();
         } catch (error: unknown) {
           if (error instanceof Error) {
@@ -193,7 +196,18 @@ const createSendTransport = async (
 const connectSendTransport = async (): Promise<void> => {
   try {
     if (producerTransport) {
+      //🔊오디오
+      console.log(producerTransport);
+      audioProducer = await producerTransport.produce(audioParams);
       videoProducer = await producerTransport.produce(videoParams);
+
+      audioProducer?.on("trackended", () => {
+        console.log("audio track ended");
+      });
+
+      audioProducer?.on("transportclose", () => {
+        console.log("audio transport ended");
+      });
 
       videoProducer?.on("trackended", () => {
         console.log("video track ended");
@@ -320,6 +334,8 @@ const connectRecvTransport = async (
   }
 };
 
+export const tracks = {};
+
 const getStream = (
   consumerTransport: Transport<mediasoupClient.types.AppData>,
   remoteProducerId: string,
@@ -346,8 +362,11 @@ const getStream = (
         });
 
         try {
-          const { track } = consumer;
-          const mediaStream = new MediaStream([track]);
+          const { _track } = consumer;
+          console.log(consumer);
+
+          const mediaStream = new MediaStream([_track]);
+          tracks[_track.kind] = mediaStream;
           console.log("here 1?");
           resolve(mediaStream);
         } catch (error) {

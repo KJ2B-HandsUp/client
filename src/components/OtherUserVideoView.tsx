@@ -23,13 +23,19 @@ function OtherUserVideoView({
 }) {
   const { start } = useContext(GameContext);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const downloadLinkRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     if (userNum > 0 && videoRef.current) {
+      console.log(users);
       videoRef.current!.srcObject = users[0].stream || null;
       videoRef.current!.play();
+      audioRef.current!.srcObject = users[0].audioStream || null;
+      audioRef.current!.play();
+      console.log(users[0].stream);
+      console.log(users[0].audioStream);
     }
   }, [videoRef.current]);
 
@@ -46,8 +52,6 @@ function OtherUserVideoView({
           downloadLink.download = "screenshot.png";
           downloadLink.click();
         }
-
-        console.log(screenshot);
       });
     }
   }, [videoRef.current]);
@@ -69,6 +73,7 @@ function OtherUserVideoView({
               autoPlay
               playsInline
             />
+            <audio ref={audioRef}></audio>
             <canvas
               ref={canvasRef}
               style={{

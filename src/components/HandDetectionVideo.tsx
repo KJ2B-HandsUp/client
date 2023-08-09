@@ -159,7 +159,6 @@ export default function HandDetectionVideo() {
           border: "5px solid #ffffff",
         }}
       />
-
       <Webcam
         audio={false}
         ref={webcamRef}

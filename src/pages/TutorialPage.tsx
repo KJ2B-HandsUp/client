@@ -36,14 +36,13 @@ export default function TutorialPage() {
           <h2>싱글 모드</h2>
           <p>혼자서 런치패드를 조작할 수 있는 모드입니다.</p>
           <br />
-          <button>
-            <NavLink
-              to={`/sologame/tutorial`}
-              style={{ color: "black", textDecoration: "none" }}
-            >
-              Play!
-            </NavLink>
-          </button>
+
+          <NavLink
+            to={`/sologame/tutorial`}
+            style={{ color: "black", textDecoration: "none" }}
+          >
+            <button>Play!</button>
+          </NavLink>
         </div>
       </TutorialPageWrapper>
     </>

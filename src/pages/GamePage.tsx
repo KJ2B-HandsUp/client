@@ -11,9 +11,10 @@ import {
   closeProducer,
   signalNewConsumerTransport,
   streamSuccess,
+  tracks,
 } from "../utils/socketio";
 import { io, Socket } from "socket.io-client";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import { MemoizedMyGame } from "../components/MyGame";
 import {
   TransferDataType,
@@ -34,6 +35,9 @@ import { MemoizedOtherUserVideoView } from "../components/OtherUserVideoView";
 import { MemoizedGameOverModal } from "../components/GameOverModal";
 import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
+import { AnimatePresence } from "framer-motion";
+import { Overlay } from "../styled/rooms.styled";
+import { motion } from "framer-motion";
 
 const initalState: StateType = {
   start: false,
@@ -206,29 +210,35 @@ export default function GamePage() {
             video: {
               frameRate: { ideal: 15, max: 20 },
               width: 600,
-              height: 700,
+              height: 800,
             },
+            audio: true,
           })
           .then(async (stream) => {
             if (roomId !== undefined) {
-              await streamSuccess(stream, socket.current!, roomId).then(
-                (mediaStreamList) => {
-                  console.log(mediaStreamList);
-                  mediaStreamList.map((mediaData, idx) => {
-                    if (mediaData) {
-                      // console.log("Success: get new producer video list");
-                      // console.log(mediaData);
-                      userList.push({
-                        userId: idx + 1,
-                        nickname: mediaData.producerId,
-                        stream: mediaData.mediaStream,
-                      });
-                    }
-                  });
-                  dispatch({ type: ADD_PLAYER, num: mediaStreamList.length });
-                  myId = mediaStreamList.length + 1;
-                },
+              const mediaStreamList = await streamSuccess(
+                stream,
+                socket.current!,
+                roomId,
               );
+              console.log(tracks);
+              console.log(mediaStreamList);
+              const mediaData = mediaStreamList[0];
+              if (
+                mediaData &&
+                Object.keys(tracks).length > 0 &&
+                "video" in tracks &&
+                "audio" in tracks
+              ) {
+                userList.push({
+                  userId: 2,
+                  nickname: mediaData!.producerId,
+                  stream: tracks["video"],
+                  audioStream: tracks["audio"],
+                });
+                dispatch({ type: ADD_PLAYER, num: 1 });
+                myId = mediaStreamList.length + 1;
+              }
             }
           })
           .catch((error: Error) => {
@@ -244,13 +254,15 @@ export default function GamePage() {
               producerId,
               socket.current!,
             );
-
-            if (mediaStream) {
+            console.log(mediaStream);
+            console.log(tracks);
+            if ("audio" in tracks && "video" in tracks) {
               // console.log("Success: get new producer video");
               userList.push({
                 userId: playersNum + 1,
                 nickname: producerId,
-                stream: mediaStream,
+                stream: tracks["video"],
+                audioStream: tracks["audio"],
               });
               dispatch({ type: ADD_PLAYER, num: 1 });
             }
@@ -305,19 +317,6 @@ export default function GamePage() {
     };
   }, []);
 
-  useEffect(() => {
-    if (endTurn) {
-      setTimeout(() => {
-        dispatch({ type: CHANGE_TURN });
-      }, 1000);
-    }
-    if (end) {
-      setTimeout(() => {
-        setGameOverState(true);
-      }, 1500);
-    }
-  }, [endTurn, end]);
-
   const value = useMemo(
     () => ({
       start: start,
@@ -357,6 +356,52 @@ export default function GamePage() {
         onStartGame={handleNewGame}
         handleBeforeUnload={handleBeforeUnload}
       />
+      <AnimatePresence>
+        {gameOverState ? (
+          <Overlay
+            initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+            animate={{ backgroundColor: "rgba(0, 0, 0, .5)" }}
+            exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+          >
+            <motion.div
+              style={{
+                backgroundColor: "white",
+                width: "25rem",
+                height: "25rem",
+                borderRadius: "2%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <h1>You Lose...</h1>
+
+              <NavLink
+                to={`/main`}
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                }}
+              >
+                <motion.button
+                  style={{
+                    backgroundColor: "blue",
+                    marginTop: "3vh",
+                    width: "17vw",
+                    height: "4vh",
+                    borderRadius: "5%",
+                    bottom: 0,
+                  }}
+                >
+                  home
+                </motion.button>
+              </NavLink>
+            </motion.div>
+          </Overlay>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 }

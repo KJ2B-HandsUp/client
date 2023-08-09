@@ -1,7 +1,12 @@
 import { Button } from "react-bootstrap";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { RoomData } from "../types/roomType";
-import { RoomListPageWrapper, FormWrapper } from "../styled/rooms.styled";
+import {
+  RoomListPageWrapper,
+  FormWrapper,
+  Input,
+  CreateButton,
+} from "../styled/rooms.styled";
 import { useNavigate, NavLink } from "react-router-dom";
 import { fetchData } from "../utils/fetchData";
 import { colorList } from "../styled/game.styled";
@@ -9,6 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { styled } from "styled-components";
 import HomeButton from "../components/HomeButton";
 import { ROW_LENGTH, COL_LENGTH } from "../types/game.type";
+import { Overlay } from "../styled/rooms.styled";
 
 const emptyRoom: RoomData = {
   roomId: "Empty",
@@ -23,18 +29,6 @@ const initialRoomList: RoomData[] = [
 for (let i = 0; i < 6; i++) {
   initialRoomList.push(emptyRoom);
 }
-
-const Overlay = styled(motion.div)`
-  top: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-`;
 
 export default function RoomListPage() {
   const [room, setRoom] = useState<RoomData | null>(null);
@@ -145,10 +139,8 @@ export default function RoomListPage() {
         </AnimatePresence>
         <HomeButton />
         <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>
-          <input placeholder="Room ID" ref={newRoomNameRef}></input>
-          <Button variant="primary" type="submit">
-            Create
-          </Button>
+          <Input placeholder="Room ID" ref={newRoomNameRef}></Input>
+          <CreateButton type="submit">Create</CreateButton>
         </FormWrapper>
 
         <table style={{ borderCollapse: "separate", borderSpacing: "30px" }}>

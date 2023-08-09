@@ -21,6 +21,7 @@ export type UserType = {
   nickname?: string;
   profile_image_url?: string;
   stream?: MediaStream;
+  audioStream?: MediaStream;
 };
 
 export type MediaDataType = {
