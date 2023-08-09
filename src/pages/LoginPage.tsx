@@ -69,7 +69,7 @@ export default function LoginPage() {
             LOGIN
           </StyledNavLink>
           <img
-            src="public/kakao_login_medium.png"
+            src="/kakao_login_medium.png"
             onClick={requestLogin}
             style={{ cursor: "pointer" }}
           />
