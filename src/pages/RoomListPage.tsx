@@ -23,12 +23,6 @@ for (let i = 0; i < 6; i++) {
   initialRoomList.push(emptyRoom);
 }
 
-const spring = {
-  type: "spring",
-  damping: 10,
-  stiffness: 100,
-};
-
 const Overlay = styled(motion.div)`
   width: 100%;
   height: 100%;
