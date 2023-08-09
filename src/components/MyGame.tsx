@@ -7,10 +7,10 @@ import {
 import HandDetectionVideo from "./HandDetectionVideo";
 import { GameProps } from "../types/table";
 import { memo, useContext } from "react";
-import { SingleGameContext } from "../pages/SingleGamePage";
+import { GameContext } from "../pages/GamePage";
 
 function MyGame({ turn, userId, row, column }: GameProps) {
-  const { start } = useContext(SingleGameContext);
+  const { start } = useContext(GameContext);
   console.log("MyGame rendered", turn);
   return (
     <GameWrapper>
