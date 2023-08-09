@@ -43,7 +43,7 @@ export default function MainPage() {
   const location = useLocation();
   function getUserProfile() {
     axios
-      .get(`${import.meta.env.VITE_MEDIASERVER_IP}/profile`, {
+      .get(`${import.meta.env.VITE_LOGINSERVER_IP}/profile`, {
         withCredentials: true,
       })
       .then(({ data }) => {

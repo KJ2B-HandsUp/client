@@ -22,13 +22,18 @@ export const items: SidebarItemType[] = [
 export default function LoginPage() {
   const requestLogin = async () => {
     const response = await fetch(
-      `${import.meta.env.VITE_MEDIASERVER_IP}/authorize`,
+      `${import.meta.env.VITE_LOGINSERVER_IP}/authorize`,
       {
         method: "GET",
+        credentials: "include",
+        headers: {
+          Origin: "https://kimcookieya.shop",
+        },
       },
     );
     console.log(response);
     const data = await response.json();
+    console.log(data);
     window.location.href = data.redirectUrl;
   };
 

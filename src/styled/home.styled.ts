@@ -18,6 +18,7 @@ export const TopLeftButton = styled(NavLink)`
   text-decoration: none;
   border-radius: 50%;
   cursor: pointer;
+  margin-bottom: 20px;
   &:hover {
     background-color: #007bff;
     color: #ffffff;

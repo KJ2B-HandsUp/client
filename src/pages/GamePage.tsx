@@ -195,7 +195,7 @@ export default function GamePage() {
 
   useEffect(() => {
     if (socket.current == undefined) {
-      socket.current = io("https://choijungle.shop/mediasoup");
+      socket.current = io(`${import.meta.env.VITE_MEDIASERVER_IP}/mediasoup`);
 
       window.addEventListener("beforeunload", handleBeforeUnload);
 
@@ -270,7 +270,7 @@ export default function GamePage() {
         },
       );
 
-      dataSocket = io("https://choijungle.shop/data");
+      dataSocket = io(`${import.meta.env.VITE_MEDIASERVER_IP}/data`);
 
       dataSocket.on("connection-success", () => {
         console.log(`dataSocket: connection-success`);
