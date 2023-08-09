@@ -6,7 +6,7 @@ import {
   RefObject,
   createRef,
 } from "react";
-import { UserType } from "../types/game.type";
+import { COL_LENGTH, ROW_LENGTH, UserType } from "../types/game.type";
 import { Board } from "./Board";
 import {
   GameWrapper,
@@ -57,13 +57,12 @@ function OtherUsersVideoView({
   // 각 유저에 대한 비디오 요소 렌더링
   return (
     <>
-      {users.map((user, idx) => (
-        <GameWrapper key={idx}>
+      {users.length > 0 && (
+        <GameWrapper>
           <BoardWrapper>
-            <MyCameraView key={idx}>
+            <MyCameraView>
               <video
-                key={idx}
-                ref={videoRefs[user.userId]}
+                ref={videoRefs[users[0].userId]}
                 style={{
                   position: "absolute",
                   transform: "scaleX(-1)",
@@ -73,16 +72,21 @@ function OtherUsersVideoView({
                 }}
               />
             </MyCameraView>
-            {((start && turn == user.userId) || turn == -1) && (
-              <Board turn={turn} userId={user.userId} row={4} column={3} />
+            {((start && turn == users[0].userId) || turn == -1) && (
+              <Board
+                turn={turn}
+                userId={users[0].userId}
+                row={ROW_LENGTH}
+                column={COL_LENGTH}
+              />
             )}
           </BoardWrapper>
-          <PlayerIdContainer>Player ID: {user.userId}</PlayerIdContainer>
-          {start && turn == user.userId && (
+          <PlayerIdContainer>Player ID: {users[0].userId}</PlayerIdContainer>
+          {start && turn == users[0].userId && (
             <h2 style={{ color: "white" }}>Your Turn!</h2>
           )}
         </GameWrapper>
-      ))}
+      )}
     </>
   );
 }

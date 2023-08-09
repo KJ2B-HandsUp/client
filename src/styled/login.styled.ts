@@ -76,6 +76,7 @@ export const Card = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: default;
 `;
 
 const ripple = keyframes`

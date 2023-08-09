@@ -27,6 +27,8 @@ import {
   ADD_PLAYER,
   OTHER_PLAYER_CLICK,
   OTHER_CHANGE_TURN,
+  ROW_LENGTH,
+  COL_LENGTH,
 } from "../types/game.type";
 import { MemoizedOtherUsersVideoView } from "../components/OtherUsersVideoView";
 import { MemoizedGameOverModal } from "../components/GameOverModal";
@@ -299,9 +301,8 @@ export default function GamePage() {
     }
 
     async function fetch() {
-      // 기본 브금
-      bgmAudio.loop = true; // 무한 반복 설정
-      await bgmAudio.play(); // 음원 재생 시작
+      bgmAudio.loop = true;
+      await bgmAudio.play();
     }
     fetch();
 
@@ -321,7 +322,7 @@ export default function GamePage() {
     if (end) {
       setTimeout(() => {
         setGameOverState(true);
-      }, 2000);
+      }, 1500);
     }
   }, [endTurn, end]);
 
@@ -335,13 +336,17 @@ export default function GamePage() {
     }),
     [start, trigerClick, end],
   );
-  // console.log("myId: ", myId);
-  // console.log("current turn: ", turn, " myId: ", myId);
+
   return (
     <>
       <GameContext.Provider value={value}>
         <GamePageWrapper>
-          <MemoizedMyGame turn={turn} userId={myId} row={4} column={3} />
+          <MemoizedMyGame
+            turn={turn}
+            userId={myId}
+            row={ROW_LENGTH}
+            column={COL_LENGTH}
+          />
           <MemoizedOtherUsersVideoView
             turn={turn}
             users={userList}

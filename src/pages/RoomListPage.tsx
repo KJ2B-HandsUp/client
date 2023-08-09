@@ -8,6 +8,7 @@ import { colorList } from "../styled/game.styled";
 import { motion, AnimatePresence } from "framer-motion";
 import { styled } from "styled-components";
 import HomeButton from "../components/HomeButton";
+import { ROW_LENGTH, COL_LENGTH } from "../types/game.type";
 
 const emptyRoom: RoomData = {
   roomId: "Empty",
@@ -24,12 +25,15 @@ for (let i = 0; i < 6; i++) {
 }
 
 const Overlay = styled(motion.div)`
-  width: 100%;
-  height: 100%;
-  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 `;
 
 export default function RoomListPage() {
@@ -62,7 +66,7 @@ export default function RoomListPage() {
               peersNum: peersNum,
             });
           });
-          for (let i = 0; i < 12 - peersNum; i++) {
+          for (let i = 0; i < ROW_LENGTH * COL_LENGTH - peersNum; i++) {
             tempRoomList.push(emptyRoom);
           }
           setRoomList(tempRoomList);
@@ -94,11 +98,6 @@ export default function RoomListPage() {
               initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
               animate={{ backgroundColor: "rgba(0, 0, 0, .5)" }}
               exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-              style={{
-                width: "100vw",
-                height: "100vh",
-                zIndex: 100,
-              }}
             >
               <motion.div
                 layoutId={room.roomId}
@@ -120,26 +119,26 @@ export default function RoomListPage() {
                   {room.roomId == "Empty" ? "" : `현재인원 ${room.peersNum!}`}
                 </p>
 
-                <motion.button
+                <NavLink
+                  to={`/game/${room?.roomId}`}
                   style={{
-                    backgroundColor: roomColor!,
-                    marginTop: "3vh",
-                    width: "17vw",
-                    height: "4vh",
-                    borderRadius: "5%",
-                    bottom: 0,
+                    textDecoration: "none",
+                    color: "white",
                   }}
                 >
-                  <NavLink
-                    to={`/game/${room?.roomId}`}
+                  <motion.button
                     style={{
-                      textDecoration: "none",
-                      color: "white",
+                      backgroundColor: roomColor!,
+                      marginTop: "3vh",
+                      width: "17vw",
+                      height: "4vh",
+                      borderRadius: "5%",
+                      bottom: 0,
                     }}
                   >
                     Join
-                  </NavLink>
-                </motion.button>
+                  </motion.button>
+                </NavLink>
               </motion.div>
             </Overlay>
           ) : null}
@@ -154,12 +153,15 @@ export default function RoomListPage() {
 
         <table style={{ borderCollapse: "separate", borderSpacing: "30px" }}>
           <tbody>
-            {Array(4)
+            {Array(ROW_LENGTH)
               .fill(0)
               .map((_, rowIndex) => (
                 <tr key={rowIndex}>
                   {roomList
-                    ?.slice(rowIndex * 3, rowIndex * 3 + 3)
+                    ?.slice(
+                      rowIndex * ROW_LENGTH,
+                      rowIndex * COL_LENGTH + ROW_LENGTH,
+                    )
                     .map((roomInfo, idx) => (
                       <td key={idx}>
                         <motion.div
@@ -176,7 +178,9 @@ export default function RoomListPage() {
                             height: "18rem",
                             borderRadius: "2%",
                             boxShadow: `5px 5px 10px ${
-                              colorList[(rowIndex * 3 + idx) % colorList.length]
+                              colorList[
+                                (rowIndex * COL_LENGTH + idx) % colorList.length
+                              ]
                             }`,
                           }}
                           onClick={() => {
@@ -184,7 +188,8 @@ export default function RoomListPage() {
                               setRoom(roomInfo);
                               setRoomColor(
                                 colorList[
-                                  (rowIndex * 3 + idx) % colorList.length
+                                  (rowIndex * COL_LENGTH + idx) %
+                                    colorList.length
                                 ],
                               );
                             }

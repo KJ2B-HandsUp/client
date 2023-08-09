@@ -7,6 +7,9 @@ export const ADD_PLAYER = "ADD_PLAYER";
 export const OTHER_PLAYER_CLICK = "OTHER_PLAYER_CLICK";
 export const OTHER_CHANGE_TURN = "OTHER_CHANGE_TURN";
 
+export const ROW_LENGTH = 3;
+export const COL_LENGTH = 3;
+
 export type TransferDataType = {
   type: string;
   userId: number;

@@ -26,15 +26,14 @@ function GameStartModal({
         <Button variant="outline-primary" onClick={onStartGame}>
           New Game
         </Button>
-        <Button>
-          <NavLink
-            to={`/main/roomlist`}
-            style={{ color: "white", textDecoration: "none" }}
-            onClick={handleBeforeUnload}
-          >
-            Go Home
-          </NavLink>
-        </Button>
+
+        <NavLink
+          to={`/main/roomlist`}
+          style={{ color: "white", textDecoration: "none" }}
+          onClick={handleBeforeUnload}
+        >
+          <Button>Go Home</Button>
+        </NavLink>
       </Modal.Footer>
     </Modal>
   );

@@ -10,17 +10,51 @@ export const HomePageWrapper = styled.div`
   height: 80vh;
 `;
 
-export const TopLeftButton = styled(NavLink)`
+export const HomeButtonWrapper = styled(NavLink)`
   position: relative;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  color: white;
+  flex-direction: column;
+  justify-content: center;
+  border: none;
   padding: 20px;
-  background-color: #ffffff;
-  opacity: 0.8;
-  text-decoration: none;
+  gap: 12px;
   border-radius: 50%;
   cursor: pointer;
-  margin-bottom: 20px;
-  &:hover {
-    background-color: #007bff;
-    color: #ffffff;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    border-radius: 10px;
+    background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
+    z-index: -1;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  &::after {
+    content: "";
+    z-index: -2;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100%);
+    transform: translate3d(0, 0, 0) scale(0.95);
+    filter: blur(20px);
+  }
+
+  &:hover::after {
+    filter: blur(30px);
+  }
+
+  &:hover::before {
+    transform: rotate(-180deg);
+  }
+
+  &:active::before {
+    scale: 0.7;
   }
 `;

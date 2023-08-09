@@ -6,6 +6,8 @@ import {
   GameDispatch,
   START_GAME,
   CLICK_BLOCK,
+  ROW_LENGTH,
+  COL_LENGTH,
 } from "../types/game.type";
 import { GamePageWrapper } from "../styled/game.styled";
 import { bgmAudio } from "../utils/audio";
@@ -91,7 +93,12 @@ export default function SingleGamePage() {
       <HomeButton />
       <GamePageWrapper>
         <SingleGameContext.Provider value={value}>
-          <MemoizedSingleMyGame turn={turn} userId={myId} row={4} column={3} />
+          <MemoizedSingleMyGame
+            turn={turn}
+            userId={myId}
+            row={ROW_LENGTH}
+            column={COL_LENGTH}
+          />
         </SingleGameContext.Provider>
         <div
           style={{
