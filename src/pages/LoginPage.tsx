@@ -3,6 +3,10 @@ import {
   LoginPageWrapper,
   VideoBackground,
   TitleWrapper,
+  Card,
+  Loader,
+  Cell,
+  StyledNavLink
 } from "../styled/login.styled";
 //import Sidebar from "../components/Sidebar";
 import { SidebarItemType } from "../types/sidebar.type";
@@ -45,10 +49,31 @@ export default function LoginPage() {
         <header>
           <TitleWrapper>Hands Up!</TitleWrapper>
         </header>
-        <button onClick={requestLogin}>카카오 로그인</button>
-        <NavLink to="/main" onClick={playBtnAudio}>
-          <img alt="카카오 로그인" src="/kakao_login_medium.png" />
-        </NavLink>
+        <Card>
+          <Loader>
+            <Cell className="d-0" />
+            <Cell className="d-1" />
+            <Cell className="d-2" />
+
+            <Cell className="d-1" />
+            <Cell className="d-2" />
+
+            <Cell className="d-2" />
+            <Cell className="d-3" />
+
+            <Cell className="d-3" />
+            <Cell className="d-4" />
+          </Loader>
+
+          <StyledNavLink to="/main" onClick={playBtnAudio}>
+            LOGIN
+          </StyledNavLink>
+        
+      </Card>
+          {/*기존 코드 <button onClick={requestLogin}>카카오 로그인</button>
+          <NavLink to="/main" onClick={playBtnAudio}>
+            <img alt="카카오 로그인" src="/kakao_login_medium_wide.png"/>
+          </NavLink> */}
       </LoginPageWrapper>
     </>
   );
