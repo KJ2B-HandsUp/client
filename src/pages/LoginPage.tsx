@@ -21,6 +21,7 @@ export default function LoginPage() {
       `${import.meta.env.VITE_LOGINSERVER_IP}/authorize`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           Origin: "https://kimcookieya.shop",
         },
