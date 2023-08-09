@@ -7,7 +7,6 @@ import {
 //import Sidebar from "../components/Sidebar";
 import { SidebarItemType } from "../types/sidebar.type";
 import { playBtnAudio } from "../utils/audio";
-import { DataConsumer } from "mediasoup-client/lib/DataConsumer";
 
 export const items: SidebarItemType[] = [
   {
