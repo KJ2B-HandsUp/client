@@ -21,12 +21,12 @@ export default function LoginPage() {
       `${import.meta.env.VITE_LOGINSERVER_IP}/authorize`,
       {
         method: "GET",
-        mode: "no-cors",
       },
     );
     console.log(response);
     const data = await response.json();
     console.log(data);
+    window.location.href = data.redirectUrl;
   };
 
   return (
