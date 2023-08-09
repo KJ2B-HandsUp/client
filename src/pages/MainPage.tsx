@@ -13,7 +13,7 @@ import PageMotionWrapper from "../motions/PageMotionWrapper";
 import axios from "axios";
 import { UserType } from "../types/game.type";
 import { MemoizedUserProfile } from "../components/UserProfile";
-import { bgmAudio } from "../utils/audio";
+import BGMPlayer from "../components/BGMPlayer";
 
 const MainPageWrapper = styled.div`
   flex-direction: column;
@@ -66,18 +66,7 @@ export default function MainPage() {
   }
 
   useEffect(() => {
-    async function fetch() {
-      // 로그인 유저 정보
-      getUserProfile();
-      // 기본 브금
-      bgmAudio.loop = true; // 무한 반복 설정
-      await bgmAudio.play(); // 음원 재생 시작
-    }
-    fetch();
-
-    return () => {
-      bgmAudio.pause(); // 컴포넌트 언마운트 시 음원 정지
-    };
+    getUserProfile();
   }, []);
 
   return (
@@ -87,6 +76,7 @@ export default function MainPage() {
       </VideoBackground>
       <MainPageWrapper>
         <MemoizedUserProfile user={myProfile} />
+        <BGMPlayer />
         <CenterWrapper>
           <AnimatePresence mode="wait">
             <Routes key={location.pathname} location={location}>

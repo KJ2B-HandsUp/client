@@ -10,7 +10,6 @@ import {
   COL_LENGTH,
 } from "../types/game.type";
 import { GamePageWrapper } from "../styled/game.styled";
-import { bgmAudio } from "../utils/audio";
 import { NavLink } from "react-router-dom";
 import { TutorialPageWrapper } from "../styled/tutorial.styled";
 import HomeButton from "../components/HomeButton";
@@ -74,19 +73,6 @@ export default function SingleGamePage() {
     }),
     [start, trigerClick, clickedBlock],
   );
-
-  useEffect(() => {
-    async function fetch() {
-      // 기본 브금
-      bgmAudio.loop = true; // 무한 반복 설정
-      await bgmAudio.play(); // 음원 재생 시작
-    }
-    fetch();
-
-    return () => {
-      bgmAudio.pause(); // 컴포넌트 언마운트 시 음원 정지
-    };
-  }, []);
 
   return (
     <TutorialPageWrapper>

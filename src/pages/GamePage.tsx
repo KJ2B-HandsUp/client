@@ -34,7 +34,6 @@ import { MemoizedOtherUsersVideoView } from "../components/OtherUsersVideoView";
 import { MemoizedGameOverModal } from "../components/GameOverModal";
 import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
-import { bgmAudio } from "../utils/audio";
 
 const initalState: StateType = {
   start: false,
@@ -300,16 +299,9 @@ export default function GamePage() {
       });
     }
 
-    async function fetch() {
-      bgmAudio.loop = true;
-      await bgmAudio.play();
-    }
-    fetch();
-
     // Clean up
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      bgmAudio.pause();
     };
   }, []);
 

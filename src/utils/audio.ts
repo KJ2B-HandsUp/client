@@ -23,8 +23,6 @@ for (let rowIndex = 0; rowIndex < mp3List2.length; rowIndex++) {
   audioList.push([...tempList]);
 }
 
-export const bgmAudio = new Audio("/mp3/dubstep_drum_trap_loop.mp3");
-
 const btnAudio = new Audio("/mp3/warp1.mp3");
 
 export function playBtnAudio() {
