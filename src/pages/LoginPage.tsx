@@ -25,7 +25,6 @@ export default function LoginPage() {
     );
     console.log(response);
     const data = await response.json();
-    window.location.href = data.redirectUrl;
   };
 
   return (
