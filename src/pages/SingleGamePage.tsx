@@ -9,11 +9,9 @@ import {
 } from "../types/game.type";
 import { GamePageWrapper } from "../styled/game.styled";
 import { bgmAudio } from "../utils/audio";
-import { TopLeftButton } from "../styled/home.styled";
-import { playBtnAudio } from "../utils/audio";
-import { AiOutlineHome } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 import { TutorialPageWrapper } from "../styled/tutorial.styled";
+import HomeButton from "../components/HomeButton";
 
 const initalState: StateType = {
   start: true,
@@ -90,9 +88,7 @@ export default function SingleGamePage() {
 
   return (
     <TutorialPageWrapper>
-      <TopLeftButton to="/main" onClick={playBtnAudio}>
-        <AiOutlineHome size="30" color="black" />
-      </TopLeftButton>
+      <HomeButton />
       <GamePageWrapper>
         <SingleGameContext.Provider value={value}>
           <MemoizedSingleMyGame turn={turn} userId={myId} row={4} column={3} />

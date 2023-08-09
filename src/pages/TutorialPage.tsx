@@ -1,16 +1,12 @@
 import { TutorialPageWrapper } from "../styled/tutorial.styled";
-import { TopLeftButton } from "../styled/home.styled";
-import { AiOutlineHome } from "react-icons/ai";
-import { playBtnAudio } from "../utils/audio";
 import { NavLink } from "react-router-dom";
+import HomeButton from "../components/HomeButton";
 
 export default function TutorialPage() {
   return (
     <>
       <TutorialPageWrapper>
-        <TopLeftButton to="/main" onClick={playBtnAudio}>
-          <AiOutlineHome size="30" color="black" />
-        </TopLeftButton>
+        <HomeButton />
         <div
           style={{
             display: "flex",
