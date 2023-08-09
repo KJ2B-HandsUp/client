@@ -68,11 +68,12 @@ export default function LoginPage() {
           <StyledNavLink to="/main" onClick={playBtnAudio}>
             LOGIN
           </StyledNavLink>
+          <img
+            src="public/kakao_login_medium.png"
+            onClick={requestLogin}
+            style={{ cursor: "pointer" }}
+          />
         </Card>
-        {/*기존 코드 <button onClick={requestLogin}>카카오 로그인</button>
-          <NavLink to="/main" onClick={playBtnAudio}>
-            <img alt="카카오 로그인" src="/kakao_login_medium_wide.png"/>
-          </NavLink> */}
       </LoginPageWrapper>
     </>
   );

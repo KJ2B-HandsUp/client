@@ -1,5 +1,5 @@
-import { styled,keyframes } from "styled-components";
-import { NavLink } from 'react-router-dom';
+import { styled, keyframes } from "styled-components";
+import { NavLink } from "react-router-dom";
 
 export const LoginPageWrapper = styled.div`
   display: flex;
@@ -38,33 +38,32 @@ export const TitleWrapper = styled.div`
   border-radius: 20px;
 `;
 
-//새로 추가한 코드
 export const StyledNavLink = styled(NavLink)`
-text-transform: uppercase;
-display: block;
-font-size: 65px;
-color: #ffffffce;
-text-shadow:
-  0 8px 9px #010300,
-  0px -2px 1px #ffffff;
-font-weight: bold;
-letter-spacing: -4px;
-text-align: center;
-border-radius: 20px;
-margin-top : 20px;
-&:hover{
-  color : #00FF87;
-}
+  text-transform: uppercase;
+  display: block;
+  font-size: 8vh;
+  color: #ffffffce;
+  text-shadow:
+    0 8px 9px #010300,
+    0px -2px 1px #ffffff;
+  font-weight: bold;
+  letter-spacing: -4px;
+  text-align: center;
+  border-radius: 20px;
+  margin-top: 4vh;
+  &:hover {
+    color: #00ff87;
+  }
 `;
-export const colors = {
-    white: "#FEFEFE",
-    brown: "#362100"
-};
 
+export const colors = {
+  white: "#FEFEFE",
+  brown: "#362100",
+};
 
 export const Card = styled.section`
   backdrop-filter: blur(10px);
-  background-color: rgba(0,0,0);
+  background-color: rgba(0, 0, 0);
   border: 1px solid rgba(225, 225, 225, 0.18);
   border-radius: 15px;
   box-shadow: 0 10px 35px 0;
@@ -78,7 +77,6 @@ export const Card = styled.section`
   flex-direction: column;
   align-items: center;
 `;
-
 
 const ripple = keyframes`
   0% {
@@ -99,10 +97,12 @@ const ripple = keyframes`
 `;
 
 export const Loader = styled.div`
-  --cell-size: 150px;
-  --cell-spacing: 10px;
+  --cell-size: 10vh;
+  --cell-spacing: 1vh;
   --cells: 3;
-  --total-size: calc(var(--cells) * (var(--cell-size) + 2 * var(--cell-spacing)));
+  --total-size: calc(
+    var(--cells) * (var(--cell-size) + 2 * var(--cell-spacing))
+  );
   display: flex;
   flex-wrap: wrap;
   width: var(--total-size);
@@ -132,44 +132,41 @@ export const Cell = styled.div`
 
   &.d-4 {
     animation-delay: 400ms;
-
   }
 
-  
-
   &:nth-child(1) {
-    --cell-color: #00FF87;
+    --cell-color: #00ff87;
   }
 
   &:nth-child(2) {
-    --cell-color: #0CFD95;
+    --cell-color: #0cfd95;
   }
 
   &:nth-child(3) {
-    --cell-color: #17FBA2;
+    --cell-color: #17fba2;
   }
 
   &:nth-child(4) {
-    --cell-color: #23F9B2;
+    --cell-color: #23f9b2;
   }
 
   &:nth-child(5) {
-    --cell-color: #30F7C3;
+    --cell-color: #30f7c3;
   }
 
   &:nth-child(6) {
-    --cell-color: #3DF5D4;
+    --cell-color: #3df5d4;
   }
 
   &:nth-child(7) {
-    --cell-color: #45F4DE;
+    --cell-color: #45f4de;
   }
 
   &:nth-child(8) {
-    --cell-color: #53F1F0;
+    --cell-color: #53f1f0;
   }
 
   &:nth-child(9) {
-    --cell-color: #60EFFF;
+    --cell-color: #60efff;
   }
 `;
