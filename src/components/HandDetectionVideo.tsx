@@ -161,7 +161,7 @@ export default function HandDetectionVideo() {
       />
 
       <Webcam
-        audio={false}
+        audio={true}
         ref={webcamRef}
         style={{ visibility: "hidden" }}
         videoConstraints={{

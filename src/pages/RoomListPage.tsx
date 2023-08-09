@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { RoomData } from "../types/roomType";
-import { RoomListPageWrapper, FormWrapper } from "../styled/rooms.styled";
+import { RoomListPageWrapper, FormWrapper, Input,CreateButton} from "../styled/rooms.styled";
 import { useNavigate, NavLink } from "react-router-dom";
 import { fetchData } from "../utils/fetchData";
 import { colorList } from "../styled/game.styled";
@@ -146,10 +146,10 @@ export default function RoomListPage() {
         </AnimatePresence>
         <HomeButton />
         <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>
-          <input placeholder="Room ID" ref={newRoomNameRef}></input>
-          <Button variant="primary" type="submit">
+          <Input placeholder="Room ID" ref={newRoomNameRef}></Input>
+          <CreateButton type="submit">
             Create
-          </Button>
+          </CreateButton>
         </FormWrapper>
 
         <table style={{ borderCollapse: "separate", borderSpacing: "30px" }}>

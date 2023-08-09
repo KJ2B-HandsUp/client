@@ -20,6 +20,15 @@ const flash = keyframes`
   }
 `;
 
+const rotation_481 = keyframes`
+    0% {
+    transform: rotateZ(0deg);
+    }
+    100% {
+    transform: rotateZ(360deg);
+    }
+`;
+
 export const GridCell = styled(motion.td)<{ flashcolor: string }>`
   position: relative;
   border: 4px solid ${(props) => props.flashcolor};
@@ -29,9 +38,12 @@ export const GridCell = styled(motion.td)<{ flashcolor: string }>`
   background-color: white;
   opacity: 0.5;
   cursor: pointer;
+  border-radius: 10px;
+  animation: ${rotation_481} 5000ms infinite linear;
 
   &.flash {
     animation: ${flash} 0.5s;
+    
   }
 
   &.gameover {

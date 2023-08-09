@@ -15,6 +15,8 @@ let rtpCapabilities: RtpCapabilities;
 let producerTransport;
 let consumerTransportList: Transport[] = [];
 let videoProducer;
+//🔊오디오
+let audioProducer
 
 const params = {
   encodings: [
@@ -34,6 +36,7 @@ const params = {
   },
 };
 
+let audioParams;
 let videoParams: mediasoupClient.types.ProducerOptions;
 
 export const streamSuccess = async (
@@ -41,6 +44,8 @@ export const streamSuccess = async (
   socket: Socket,
   roomName: string,
 ): Promise<(MediaDataType | undefined)[]> => {
+  //🔊오디오
+  audioParams = { track: stream.getAudioTracks()[0], ...audioParams };
   videoParams = { track: stream.getVideoTracks()[0], ...params };
   return await joinRoom(socket, roomName);
 };
@@ -193,7 +198,18 @@ const createSendTransport = async (
 const connectSendTransport = async (): Promise<void> => {
   try {
     if (producerTransport) {
+      //🔊오디오
+      audioProducer = await producerTransport.produce(audioParams);
       videoProducer = await producerTransport.produce(videoParams);
+
+      audioProducer?.on("trackended", () => {
+        console.log("audio track ended");
+      });
+
+      audioProducer?.on("transportclose", () => {
+        console.log("audio transport ended");
+      });
+
 
       videoProducer?.on("trackended", () => {
         console.log("video track ended");
