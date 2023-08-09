@@ -20,8 +20,8 @@ export type UserType = {
   userId: number;
   nickname?: string;
   profile_image_url?: string;
-  stream?: MediaStream | unknown;
-  audioStream?: MediaStream | unknown;
+  stream?: MediaStream;
+  audioStream?: MediaStream;
 };
 
 export type MediaDataType = {

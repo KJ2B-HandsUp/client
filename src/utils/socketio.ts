@@ -334,7 +334,12 @@ const connectRecvTransport = async (
   }
 };
 
-export const tracks = {};
+export type TracksType = {
+  audio?: MediaStream;
+  video?: MediaStream;
+};
+
+export const tracks: TracksType = {};
 
 const getStream = (
   consumerTransport: Transport<mediasoupClient.types.AppData>,
@@ -362,11 +367,11 @@ const getStream = (
         });
 
         try {
-          const { _track } = consumer;
+          const { track } = consumer;
           console.log(consumer);
 
-          const mediaStream = new MediaStream([_track]);
-          tracks[_track.kind] = mediaStream;
+          const mediaStream = new MediaStream([track]);
+          tracks[track.kind] = mediaStream;
           console.log("here 1?");
           resolve(mediaStream);
         } catch (error) {

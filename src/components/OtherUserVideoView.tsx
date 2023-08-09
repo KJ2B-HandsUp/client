@@ -30,9 +30,9 @@ function OtherUserVideoView({
   useEffect(() => {
     if (userNum > 0 && videoRef.current) {
       console.log(users);
-      videoRef.current!.srcObject = users[0].stream || null;
+      videoRef.current!.srcObject = users[0].stream!;
       videoRef.current!.play();
-      audioRef.current!.srcObject = users[0].audioStream || null;
+      audioRef.current!.srcObject = users[0].audioStream!;
       audioRef.current!.play();
       console.log(users[0].stream);
       console.log(users[0].audioStream);
