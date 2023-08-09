@@ -18,10 +18,8 @@ export const HomeButtonWrapper = styled(NavLink)`
   color: white;
   flex-direction: column;
   justify-content: center;
-  border: none;
-  padding: 20px;
-  gap: 12px;
-  border-radius: 50%;
+  width: 60px;
+  height: 60px;
   cursor: pointer;
 
   &::before {
@@ -29,7 +27,10 @@ export const HomeButtonWrapper = styled(NavLink)`
     position: absolute;
     inset: 0;
     margin: auto;
-    border-radius: 10px;
+    left: -4px;
+    top: -2px;
+    width: 68px;
+    height: 68px;
     background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
     z-index: -1;
     pointer-events: none;
