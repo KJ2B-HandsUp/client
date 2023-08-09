@@ -28,7 +28,6 @@ export const HomeButtonWrapper = styled(NavLink)`
     inset: 0;
     margin: auto;
     left: -4px;
-    top: -2px;
     width: 68px;
     height: 68px;
     background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);

@@ -30,7 +30,7 @@ import {
   ROW_LENGTH,
   COL_LENGTH,
 } from "../types/game.type";
-import { MemoizedOtherUsersVideoView } from "../components/OtherUsersVideoView";
+import { MemoizedOtherUserVideoView } from "../components/OtherUserVideoView";
 import { MemoizedGameOverModal } from "../components/GameOverModal";
 import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
@@ -339,7 +339,7 @@ export default function GamePage() {
             row={ROW_LENGTH}
             column={COL_LENGTH}
           />
-          <MemoizedOtherUsersVideoView
+          <MemoizedOtherUserVideoView
             turn={turn}
             users={userList}
             userNum={playersNum - 1}
