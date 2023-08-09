@@ -7,6 +7,7 @@ import {
 //import Sidebar from "../components/Sidebar";
 import { SidebarItemType } from "../types/sidebar.type";
 import { playBtnAudio } from "../utils/audio";
+import { DataConsumer } from "mediasoup-client/lib/DataConsumer";
 
 export const items: SidebarItemType[] = [
   {
@@ -25,6 +26,7 @@ export default function LoginPage() {
     );
     console.log(response);
     const data = await response.json();
+    console.log(data);
   };
 
   return (
