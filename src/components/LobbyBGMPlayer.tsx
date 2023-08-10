@@ -6,7 +6,6 @@ const BGMPlayerWrapper = styled.button`
 `;
 
 const VolumeControl = styled.div<{ volume: number }>`
-margit-top: 100px;
   justify-content: center;
   align-items: center;
   width: 6rem;
@@ -45,55 +44,57 @@ margit-top: 100px;
     }
 `;
 
-const bgmAudio = new Audio("/mp3/dubstep_drum_trap_loop.mp3");
+const lobbyAudio = new Audio("/mp3/menu_loop.mp3");
 
-export default function BGMPlayer() {
+export default function LobbyBGMPlayer() {
   const [isPlaying, setIsPlaying] = useState(true);
-  const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(0.7);
 
   useEffect(() => {
     async function fetch() {
-      bgmAudio.loop = true;
-      await bgmAudio.play();
+      lobbyAudio.currentTime = 0;
+      lobbyAudio.loop = true;
+      await lobbyAudio.play();
     }
     fetch();
 
     return () => {
-      bgmAudio.pause();
-      bgmAudio.currentTime = 0;
+      lobbyAudio.pause();
     };
   }, []);
 
   const handleToggle = () => {
     if (isPlaying) {
-      bgmAudio.pause();
+      lobbyAudio.pause();
     } else {
-      bgmAudio.play();
+      lobbyAudio.play();
     }
     setIsPlaying(!isPlaying);
   };
 
   const handleVolumeChange = (e) => {
     const newVolume = e.target.value;
-    bgmAudio.volume = newVolume;
+    lobbyAudio.volume = newVolume;
     setVolume(newVolume);
   };
 
   return (
-    <div style={{ position: "fixed", right: "40px", top: "200px" }}>
+    <div style={{ position: "fixed", right: "40px", bottom: "50px" }}>
       <BGMPlayerWrapper onClick={handleToggle}>
         {isPlaying ? "Pause BGM" : "Play BGM"}
       </BGMPlayerWrapper>
-      <VolumeControl volume={volume * 100}>
-        <input
-          type="range"
-          value={volume}
-          onChange={handleVolumeChange}
-          min={0}
-          max={1}
-          step={0.1}
-        />
-      </VolumeControl>
+      {isPlaying && (
+        <VolumeControl volume={volume * 100}>
+          <input
+            type="range"
+            value={volume}
+            onChange={handleVolumeChange}
+            min={0}
+            max={1}
+            step={0.1}
+          />
+        </VolumeControl>
+      )}
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import HomeButton from "../components/HomeButton";
 import { ROW_LENGTH, COL_LENGTH } from "../types/game.type";
 import { Overlay } from "../styled/rooms.styled";
+import { playHoverBtnAudio } from "../utils/audio";
 
 const emptyRoom: RoomData = {
   roomId: "Empty",
@@ -160,6 +161,7 @@ export default function RoomListPage() {
                         <motion.div
                           layoutId={roomInfo.roomId}
                           whileHover={{ scale: 1.1 }}
+                          onHoverStart={playHoverBtnAudio}
                           style={{
                             backgroundColor: "white",
                             opacity: 0.8,

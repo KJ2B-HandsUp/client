@@ -38,8 +38,12 @@ import { GamePageWrapper } from "../styled/game.styled";
 import { AnimatePresence } from "framer-motion";
 import { Overlay } from "../styled/rooms.styled";
 import { motion } from "framer-motion";
-import BGMPlayer from "../components/BGMPlayer";
-import { GameOverAudio, GameStartAudio } from "../utils/audio";
+import {
+  GameOverAudio,
+  GameStartAudio,
+  pauseBGMAudio,
+  playBGMAudio,
+} from "../utils/audio";
 
 const initalState: StateType = {
   start: false,
@@ -317,10 +321,11 @@ export default function GamePage() {
         }
       });
     }
+    playBGMAudio();
 
-    // Clean up
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      pauseBGMAudio();
     };
   }, []);
 
@@ -366,7 +371,6 @@ export default function GamePage() {
           />
         </GamePageWrapper>
       </GameContext.Provider>
-      <BGMPlayer />
       <MemoizedGameStartModal
         show={start || end}
         onStartGame={handleNewGame}

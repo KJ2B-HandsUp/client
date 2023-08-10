@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import {
   LoginPageWrapper,
   VideoBackground,
@@ -42,9 +41,6 @@ export default function LoginPage() {
       <VideoBackground autoPlay loop muted playsInline>
         <source src="/back.mp4" type="video/mp4" />
       </VideoBackground>
-      {
-        //<Sidebar items={items} />
-      }
       <LoginPageWrapper>
         <header>
           <TitleWrapper>Hands Up!</TitleWrapper>
