@@ -36,3 +36,23 @@ export function pauseBtnAudio() {
 
 export const GameStartAudio = new Audio("/mp3/gamestart.mp3");
 export const GameOverAudio = new Audio("/mp3/gameover.mp3");
+
+const GameBGMAudio = new Audio("/mp3/dubstep_drum_trap_loop.mp3");
+
+export function playBGMAudio() {
+  GameBGMAudio.currentTime = 0;
+  GameBGMAudio.loop = true;
+  GameBGMAudio.play();
+}
+
+export function pauseBGMAudio() {
+  GameBGMAudio.pause();
+}
+
+const HoverBtnAudio = new Audio("/mp3/jump02.mp3");
+HoverBtnAudio.volume = 0.5;
+
+export function playHoverBtnAudio() {
+  HoverBtnAudio.currentTime = 0;
+  HoverBtnAudio.play();
+}

@@ -32,14 +32,18 @@ import {
   COL_LENGTH,
 } from "../types/game.type";
 import { MemoizedOtherUserVideoView } from "../components/OtherUserVideoView";
-import { MemoizedGameOverModal } from "../components/GameOverModal";
 import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
 import { AnimatePresence } from "framer-motion";
 import { Overlay } from "../styled/rooms.styled";
 import { motion } from "framer-motion";
-import BGMPlayer from "../components/BGMPlayer";
-import { GameOverAudio, GameStartAudio } from "../utils/audio";
+import {
+  GameOverAudio,
+  GameStartAudio,
+  pauseBGMAudio,
+  playBGMAudio,
+} from "../utils/audio";
+import { takeScreenshot } from "../utils/takeScreenshot";
 
 const initalState: StateType = {
   start: false,
@@ -164,6 +168,29 @@ const reducer = (state: StateType, action: ActionType): StateType => {
   }
 };
 
+const modalVariants = {
+  hidden: {
+    y: "100vh", // 바닥에서 시작
+    opacity: 0.3, // 흐려진 상태에서 시작
+  },
+  visible: {
+    y: "0%", // 화면 중앙으로 이동
+    opacity: 1, // 선명하게 표시
+    transition: {
+      type: "spring",
+      stiffness: 150,
+      damping: 15,
+    },
+  },
+  exit: {
+    y: "100vh", // 바닥으로 이동
+    opacity: 0, // 완전히 흐려진 상태
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
 export const GameContext = createContext<GameDispatch>({
   start: false,
   dispatch: () => {
@@ -194,6 +221,9 @@ export default function GamePage() {
 
   const { roomId } = useParams();
   const socket = useRef<Socket>();
+  const downloadLinkRef = useRef<HTMLAnchorElement>(null);
+  const [screenshotData, setScreenshotData] = useState<string>();
+
   const [gameOverState, setGameOverState] = useState(false);
 
   const handleBeforeUnload = useCallback(() => {
@@ -317,10 +347,11 @@ export default function GamePage() {
         }
       });
     }
+    playBGMAudio();
 
-    // Clean up
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      pauseBGMAudio();
     };
   }, []);
 
@@ -330,11 +361,22 @@ export default function GamePage() {
         dispatch({ type: CHANGE_TURN });
       }, 1000);
     }
+
+    const fetch = async () => {
+      const screenshot = await takeScreenshot();
+      const downloadLink = downloadLinkRef.current;
+      if (downloadLink) {
+        downloadLink.href = screenshot;
+        downloadLink.download = "screenshot.png";
+        // downloadLink.click();
+      }
+      setScreenshotData(screenshot);
+      GameOverAudio.play();
+      setGameOverState(true);
+    };
+
     if (end) {
-      setTimeout(() => {
-        GameOverAudio.play();
-        setGameOverState(true);
-      }, 1000);
+      fetch();
     }
   }, [endTurn, end]);
 
@@ -366,7 +408,6 @@ export default function GamePage() {
           />
         </GamePageWrapper>
       </GameContext.Provider>
-      <BGMPlayer />
       <MemoizedGameStartModal
         show={start || end}
         onStartGame={handleNewGame}
@@ -380,10 +421,14 @@ export default function GamePage() {
             exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
           >
             <motion.div
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={modalVariants}
               style={{
                 backgroundColor: "white",
-                width: "25rem",
-                height: "25rem",
+                width: "60rem",
+                height: "60rem",
                 borderRadius: "2%",
                 display: "flex",
                 flexDirection: "column",
@@ -392,7 +437,14 @@ export default function GamePage() {
                 textAlign: "center",
               }}
             >
-              <h1>You Lose...</h1>
+              <h1>{myId === winner ? "You Lose..." : "You Win!!!"}</h1>
+              {screenshotData && (
+                <img
+                  src={screenshotData}
+                  alt="screenshot"
+                  style={{ margin: "20px", width: "50vw", height: "50vh" }}
+                />
+              )}
 
               <NavLink
                 to={`/main`}
@@ -406,7 +458,6 @@ export default function GamePage() {
                     handleBeforeUnload();
                   }}
                   style={{
-                    backgroundColor: "blue",
                     marginTop: "3vh",
                     width: "17vw",
                     height: "4vh",
@@ -422,7 +473,6 @@ export default function GamePage() {
                   handleNewGame();
                 }}
                 style={{
-                  backgroundColor: "blue",
                   marginTop: "3vh",
                   width: "17vw",
                   height: "4vh",
@@ -432,6 +482,12 @@ export default function GamePage() {
               >
                 New Game
               </motion.button>
+              <a ref={downloadLinkRef} href="/" style={{ display: "none" }}>
+                Download
+              </a>
+              <button onClick={() => downloadLinkRef.current?.click()}>
+                Download Screenshot
+              </button>
             </motion.div>
           </Overlay>
         ) : null}

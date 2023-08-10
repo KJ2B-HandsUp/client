@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import HomeButton from "../components/HomeButton";
 import { ROW_LENGTH, COL_LENGTH } from "../types/game.type";
 import { Overlay } from "../styled/rooms.styled";
+import { playHoverBtnAudio } from "../utils/audio";
 
 const emptyRoom: RoomData = {
   roomId: "Empty",

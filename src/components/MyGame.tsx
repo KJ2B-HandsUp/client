@@ -4,7 +4,7 @@ import {
   PlayerIdContainer,
   BoardWrapper,
 } from "../styled/game.styled";
-import HandDetectionVideo from "./HandDetectionVideo";
+import { MemoizedHandDetectionVideo } from "./HandDetectionVideo";
 import { GameProps } from "../types/table";
 import { memo, useContext } from "react";
 import { GameContext } from "../pages/GamePage";
@@ -15,8 +15,8 @@ function MyGame({ turn, userId, row, column }: GameProps) {
   return (
     <GameWrapper>
       <BoardWrapper>
-        <HandDetectionVideo />
-        {turn == userId || turn == -1 ? (
+        <MemoizedHandDetectionVideo />
+        {turn == userId ? (
           <Board turn={turn} userId={userId} row={row} column={column} />
         ) : null}
       </BoardWrapper>

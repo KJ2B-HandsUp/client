@@ -13,7 +13,7 @@ import { GamePageWrapper } from "../styled/game.styled";
 import { NavLink } from "react-router-dom";
 import { TutorialPageWrapper } from "../styled/tutorial.styled";
 import HomeButton from "../components/HomeButton";
-import BGMPlayer from "../components/BGMPlayer";
+import { pauseBGMAudio, playBGMAudio } from "../utils/audio";
 
 const initalState: StateType = {
   start: true,
@@ -75,6 +75,14 @@ export default function SingleGamePage() {
     [start, trigerClick, clickedBlock],
   );
 
+  useEffect(() => {
+    playBGMAudio();
+
+    return () => {
+      pauseBGMAudio();
+    };
+  });
+
   return (
     <TutorialPageWrapper>
       <HomeButton />
@@ -112,7 +120,6 @@ export default function SingleGamePage() {
               Home
             </NavLink>
           </button>
-          <BGMPlayer />
         </div>
       </GamePageWrapper>
     </TutorialPageWrapper>

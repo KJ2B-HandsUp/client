@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useContext } from "react";
+import { useCallback, useEffect, useRef, useContext, memo } from "react";
 import Webcam from "react-webcam";
-import { drawCanvas } from "../utils/drawCanvas";
+import { drawCanvas, updateCanvasImage } from "../utils/drawCanvas";
 import { MyCameraView } from "../styled/game.styled";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
 import { HandType } from "../types/game.type";
@@ -11,7 +11,7 @@ let rectLeft = 0;
 let rectTop = 0;
 const threshold = 5;
 
-export default function HandDetectionVideo() {
+function HandDetectionVideo() {
   const { start } = useContext(GameContext);
 
   const webcamRef = useRef<Webcam>(null);
@@ -23,7 +23,6 @@ export default function HandDetectionVideo() {
     if (myRef.current) {
       rectLeft = myRef.current.getBoundingClientRect().left;
       rectTop = myRef.current.getBoundingClientRect().top;
-      console.log("myRef.current exists ", rectLeft, rectTop);
     }
     if (canvasRef.current) {
       canvasRef.current.width = window.innerWidth * (CAMERA_VIEW_WIDTH / 100);
@@ -75,40 +74,39 @@ export default function HandDetectionVideo() {
 
   const onResults = useCallback(
     (results: Window["Results"]) => {
+      let fingerSize = [20, 20];
       resultsRef.current = results;
 
       if (ctx === null) {
         return;
       }
 
-      drawCanvas(ctx, results);
-      if (
-        results.multiHandLandmarks.length == 2 &&
-        results.multiHandedness[0].label !== results.multiHandedness[1].label
-      ) {
-        results.multiHandLandmarks?.forEach((landmarks, index) => {
-          const handType = results.multiHandedness?.[
-            index
-          ]?.label.toLowerCase() as HandType;
+      results.multiHandLandmarks?.forEach((landmarks, index) => {
+        const handType = results.multiHandedness?.[
+          index
+        ]?.label.toLowerCase() as HandType;
 
-          const indexFingerLandmark = landmarks[8];
-          if (indexFingerLandmark && "z" in indexFingerLandmark) {
-            const zValue = indexFingerLandmark.z * 100;
-            if (
-              typeof zValue === "number" &&
-              previousZRef.current[handType] != null &&
-              previousZRef.current[handType]! > -0.01 &&
-              zValue < 0
-            ) {
-              if (previousZRef.current[handType]! - zValue > threshold) {
-                simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
-              }
+        const indexFingerLandmark = landmarks[8];
+        if (indexFingerLandmark && "z" in indexFingerLandmark) {
+          const zValue = indexFingerLandmark.z * 100;
+          if (
+            typeof zValue === "number" &&
+            previousZRef.current[handType] != null &&
+            previousZRef.current[handType]! > -0.015 &&
+            zValue < 0
+          ) {
+            if (previousZRef.current[handType]! - zValue > threshold) {
+              simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
+              fingerSize[index] = 40;
             }
-
-            previousZRef.current[handType] = zValue;
           }
-        });
-      }
+
+          previousZRef.current[handType] = zValue;
+        }
+      });
+
+      drawCanvas(ctx, results, fingerSize);
+      updateCanvasImage(canvasRef.current!);
     },
     [simulateClick],
   );
@@ -172,3 +170,5 @@ export default function HandDetectionVideo() {
     </MyCameraView>
   );
 }
+
+export const MemoizedHandDetectionVideo = memo(HandDetectionVideo);
