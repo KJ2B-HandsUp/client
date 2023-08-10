@@ -4,8 +4,12 @@ import { RoomData } from "../types/roomType";
 import {
   RoomListPageWrapper,
   FormWrapper,
-  Input,
-  CreateButton,
+  RoomWrapper,
+  RoomListColor,
+  InputGroup,
+  SubmitButton,
+  InputField,
+  MotionButton
 } from "../styled/rooms.styled";
 import { useNavigate, NavLink } from "react-router-dom";
 import { fetchData } from "../utils/fetchData";
@@ -80,6 +84,7 @@ export default function RoomListPage() {
     }
   }, [room]);
 
+ 
   return (
     <>
       <RoomListPageWrapper>
@@ -100,7 +105,7 @@ export default function RoomListPage() {
                   backgroundColor: "white",
                   width: "25rem",
                   height: "25rem",
-                  borderRadius: "2%",
+                  borderRadius: "20px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
@@ -108,11 +113,16 @@ export default function RoomListPage() {
                   textAlign: "center",
                 }}
               >
-                <h3>{room.roomId}</h3>
-                {room.description}
-                <p>
-                  {room.roomId == "Empty" ? "" : `현재인원 ${room.peersNum!}`}
-                </p>
+                <h1 style={{marginBottom : "100px"}}>
+                  참가하시겠습니까?
+                  </h1>
+                
+                
+                <h3>
+                  {room.description}
+                  <br/>
+                  {room.roomId == "Empty" ? ""  : `현재인원 ${room.peersNum!}`}
+                </h3>
 
                 <NavLink
                   to={`/game/${room?.roomId}`}
@@ -121,7 +131,7 @@ export default function RoomListPage() {
                     color: "white",
                   }}
                 >
-                  <motion.button
+                  <MotionButton
                     style={{
                       backgroundColor: roomColor!,
                       marginTop: "3vh",
@@ -129,10 +139,12 @@ export default function RoomListPage() {
                       height: "4vh",
                       borderRadius: "5%",
                       bottom: 0,
+                      fontWeight: "bold",
+                      letterSpacing: "2px"
                     }}
                   >
                     Join
-                  </motion.button>
+                  </MotionButton>
                 </NavLink>
               </motion.div>
             </Overlay>
@@ -140,8 +152,12 @@ export default function RoomListPage() {
         </AnimatePresence>
         <HomeButton />
         <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>
-          <Input placeholder="Room ID" ref={newRoomNameRef}></Input>
-          <CreateButton type="submit">Create</CreateButton>
+          <InputGroup>
+          <InputField placeholder="Room ID" ref={newRoomNameRef}></InputField>
+          <SubmitButton type="submit">
+            ADD</SubmitButton>
+        </InputGroup>
+
         </FormWrapper>
 
         <table style={{ borderCollapse: "separate", borderSpacing: "30px" }}>
@@ -157,24 +173,21 @@ export default function RoomListPage() {
                     )
                     .map((roomInfo, idx) => (
                       <td key={idx}>
-                        <motion.div
+                        <RoomWrapper
                           layoutId={roomInfo.roomId}
-                          whileHover={{ scale: 1.1 }}
                           style={{
-                            backgroundColor: "white",
-                            opacity: 0.8,
+                            backgroundColor:`${RoomListColor[(rowIndex * COL_LENGTH + idx) % RoomListColor.length]}`,
+                            color:`${(rowIndex * COL_LENGTH + idx)%2==0 ? 'white' : 'black'}`,
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center",
                             textAlign: "center",
-                            width: "18rem",
-                            height: "18rem",
-                            borderRadius: "2%",
-                            boxShadow: `5px 5px 10px ${
-                              colorList[
-                                (rowIndex * COL_LENGTH + idx) % colorList.length
-                              ]
-                            }`,
+                            width: "17rem",
+                            height: "17rem",
+                            padding: "20px",
+                            gap: "20px",
+                            borderRadius: "20px",
+              
                           }}
                           onClick={() => {
                             if (roomInfo.roomId !== "Empty") {
@@ -188,14 +201,16 @@ export default function RoomListPage() {
                             }
                           }}
                         >
-                          <h3>{roomInfo.roomId}</h3>
-                          {roomInfo.description}
-                          <p>
+                          <div style={{marginBottom : "50px"}}>
+                          <h1>{roomInfo.roomId}</h1></div>
+                         
+                          {/* <h3>{roomInfo.description}</h3> */}
+                          <p style={{marginTop : "10px"}}>
                             {roomInfo.roomId == "Empty"
-                              ? ""
-                              : `현재인원 ${roomInfo.peersNum!}`}
+                              ? "현재인원 0명"
+                              : `현재인원 ${roomInfo.peersNum!}명`}
                           </p>
-                        </motion.div>
+                        </RoomWrapper>
                       </td>
                     ))}
                 </tr>
