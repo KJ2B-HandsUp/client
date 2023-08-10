@@ -83,7 +83,7 @@ function OtherUserVideoView({
               }}
             />
           </MyCameraView>
-          {((start && turn == users[0].userId) || turn == -1) && (
+          {users[0] && ((start && turn == users[0].userId) || turn == -1) && (
             <Board
               turn={turn}
               userId={users[0].userId}
@@ -95,7 +95,7 @@ function OtherUserVideoView({
         <PlayerIdContainer>
           Player ID: {userNum > 0 ? users[0].userId : "None"}
         </PlayerIdContainer>
-        {start && turn == users[0].userId && (
+        {users[0] && start && turn == users[0].userId && (
           <h2 style={{ color: "white" }}>Your Turn!</h2>
         )}
         <button onClick={handleScreenshot}>Take Screenshot</button>

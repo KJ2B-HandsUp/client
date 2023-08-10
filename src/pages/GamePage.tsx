@@ -59,6 +59,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case START_GAME:
       if (!state.start) {
+        console.log("start game");
         if (dataSocket != undefined) {
           dataSocket.emit("get_game_data", {
             type: "START",
@@ -79,7 +80,9 @@ const reducer = (state: StateType, action: ActionType): StateType => {
       return state;
     case CLICK_BLOCK: {
       const idx = state.blockList.length;
+      console.log(myId, state.turn);
       if (dataSocket != undefined && !state.trigerClick && myId == state.turn) {
+        console.log("Click Block");
         dataSocket.emit("get_game_data", {
           type: "CLICK",
           userId: myId,
@@ -138,6 +141,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
         playersNum: state.playersNum + action.num,
       };
     case OTHER_PLAYER_CLICK:
+      console.log("clicked by other player");
       return {
         ...state,
         trigerClick: true,
@@ -232,13 +236,13 @@ export default function GamePage() {
                 "audio" in tracks
               ) {
                 userList.push({
-                  userId: 2,
+                  userId: 1,
                   nickname: mediaData!.producerId,
                   stream: tracks["video"],
                   audioStream: tracks["audio"],
                 });
                 dispatch({ type: ADD_PLAYER, num: 1 });
-                myId = mediaStreamList.length + 1;
+                myId = 2;
               }
             }
           })
@@ -260,7 +264,7 @@ export default function GamePage() {
             if ("audio" in tracks && "video" in tracks) {
               // console.log("Success: get new producer video");
               userList.push({
-                userId: playersNum + 1,
+                userId: 2,
                 nickname: producerId,
                 stream: tracks["video"],
                 audioStream: tracks["audio"],
@@ -317,6 +321,19 @@ export default function GamePage() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
+  useEffect(() => {
+    if (endTurn) {
+      setTimeout(() => {
+        dispatch({ type: CHANGE_TURN });
+      }, 1000);
+    }
+    if (end) {
+      setTimeout(() => {
+        setGameOverState(true);
+      }, 2000);
+    }
+  }, [endTurn, end]);
 
   const value = useMemo(
     () => ({
