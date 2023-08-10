@@ -11,7 +11,6 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { fetchData } from "../utils/fetchData";
 import { colorList } from "../styled/game.styled";
 import { motion, AnimatePresence } from "framer-motion";
-import { styled } from "styled-components";
 import HomeButton from "../components/HomeButton";
 import { ROW_LENGTH, COL_LENGTH } from "../types/game.type";
 import { Overlay } from "../styled/rooms.styled";
@@ -21,11 +20,13 @@ const emptyRoom: RoomData = {
   description: "",
   peersNum: -1,
 };
+
 const initialRoomList: RoomData[] = [
   { roomId: "room1", description: "This is Room 1!!!", peersNum: 0 },
   { roomId: "room2", description: "This is Room 2!!!", peersNum: 0 },
   { roomId: "room3", description: "This is Room 3!!!", peersNum: 0 },
 ];
+
 for (let i = 0; i < 6; i++) {
   initialRoomList.push(emptyRoom);
 }

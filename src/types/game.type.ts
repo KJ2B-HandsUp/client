@@ -22,6 +22,7 @@ export type UserType = {
   profile_image_url?: string;
   stream?: MediaStream;
   audioStream?: MediaStream;
+  highscore?: number;
 };
 
 export type MediaDataType = {
