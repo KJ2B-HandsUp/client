@@ -3,6 +3,7 @@ import { GameProps } from "../types/table";
 import { GridCell, GridTable } from "../styled/tables.styled";
 import { colorList } from "../styled/game.styled";
 import { audioList } from "../utils/audio";
+import { COL_LENGTH, ROW_LENGTH } from "../types/game.type";
 
 function bfs(
   row: number,
@@ -10,8 +11,6 @@ function bfs(
   visited: boolean[][],
   setCellFlash: (newFlash: number[][]) => void,
 ) {
-  const rows = 4;
-  const cols = 3;
   const directions = [
     [1, 0],
     [0, 1],
@@ -32,9 +31,9 @@ function bfs(
 
       if (
         newRow >= 0 &&
-        newRow < rows &&
+        newRow < ROW_LENGTH &&
         newCol >= 0 &&
-        newCol < cols &&
+        newCol < COL_LENGTH &&
         !visited[newRow][newCol]
       ) {
         queue.push([newRow, newCol]);

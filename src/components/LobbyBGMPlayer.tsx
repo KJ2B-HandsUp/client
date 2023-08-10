@@ -106,6 +106,7 @@ const MuteSpeakerIcon = styled.div`
 `;
 
 const lobbyAudio = new Audio("/mp3/menu_loop.mp3");
+lobbyAudio.preload = "auto";
 
 export default function LobbyBGMPlayer() {
   const [isPlaying, setIsPlaying] = useState(true);

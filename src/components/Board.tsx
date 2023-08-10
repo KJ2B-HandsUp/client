@@ -2,7 +2,7 @@ import { useCallback, useState, useContext, useEffect } from "react";
 import { GameProps } from "../types/table";
 import { GridCell, GridTable } from "../styled/tables.styled";
 import { GameContext } from "../pages/GamePage";
-import { CLICK_BLOCK } from "../types/game.type";
+import { CLICK_BLOCK, COL_LENGTH, ROW_LENGTH } from "../types/game.type";
 import { colorList } from "../styled/game.styled";
 import { audioList } from "../utils/audio";
 
@@ -12,8 +12,6 @@ function bfs(
   visited: boolean[][],
   setCellFlash: (newFlash: number[][]) => void,
 ) {
-  const rows = 4;
-  const cols = 3;
   const directions = [
     [1, 0],
     [0, 1],
@@ -34,9 +32,9 @@ function bfs(
 
       if (
         newRow >= 0 &&
-        newRow < rows &&
+        newRow < ROW_LENGTH &&
         newCol >= 0 &&
-        newCol < cols &&
+        newCol < COL_LENGTH &&
         !visited[newRow][newCol]
       ) {
         queue.push([newRow, newCol]);
