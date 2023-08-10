@@ -75,40 +75,38 @@ export default function HandDetectionVideo() {
 
   const onResults = useCallback(
     (results: Window["Results"]) => {
+      let fingerSize = [20, 20];
       resultsRef.current = results;
 
       if (ctx === null) {
         return;
       }
 
-      drawCanvas(ctx, results);
-      if (
-        results.multiHandLandmarks.length == 2 &&
-        results.multiHandedness[0].label !== results.multiHandedness[1].label
-      ) {
-        results.multiHandLandmarks?.forEach((landmarks, index) => {
-          const handType = results.multiHandedness?.[
-            index
-          ]?.label.toLowerCase() as HandType;
+      results.multiHandLandmarks?.forEach((landmarks, index) => {
+        const handType = results.multiHandedness?.[
+          index
+        ]?.label.toLowerCase() as HandType;
 
-          const indexFingerLandmark = landmarks[8];
-          if (indexFingerLandmark && "z" in indexFingerLandmark) {
-            const zValue = indexFingerLandmark.z * 100;
-            if (
-              typeof zValue === "number" &&
-              previousZRef.current[handType] != null &&
-              previousZRef.current[handType]! > -0.01 &&
-              zValue < 0
-            ) {
-              if (previousZRef.current[handType]! - zValue > threshold) {
-                simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
-              }
+        const indexFingerLandmark = landmarks[8];
+        if (indexFingerLandmark && "z" in indexFingerLandmark) {
+          const zValue = indexFingerLandmark.z * 100;
+          if (
+            typeof zValue === "number" &&
+            previousZRef.current[handType] != null &&
+            previousZRef.current[handType]! > -0.015 &&
+            zValue < 0
+          ) {
+            if (previousZRef.current[handType]! - zValue > threshold) {
+              simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
+              fingerSize[index] = 40;
             }
-
-            previousZRef.current[handType] = zValue;
           }
-        });
-      }
+
+          previousZRef.current[handType] = zValue;
+        }
+      });
+
+      drawCanvas(ctx, results, fingerSize);
     },
     [simulateClick],
   );

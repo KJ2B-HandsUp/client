@@ -1,6 +1,7 @@
 export const drawCanvas = (
   ctx: CanvasRenderingContext2D,
   results: Window["Results"],
+  fingerSize: number[],
 ) => {
   const width = ctx.canvas.width;
   const height = ctx.canvas.height;
@@ -14,16 +15,20 @@ export const drawCanvas = (
   ctx.drawImage(results.image, 0, 0, width, height);
 
   if (results.multiHandLandmarks) {
+    let idx = 0;
     for (const landmarks of results.multiHandLandmarks) {
-      window.drawConnectors(ctx, landmarks, window.HAND_CONNECTIONS, {
-        color: "#ffffff",
-        lineWidth: 10,
-      });
-      window.drawLandmarks(ctx, landmarks, {
-        color: "#ffffff",
-        lineWidth: 5,
-        radius: 5,
-      });
+      const indexFingertip = landmarks[8];
+      ctx.beginPath();
+      ctx.arc(
+        indexFingertip.x * width,
+        indexFingertip.y * height,
+        fingerSize[idx],
+        0,
+        2 * Math.PI,
+      );
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+      idx++;
     }
   }
   ctx.restore();
