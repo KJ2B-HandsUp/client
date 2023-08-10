@@ -13,6 +13,7 @@ import { GamePageWrapper } from "../styled/game.styled";
 import { NavLink } from "react-router-dom";
 import { TutorialPageWrapper } from "../styled/tutorial.styled";
 import HomeButton from "../components/HomeButton";
+import BGMPlayer from "../components/BGMPlayer";
 
 const initalState: StateType = {
   start: true,
@@ -111,6 +112,7 @@ export default function SingleGamePage() {
               Home
             </NavLink>
           </button>
+          <BGMPlayer />
         </div>
       </GamePageWrapper>
     </TutorialPageWrapper>
