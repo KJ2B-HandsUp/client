@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
 import { motion } from "framer-motion";
 
-export const GridTable = styled.table`
+export const GridTable = styled(motion.table)`
   border-collapse: separate;
   border-spacing: 10px;
   width: ${CAMERA_VIEW_WIDTH - 10}vw;
@@ -42,12 +42,6 @@ export const GridCell = styled(motion.td)<{ flashcolor: string }>`
 
   &.flash {
     animation: ${flash} 0.5s;
-  }
-
-  &.gameover {
-    border: 4px solid black;
-    background-color: black;
     opacity: 1;
-    z-index: 10;
   }
 `;

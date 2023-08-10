@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useContext } from "react";
+import { useCallback, useEffect, useRef, useContext, memo } from "react";
 import Webcam from "react-webcam";
-import { drawCanvas } from "../utils/drawCanvas";
+import { drawCanvas, updateCanvasImage } from "../utils/drawCanvas";
 import { MyCameraView } from "../styled/game.styled";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
 import { HandType } from "../types/game.type";
@@ -11,7 +11,7 @@ let rectLeft = 0;
 let rectTop = 0;
 const threshold = 5;
 
-export default function HandDetectionVideo() {
+function HandDetectionVideo() {
   const { start } = useContext(GameContext);
 
   const webcamRef = useRef<Webcam>(null);
@@ -23,7 +23,6 @@ export default function HandDetectionVideo() {
     if (myRef.current) {
       rectLeft = myRef.current.getBoundingClientRect().left;
       rectTop = myRef.current.getBoundingClientRect().top;
-      console.log("myRef.current exists ", rectLeft, rectTop);
     }
     if (canvasRef.current) {
       canvasRef.current.width = window.innerWidth * (CAMERA_VIEW_WIDTH / 100);
@@ -107,6 +106,7 @@ export default function HandDetectionVideo() {
       });
 
       drawCanvas(ctx, results, fingerSize);
+      updateCanvasImage(canvasRef.current!);
     },
     [simulateClick],
   );
@@ -170,3 +170,5 @@ export default function HandDetectionVideo() {
     </MyCameraView>
   );
 }
+
+export const MemoizedHandDetectionVideo = memo(HandDetectionVideo);

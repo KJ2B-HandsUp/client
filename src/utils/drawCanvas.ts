@@ -1,8 +1,27 @@
-export const drawCanvas = (
+export function updateCanvasImage(canvasElement) {
+  const dataUrl = canvasElement.toDataURL();
+
+  let img = canvasElement.nextSibling;
+  if (!img || img.tagName !== "IMG") {
+    img = new Image();
+    canvasElement.parentNode.insertBefore(img, canvasElement.nextSibling);
+  }
+
+  img.src = dataUrl;
+  img.style.position = "absolute";
+  img.style.left = canvasElement.offsetLeft + "px";
+  img.style.top = canvasElement.offsetTop + "px";
+  img.style.width = canvasElement.offsetWidth + "px";
+  img.style.height = canvasElement.offsetHeight + "px";
+
+  canvasElement.style.visibility = "hidden";
+}
+
+export function drawCanvas(
   ctx: CanvasRenderingContext2D,
   results: Window["Results"],
   fingerSize: number[],
-) => {
+) {
   const width = ctx.canvas.width;
   const height = ctx.canvas.height;
 
@@ -32,4 +51,4 @@ export const drawCanvas = (
     }
   }
   ctx.restore();
-};
+}
