@@ -50,8 +50,8 @@ export default function MainPage() {
         console.log(data);
         setMyProfile({
           userId: 1,
-          nickname: data.properties["nickname"] as string,
-          profile_image_url: data.properties["profile_image"] as string,
+          nickname: data.data.properties["nickname"] as string,
+          profile_image_url: data.data.properties["profile_image"] as string,
         });
       })
       .catch((err) => {
