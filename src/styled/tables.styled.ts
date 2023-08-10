@@ -39,7 +39,6 @@ export const GridCell = styled(motion.td)<{ flashcolor: string }>`
   opacity: 0.5;
   cursor: pointer;
   border-radius: 10px;
-  animation: ${rotation_481} 5000ms infinite linear;
 
   &.flash {
     animation: ${flash} 0.5s;
