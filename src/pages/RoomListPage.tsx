@@ -9,7 +9,7 @@ import {
   InputGroup,
   SubmitButton,
   InputField,
-  MotionButton
+  MotionButton,
 } from "../styled/rooms.styled";
 import { useNavigate, NavLink } from "react-router-dom";
 import { fetchData } from "../utils/fetchData";
@@ -85,7 +85,6 @@ export default function RoomListPage() {
     }
   }, [room]);
 
- 
   return (
     <>
       <RoomListPageWrapper>
@@ -114,15 +113,12 @@ export default function RoomListPage() {
                   textAlign: "center",
                 }}
               >
-                <h1 style={{marginBottom : "100px"}}>
-                  참가하시겠습니까?
-                  </h1>
-                
-                
+                <h1 style={{ marginBottom: "100px" }}>참가하시겠습니까?</h1>
+
                 <h3>
                   {room.description}
-                  <br/>
-                  {room.roomId == "Empty" ? ""  : `현재인원 ${room.peersNum!}`}
+                  <br />
+                  {room.roomId == "Empty" ? "" : `현재인원 ${room.peersNum!}`}
                 </h3>
 
                 <NavLink
@@ -141,7 +137,7 @@ export default function RoomListPage() {
                       borderRadius: "5%",
                       bottom: 0,
                       fontWeight: "bold",
-                      letterSpacing: "2px"
+                      letterSpacing: "2px",
                     }}
                   >
                     Join
@@ -154,11 +150,9 @@ export default function RoomListPage() {
         <HomeButton />
         <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>
           <InputGroup>
-          <InputField placeholder="Room ID" ref={newRoomNameRef}></InputField>
-          <SubmitButton type="submit">
-            ADD</SubmitButton>
-        </InputGroup>
-
+            <InputField placeholder="Room ID" ref={newRoomNameRef}></InputField>
+            <SubmitButton type="submit">ADD</SubmitButton>
+          </InputGroup>
         </FormWrapper>
 
         <table style={{ borderCollapse: "separate", borderSpacing: "30px" }}>
@@ -175,10 +169,21 @@ export default function RoomListPage() {
                     .map((roomInfo, idx) => (
                       <td key={idx}>
                         <RoomWrapper
+                          whileHover={{ scale: 1.1 }}
+                          onHoverStart={playHoverBtnAudio}
                           layoutId={roomInfo.roomId}
                           style={{
-                            backgroundColor:`${RoomListColor[(rowIndex * COL_LENGTH + idx) % RoomListColor.length]}`,
-                            color:`${(rowIndex * COL_LENGTH + idx)%2==0 ? 'white' : 'black'}`,
+                            backgroundColor: `${
+                              RoomListColor[
+                                (rowIndex * COL_LENGTH + idx) %
+                                  RoomListColor.length
+                              ]
+                            }`,
+                            color: `${
+                              (rowIndex * COL_LENGTH + idx) % 2 == 0
+                                ? "white"
+                                : "black"
+                            }`,
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center",
@@ -188,7 +193,6 @@ export default function RoomListPage() {
                             padding: "20px",
                             gap: "20px",
                             borderRadius: "20px",
-              
                           }}
                           onClick={() => {
                             if (roomInfo.roomId !== "Empty") {
@@ -202,11 +206,12 @@ export default function RoomListPage() {
                             }
                           }}
                         >
-                          <div style={{marginBottom : "50px"}}>
-                          <h1>{roomInfo.roomId}</h1></div>
-                         
+                          <div style={{ marginBottom: "50px" }}>
+                            <h1>{roomInfo.roomId}</h1>
+                          </div>
+
                           {/* <h3>{roomInfo.description}</h3> */}
-                          <p style={{marginTop : "10px"}}>
+                          <p style={{ marginTop: "10px" }}>
                             {roomInfo.roomId == "Empty"
                               ? "현재인원 0명"
                               : `현재인원 ${roomInfo.peersNum!}명`}
