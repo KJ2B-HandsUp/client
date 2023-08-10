@@ -39,6 +39,7 @@ import { AnimatePresence } from "framer-motion";
 import { Overlay } from "../styled/rooms.styled";
 import { motion } from "framer-motion";
 import BGMPlayer from "../components/BGMPlayer";
+import { GameOverAudio, GameStartAudio } from "../utils/audio";
 
 const initalState: StateType = {
   start: false,
@@ -60,6 +61,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
     case START_GAME:
       if (!state.start) {
         console.log("start game");
+        GameStartAudio.play();
         if (dataSocket != undefined) {
           dataSocket.emit("get_game_data", {
             type: "START",
@@ -330,8 +332,9 @@ export default function GamePage() {
     }
     if (end) {
       setTimeout(() => {
+        GameOverAudio.play();
         setGameOverState(true);
-      }, 2000);
+      }, 1000);
     }
   }, [endTurn, end]);
 
@@ -369,12 +372,6 @@ export default function GamePage() {
         onStartGame={handleNewGame}
         handleBeforeUnload={handleBeforeUnload}
       />
-      <MemoizedGameOverModal
-        show={gameOverState}
-        winner={winner.toString()}
-        onStartGame={handleNewGame}
-        handleBeforeUnload={handleBeforeUnload}
-      />
       <AnimatePresence>
         {gameOverState ? (
           <Overlay
@@ -405,6 +402,9 @@ export default function GamePage() {
                 }}
               >
                 <motion.button
+                  onClick={() => {
+                    handleBeforeUnload();
+                  }}
                   style={{
                     backgroundColor: "blue",
                     marginTop: "3vh",
@@ -417,6 +417,21 @@ export default function GamePage() {
                   home
                 </motion.button>
               </NavLink>
+              <motion.button
+                onClick={() => {
+                  handleNewGame();
+                }}
+                style={{
+                  backgroundColor: "blue",
+                  marginTop: "3vh",
+                  width: "17vw",
+                  height: "4vh",
+                  borderRadius: "5%",
+                  bottom: 0,
+                }}
+              >
+                New Game
+              </motion.button>
             </motion.div>
           </Overlay>
         ) : null}

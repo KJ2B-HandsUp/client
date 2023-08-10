@@ -33,3 +33,6 @@ export function playBtnAudio() {
 export function pauseBtnAudio() {
   btnAudio.pause();
 }
+
+export const GameStartAudio = new Audio("/mp3/gamestart.mp3");
+export const GameOverAudio = new Audio("/mp3/gameover.mp3");
