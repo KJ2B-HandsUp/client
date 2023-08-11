@@ -8,7 +8,7 @@ const StyledButton = styled.button`
   font-family: inherit;
   padding: 0.35em;
   padding-left: 1.2em;
-  width: 8vw;
+  width: 150px;
   font-size: 17px;
   border-radius: 10em;
   border: none;

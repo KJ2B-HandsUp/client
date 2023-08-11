@@ -33,11 +33,9 @@ import {
   CHANGE_MODE,
 } from "../types/game.type";
 import { MemoizedOtherUserVideoView } from "../components/OtherUserVideoView";
-import { MemoizedGameStartModal } from "../components/GameStartModal";
 import { GamePageWrapper } from "../styled/game.styled";
 import { AnimatePresence } from "framer-motion";
 import { Overlay } from "../styled/rooms.styled";
-import { motion } from "framer-motion";
 import {
   GameOverAudio,
   GameStartAudio,
@@ -46,6 +44,10 @@ import {
 } from "../utils/audio";
 import { takeScreenshot } from "../utils/takeScreenshot";
 import CountdownModal from "../components/CountdownModal";
+import HoverCard from "../components/HoverCard";
+import CSSButtonComponent from "../components/CSSButtonComponent";
+import { AiOutlineDownload } from "react-icons/ai";
+import "/src/index.css";
 
 const initalState: StateType = {
   start: false,
@@ -179,12 +181,12 @@ const reducer = (state: StateType, action: ActionType): StateType => {
 
 const modalVariants = {
   hidden: {
-    y: "100vh", // 바닥에서 시작
+    scale: 0.1,
     opacity: 0.3, // 흐려진 상태에서 시작
   },
   visible: {
-    y: "0%", // 화면 중앙으로 이동
     opacity: 1, // 선명하게 표시
+    scale: [1.2, 1],
     transition: {
       type: "spring",
       stiffness: 150,
@@ -192,7 +194,7 @@ const modalVariants = {
     },
   },
   exit: {
-    y: "100vh", // 바닥으로 이동
+    scale: 0.1,
     opacity: 0, // 완전히 흐려진 상태
     transition: {
       duration: 0.5,
@@ -238,9 +240,9 @@ export default function GamePage() {
   const handleBeforeUnload = useCallback(() => {
     socket.current!.emit("disconnect");
   }, []);
+
   const handleNewGame = useCallback(() => {
     setGameOverState(false);
-
     dispatch({ type: START_GAME });
   }, []);
 
@@ -402,6 +404,7 @@ export default function GamePage() {
 
   return (
     <>
+      <div id="stars"></div>
       <GameContext.Provider value={value}>
         <GamePageWrapper>
           <MemoizedMyGame
@@ -417,37 +420,24 @@ export default function GamePage() {
           />
         </GamePageWrapper>
       </GameContext.Provider>
-      <MemoizedGameStartModal
-        show={start || end}
-        onStartGame={handleNewGame}
-        handleBeforeUnload={handleBeforeUnload}
-      />
+
       <AnimatePresence>
-        {!start && !gameOverState ? (
+        {!start ? (
           <Overlay
             initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
             animate={{ backgroundColor: "rgba(0, 0, 0, .5)" }}
             exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
           >
-            <motion.div
+            {" "}
+            <HoverCard
               initial="hidden"
               animate="visible"
               exit="exit"
               variants={modalVariants}
-              style={{
-                backgroundColor: "white",
-                width: "60rem",
-                height: "60rem",
-                borderRadius: "2%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-              }}
+              header={"Ready?"}
+              style={{ width: "50vw", height: "70vh" }}
             >
-              <h1>Ready?</h1>
-
+              <CountdownModal onClick={handleNewGame} />
               <NavLink
                 to={`/main`}
                 style={{
@@ -455,37 +445,15 @@ export default function GamePage() {
                   color: "white",
                 }}
               >
-                <motion.button
+                <CSSButtonComponent
                   onClick={() => {
                     handleBeforeUnload();
                   }}
-                  style={{
-                    marginTop: "3vh",
-                    width: "17vw",
-                    height: "4vh",
-                    borderRadius: "5%",
-                    bottom: 0,
-                  }}
                 >
                   Home
-                </motion.button>
+                </CSSButtonComponent>
               </NavLink>
-              <motion.button
-                onClick={() => {
-                  handleNewGame();
-                }}
-                style={{
-                  marginTop: "3vh",
-                  width: "17vw",
-                  height: "4vh",
-                  borderRadius: "5%",
-                  bottom: 0,
-                }}
-              >
-                Start!
-              </motion.button>
-              <CountdownModal />
-            </motion.div>
+            </HoverCard>
           </Overlay>
         ) : null}
       </AnimatePresence>
@@ -496,79 +464,50 @@ export default function GamePage() {
             animate={{ backgroundColor: "rgba(0, 0, 0, .5)" }}
             exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
           >
-            <motion.div
+            <HoverCard
               initial="hidden"
               animate="visible"
               exit="exit"
               variants={modalVariants}
-              style={{
-                backgroundColor: "white",
-                width: "60rem",
-                height: "60rem",
-                borderRadius: "2%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-              }}
+              header={
+                <div color="yellow">
+                  {myId === winner
+                    ? "그럴 수 있어. 이런 날도 있는거지 뭐."
+                    : "이겼닭! 오늘 저녁은 치킨이닭!"}
+                </div>
+              }
+              style={{ width: "60vw", height: "95vh" }}
             >
-              <h1 color="gold">
-                {myId === winner
-                  ? "그럴 수 있어. 이런 날도 있는거지 뭐."
-                  : "이겼닭! 오늘 저녁은 치킨이닭!"}
-              </h1>
               {screenshotData && (
                 <img
                   src={screenshotData}
                   alt="screenshot"
-                  style={{ margin: "20px", width: "50vw", height: "50vh" }}
+                  style={{ margin: "20px", width: "40vw", height: "40vh" }}
                 />
               )}
-
-              <NavLink
-                to={`/main`}
+              <div
                 style={{
-                  textDecoration: "none",
-                  color: "white",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
                 }}
               >
-                <motion.button
+                <CountdownModal onClick={handleNewGame} />
+                <CSSButtonComponent
                   onClick={() => {
                     handleBeforeUnload();
                   }}
-                  style={{
-                    marginTop: "3vh",
-                    width: "17vw",
-                    height: "4vh",
-                    borderRadius: "5%",
-                    bottom: 0,
-                  }}
                 >
-                  home
-                </motion.button>
-              </NavLink>
-              <motion.button
-                onClick={() => {
-                  handleNewGame();
-                }}
-                style={{
-                  marginTop: "3vh",
-                  width: "17vw",
-                  height: "4vh",
-                  borderRadius: "5%",
-                  bottom: 0,
-                }}
-              >
-                New Game
-              </motion.button>
-              <a ref={downloadLinkRef} href="/" style={{ display: "none" }}>
-                Download
-              </a>
-              <button onClick={() => downloadLinkRef.current?.click()}>
-                Download Screenshot
-              </button>
-            </motion.div>
+                  Home
+                </CSSButtonComponent>
+                <a ref={downloadLinkRef} href="/" style={{ display: "none" }}>
+                  Download
+                </a>
+                <button onClick={() => downloadLinkRef.current?.click()}>
+                  <AiOutlineDownload size="30" />
+                </button>
+              </div>
+            </HoverCard>
           </Overlay>
         ) : null}
       </AnimatePresence>

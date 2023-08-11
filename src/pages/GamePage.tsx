@@ -396,9 +396,11 @@ export default function GamePage() {
 
   return (
     <>
-      <div id="stars"></div>
-      <GameContext.Provider value={value}>
-        <GamePageWrapper>
+      <div id="stars" />
+      <div id="stars2" />
+      <div id="stars3" />
+      <GamePageWrapper>
+        <GameContext.Provider value={value}>
           <MemoizedMyGame
             turn={turn}
             userId={myId}
@@ -410,8 +412,8 @@ export default function GamePage() {
             users={userList}
             userNum={playersNum - 1}
           />
-        </GamePageWrapper>
-      </GameContext.Provider>
+        </GameContext.Provider>
+      </GamePageWrapper>
 
       <AnimatePresence>
         {!start ? (
@@ -427,6 +429,7 @@ export default function GamePage() {
               exit="exit"
               variants={modalVariants}
               header={"Ready?"}
+              style={{ width: "50vw", height: "70vh" }}
             >
               <CountdownModal onClick={handleNewGame} />
               <NavLink
@@ -467,6 +470,7 @@ export default function GamePage() {
                     : "이겼닭! 오늘 저녁은 치킨이닭!"}
                 </div>
               }
+              style={{ width: "60vw", height: "95vh" }}
             >
               {screenshotData && (
                 <img
@@ -483,13 +487,15 @@ export default function GamePage() {
                 }}
               >
                 <CountdownModal onClick={handleNewGame} />
-                <CSSButtonComponent
-                  onClick={() => {
-                    handleBeforeUnload();
-                  }}
-                >
-                  Home
-                </CSSButtonComponent>
+                <NavLink to="/main">
+                  <CSSButtonComponent
+                    onClick={() => {
+                      handleBeforeUnload();
+                    }}
+                  >
+                    Home
+                  </CSSButtonComponent>
+                </NavLink>
                 <a ref={downloadLinkRef} href="/" style={{ display: "none" }}>
                   Download
                 </a>

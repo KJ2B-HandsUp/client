@@ -28,25 +28,24 @@ export const SubmitButton = styled.button`
   font-size: 14px;
   border: transparent;
   padding: 0.5em 2em;
-  padding-top : 1em;
+  padding-top: 1em;
   box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24);
-  background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
+  background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%);
   border-radius: 0 5px 5px 0;
   transition: 0.3s;
-  position : relative;
-  color : black;
+  position: relative;
+  color: black;
   justify-content: center;
 
   &:hover {
-    background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
+    background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%);
     cursor: pointer;
-    color : white;
+    color: white;
   }
 
   &:active {
     transform: translate(0em, 0.2em);
   }
-
 `;
 
 export const InputField = styled.input`
@@ -78,19 +77,23 @@ export const RoomListColor = ["black", "white"];
 
 export const RoomWrapper = styled(motion.div)`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 280px;
+  height: 280px;
   cursor: pointer;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
-    flex-direction: column;
-    justifyContent: center;
     inset: 0;
-    left: -8px;
-    margin: auto;border-radius: 20px;
-    width:  18rem;
-    height: 18rem;
-    background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100% );
+    margin: auto;
+    left: -10px;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
     z-index: -1;
     pointer-events: none;
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -100,9 +103,8 @@ export const RoomWrapper = styled(motion.div)`
     content: "";
     z-index: -2;
     position: absolute;
-    border-radius: 20px;
     inset: 0;
-    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100% );
+    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100%);
     transform: translate3d(0, 0, 0) scale(0.95);
     filter: blur(20px);
   }
@@ -124,23 +126,22 @@ export const MotionButton = styled(motion.button)`
   font-size: 20px;
   border: transparent;
   padding: 2em 0.5em;
-  padding-top : 1em;
+  padding-top: 1em;
   box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24);
-  background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
+  background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%);
   border-radius: 0 5px 5px 0;
   transition: 0.3s;
-  position : relative;
-  color : black;
+  position: relative;
+  color: black;
   justify-content: center;
 
   &:hover {
-    background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
+    background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%);
     cursor: pointer;
-    color : white;
+    color: white;
   }
 
   &:active {
     transform: translate(0em, 0.2em);
   }
-
 `;

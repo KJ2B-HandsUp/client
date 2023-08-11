@@ -9,11 +9,17 @@ import {
   ROW_LENGTH,
   COL_LENGTH,
 } from "../types/game.type";
-import { GamePageWrapper } from "../styled/game.styled";
+import {
+  CAMERA_VIEW_HEIGHT,
+  CAMERA_VIEW_WIDTH,
+  GamePageWrapper,
+} from "../styled/game.styled";
 import { NavLink } from "react-router-dom";
 import { TutorialPageWrapper } from "../styled/tutorial.styled";
-import HomeButton from "../components/HomeButton";
 import { pauseBGMAudio, playBGMAudio } from "../utils/audio";
+import HoverCard from "../components/HoverCard";
+import CSSButtonComponent from "../components/CSSButtonComponent";
+import "/src/index.css";
 
 const initalState: StateType = {
   start: true,
@@ -84,44 +90,39 @@ export default function SingleGamePage() {
   });
 
   return (
-    <TutorialPageWrapper>
-      <HomeButton />
-      <GamePageWrapper>
-        <SingleGameContext.Provider value={value}>
-          <MemoizedSingleMyGame
-            turn={turn}
-            userId={myId}
-            row={ROW_LENGTH}
-            column={COL_LENGTH}
-          />
-        </SingleGameContext.Provider>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "white",
-            color: "black",
-            padding: "30px",
-            borderRadius: "2%",
-          }}
-        >
-          <h1>가상 런치패드 소개</h1>
-          <br />
-          <h2>게임 방식</h2>
-          <p>화면을 치는 모션으로 런치패드를 칠 수 있습니다.</p>
-          <br />
+    <>
+      <TutorialPageWrapper>
+        <GamePageWrapper>
+          <SingleGameContext.Provider value={value}>
+            <MemoizedSingleMyGame
+              turn={turn}
+              userId={myId}
+              row={ROW_LENGTH}
+              column={COL_LENGTH}
+            />
+          </SingleGameContext.Provider>
+          <HoverCard
+            header={"가상 런치패드 소개"}
+            style={{
+              width: `${CAMERA_VIEW_WIDTH}vw`,
+              height: `${CAMERA_VIEW_HEIGHT}vh`,
+            }}
+          >
+            <br />
+            <h2>게임 방식</h2>
+            <p>화면을 치는 모션으로 런치패드를 칠 수 있습니다.</p>
+            <br />
 
-          <br />
-          <button>
-            <NavLink
-              to={`/main`}
-              style={{ color: "black", textDecoration: "none" }}
-            >
-              Home
+            <br />
+            <NavLink to="/main">
+              <CSSButtonComponent>Home</CSSButtonComponent>
             </NavLink>
-          </button>
-        </div>
-      </GamePageWrapper>
-    </TutorialPageWrapper>
+          </HoverCard>
+        </GamePageWrapper>
+      </TutorialPageWrapper>
+      <div id="stars" />
+      <div id="stars2" />
+      <div id="stars3" />
+    </>
   );
 }

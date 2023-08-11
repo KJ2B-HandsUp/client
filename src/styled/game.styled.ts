@@ -10,7 +10,7 @@ export const GamePageWrapper = styled.div`
   justify-content: space-evenly;
   align-items: center;
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
 `;
 
 export const GameWrapper = styled.div`

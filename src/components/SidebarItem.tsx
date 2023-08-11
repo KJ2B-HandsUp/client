@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { playHoverBtnAudio } from "../utils/audio";
 
 interface Menu {
   name: string;
@@ -22,6 +23,7 @@ const SidebarItemWrapper = styled(motion.div)`
 export default function SidebarItem({ menu }: SidebarItemProps) {
   return (
     <SidebarItemWrapper
+      onHoverStart={playHoverBtnAudio}
       whileHover={{
         scale: 1.2,
         rotate: 360,

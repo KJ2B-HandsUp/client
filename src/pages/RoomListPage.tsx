@@ -184,15 +184,6 @@ export default function RoomListPage() {
                                 ? "white"
                                 : "black"
                             }`,
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            textAlign: "center",
-                            width: "17rem",
-                            height: "17rem",
-                            padding: "20px",
-                            gap: "20px",
-                            borderRadius: "20px",
                           }}
                           onClick={() => {
                             if (roomInfo.roomId !== "Empty") {

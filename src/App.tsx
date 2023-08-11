@@ -9,7 +9,6 @@ import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import GamePage from "./pages/GamePage";
 import SoloGamePage from "./pages/SingleGamePage";
-import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 
 function App() {
