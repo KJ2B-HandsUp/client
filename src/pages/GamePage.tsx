@@ -226,15 +226,17 @@ export default function GamePage() {
         })
         .then(({ data }) => {
           console.log(data);
-          setMyProfile(() => {
-            return {
-              userId: 1,
-              nickname: data.data.properties["nickname"] as string,
-              profile_image_url: data.data.properties[
-                "profile_image"
-              ] as string,
-            };
-          });
+          if ("properties" in data.data) {
+            setMyProfile(() => {
+              return {
+                userId: 1,
+                nickname: data.data.properties["nickname"] as string,
+                profile_image_url: data.data.properties[
+                  "profile_image"
+                ] as string,
+              };
+            });
+          }
         })
         .catch((err) => {
           console.log(err);
