@@ -36,6 +36,7 @@ import { Overlay } from "../styled/rooms.styled";
 import {
   GameOverAudio,
   GameStartAudio,
+  GameWinAudio,
   pauseBGMAudio,
   playBGMAudio,
 } from "../utils/audio";
@@ -464,10 +465,14 @@ export default function GamePage() {
       if (downloadLink) {
         downloadLink.href = screenshot;
         downloadLink.download = "screenshot.png";
-        // downloadLink.click();
+        downloadLink.click();
       }
       setScreenshotData(screenshot);
-      GameOverAudio.play();
+      if (myProfile.userId === winner) {
+        GameOverAudio.play();
+      } else {
+        GameWinAudio.play();
+      }
       setGameOverState(true);
     };
 
@@ -567,10 +572,20 @@ export default function GamePage() {
                   style={{ margin: "20px", width: "40vw", height: "40vh" }}
                 />
               )}
-              <a ref={downloadLinkRef} style={{ display: "none" }}>
+              <a
+                ref={downloadLinkRef}
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "none" }}
+              >
                 Download
               </a>
-              <button onClick={() => downloadLinkRef.current?.click()}>
+              <button
+                onClick={() => {
+                  downloadLinkRef.current?.click();
+                }}
+              >
                 <AiOutlineDownload size="30" />
               </button>
               <div

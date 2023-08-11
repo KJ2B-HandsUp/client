@@ -41,6 +41,8 @@ export const GameStartAudio = new Audio("/mp3/gamestart.mp3");
 GameStartAudio.preload = "auto";
 export const GameOverAudio = new Audio("/mp3/gameover.mp3");
 GameOverAudio.preload = "auto";
+export const GameWinAudio = new Audio("/mp3/gamewin.mp3");
+GameWinAudio.preload = "auto";
 
 const GameBGMAudio = new Audio("/mp3/dubstep_drum_trap_loop.mp3");
 GameBGMAudio.preload = "auto";
