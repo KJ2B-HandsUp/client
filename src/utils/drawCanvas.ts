@@ -22,6 +22,9 @@ export function drawCanvas(
     let idx = 0;
     for (const landmarks of results.multiHandLandmarks) {
       const indexFingertip = landmarks[8];
+      if (!("x" in indexFingertip || "y" in indexFingertip)) {
+        break;
+      }
       const x = indexFingertip.x * width;
       const y = indexFingertip.y * height;
 
