@@ -20,6 +20,7 @@ function OtherUserVideoView({
   user: UserType;
   userNum: number;
 }) {
+  console.log("otheruservideo rendered", user);
   const { start } = useContext(GameContext);
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -31,7 +32,7 @@ function OtherUserVideoView({
       audioRef.current!.srcObject = user.audioStream!;
       audioRef.current!.play();
     }
-  }, [videoRef.current]);
+  }, [userNum, videoRef.current, audioRef.current]);
 
   return (
     <>

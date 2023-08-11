@@ -311,6 +311,9 @@ export default function GamePage() {
                 profile_image_url: res.data.profile_image_url!,
               };
             });
+            break;
+          default:
+            break;
         }
       });
 
@@ -405,7 +408,6 @@ export default function GamePage() {
                   nickname: myProfile.nickname,
                   profile_image_url: myProfile.profile_image_url,
                 } as TransferDataType);
-                myId = 1;
                 dispatch({ type: ADD_PLAYER, num: 1 });
               }
             }
