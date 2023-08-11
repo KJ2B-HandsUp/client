@@ -28,11 +28,9 @@ import {
   ADD_PLAYER,
   OTHER_PLAYER_CLICK,
   OTHER_CHANGE_TURN,
-  ROW_LENGTH,
-  COL_LENGTH,
 } from "../types/game.type";
 import { MemoizedOtherUserVideoView } from "../components/OtherUserVideoView";
-import { GamePageWrapper } from "../styled/game.styled";
+import { DefaultProfile, GamePageWrapper } from "../styled/game.styled";
 import { AnimatePresence } from "framer-motion";
 import { Overlay } from "../styled/rooms.styled";
 import {
@@ -46,7 +44,9 @@ import CountdownModal from "../components/CountdownModal";
 import HoverCard from "../components/HoverCard";
 import CSSButtonComponent from "../components/CSSButtonComponent";
 import { AiOutlineDownload } from "react-icons/ai";
-import "/src/index.css";
+import SpaceBackground from "../components/SpaceBackground";
+import axios from "axios";
+import { MemoizedUserProfile } from "../components/UserProfile";
 
 const initalState: StateType = {
   start: false,
@@ -61,6 +61,7 @@ const initalState: StateType = {
   trigerClick: false,
   clickedBlock: { rowIndex: -1, colIndex: -1 },
 };
+let myId = 1;
 
 let dataSocket: Socket;
 const reducer = (state: StateType, action: ActionType): StateType => {
@@ -89,7 +90,6 @@ const reducer = (state: StateType, action: ActionType): StateType => {
       return state;
     case CLICK_BLOCK: {
       const idx = state.blockList.length;
-      console.log(myId, state.turn);
       if (dataSocket != undefined && !state.trigerClick && myId == state.turn) {
         //console.log("Click Block");
         dataSocket.emit("get_game_data", {
@@ -204,11 +204,48 @@ export const GameContext = createContext<GameDispatch>({
   gameover: false,
 });
 
-let userList: UserType[] = [];
-let myId = 1;
-
 export default function GamePage() {
   console.log("GamePage rendered");
+
+  const [myProfile, setMyProfile] = useState<UserType>({
+    userId: 1,
+  });
+  const [otherUser, setOtherUser] = useState<UserType>({
+    userId: 2,
+    nickname: "대기중...",
+    profile_image_url: DefaultProfile,
+  });
+
+  useEffect(() => {
+    const getUserProfile = () => {
+      axios
+        .get(`${import.meta.env.VITE_LOGINSERVER_IP}/profile`, {
+          withCredentials: true,
+        })
+        .then(({ data }) => {
+          console.log(data);
+          setMyProfile(() => {
+            return {
+              userId: 1,
+              nickname: data.data.properties["nickname"] as string,
+              profile_image_url: data.data.properties[
+                "profile_image"
+              ] as string,
+            };
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          setMyProfile({
+            userId: 1,
+            nickname: "김민석",
+            profile_image_url:
+              "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDg0NDQ8PDQ0NDw0NDg0NDQ8NDg4NFREWFhQdExMYHCghGBolGxUTITEhJSkrLi4wFx8zODMsNygtLisBCgoKDg0OGhAQGC4dICU3KystKysrLS0rLS0tLSstLS0tLS0tLS0rLS0rLS0tLSstLS0tKy0tKzcrKysrKy0rN//AABEIAOAA4QMBIgACEQEDEQH/xAAaAAEBAQADAQAAAAAAAAAAAAAAAQUCAwQG/8QAMBABAAIAAggDBwUBAAAAAAAAAAECAwQFERIhMUFRcTJSYSKBkaGxweETM3KS0UL/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQMCBAX/xAAeEQEBAQEAAwADAQAAAAAAAAAAAQIRAzFBEiFRE//aAAwDAQACEQMRAD8A+rBX0XzUFQUFQQFAQUBBQEFAQUBBQEFAQVABUABQQAAABUUAABFAAAAAAAAAAAAAAAAAAAAAAAQAAAVRAFEUAAQAAAAAAAAAAAAEBVEAUQBRAAAQAFAAFRQABAAAAAcqUtbdWJntGt31yGLPKI7zCdkWS15h6p0fi9IntaHRiYN6eKsx66t3xOw5Y4AKgACACgAAAAAAAgAKAAKigACAAER0aOV0fHHE/r/rno7K7MbdvFPD0h7WWt/I2zj7UrWIjVEao6QoM2gADx5nIVtvp7Nun/M/4y71mszExqmOT6B5s7loxK648ccPX0d53/WesfYxwGzFABQAAAAAAAQAFAAFRQABB3ZPC271jlxntDpaGia+O3aHOryOsztaIDB6AAAAAAGRpLC2b644X3+/m8rU0rXXSJ6W+Ustvi9jDc5UAdOQAAAAAAAAAAABUUAAQaeifDfvH0Zj3aKvqtavmjXHeHO/TvHtpgMG4AAAAADy6T/bnvVkNLS191a9Z2ma2x6Yb9oA7cgAAAAAAAgAKAAKigACDlhYk1tFo4xOtxBW/h3i0RaOExrcmPks1+nOqd9J4+ktetomImJ1xPCYYazxvnXVAcugAAmdW+eEcRl5/N7XsU8POev4WTrnV5HnzWN+pebcuEdnUDdggCgAAAAAAAIACgACooAAgAA7cDMXw59md3Os8JdQitXC0jSfFE1n4w9FcxhzwvX4wwkc3EdzyVvzjUjjav8AaHRi5/Drwnan0/1jqn+cL5K9GYzd8Td4a+WPu84O5OOLegCogAoAAAAAAAIACgACooAAgO7L5a2Jw3RztPBp4GTpTfq2rdZ+zm6kdzNrMwspiX4V1R1ndD14ejPNb3Vj7y0Bnd1pMR5a6Pwo5TPeZ+znGTwvJHzd457XX4x0zlMLyR83C2Qwp5THaZekO0/GM/E0ZH/NvdaHlxcniU4xrjrXe2h1N1zcR88NrHylL8Y1T5o3SzMzlbYfHfXzR92k1KzuLHnAdOQAAAAAAAQAFAAFRQHryWT2/atup052/Djkct+pOufBXj6z0bERqZ71z9R3jPf3UrERGqI1RHKFBk2AAAAAAAACY17p4SAMvPZHZ13p4eden4eF9GyNIZXYnar4Z4x5Za418rLWfseMBozAAAAABAAUAAcqUm0xWOMzqhxe/RWFrmbzy3R35pbyLJ2tDBw4pWKxy+cuYPO9AAAAAAAAAAAACuOJSLRNZ4TulyBHz+PhTS01nl84cGnpbC3ReOW6e3JmN83sYanKAOkAAABAAUAAbeRps4dfWNqfexIh9FWNURHSNTPyNPH7AGTUAAAAAAAAAAABQBHXj02qWr1ifiwH0b5/MV1XvHS0/Vp46z24ANWYAAAIACgAOWF4q/yj6voHz+F4q/yr9X0LLyNfGgDNoAAAAAAAAAAAAoAgw89+7fu3GHnv3b9/s78ftxv06AGzIAAAB//Z",
+          });
+        });
+    };
+    getUserProfile();
+  }, []);
 
   const [state, dispatch] = useReducer(reducer, initalState);
   const {
@@ -270,14 +307,27 @@ export default function GamePage() {
                 "video" in tracks &&
                 "audio" in tracks
               ) {
-                userList.push({
-                  userId: 1,
-                  nickname: mediaData!.producerId,
-                  stream: tracks["video"],
-                  audioStream: tracks["audio"],
+                setOtherUser((state) => {
+                  return {
+                    ...state,
+                    userId: 1,
+                    stream: tracks["video"],
+                    audioStream: tracks["audio"],
+                  };
                 });
                 dispatch({ type: ADD_PLAYER, num: 1 });
+                setMyProfile({ ...myProfile, userId: 2 });
                 myId = 2;
+                // 내 프로필 보내기
+                if (dataSocket != undefined) {
+                  console.log("Send Profile1");
+                  dataSocket.emit("get_game_data", {
+                    type: "PROFILE",
+                    userId: myProfile.userId,
+                    nickname: myProfile.nickname,
+                    profile_image_url: myProfile.profile_image_url,
+                  } as TransferDataType);
+                }
               }
             }
           })
@@ -298,13 +348,26 @@ export default function GamePage() {
             console.log(tracks);
             if ("audio" in tracks && "video" in tracks) {
               // console.log("Success: get new producer video");
-              userList.push({
-                userId: 2,
-                nickname: producerId,
-                stream: tracks["video"],
-                audioStream: tracks["audio"],
+
+              setOtherUser((state) => {
+                return {
+                  ...state,
+                  userId: 2,
+                  stream: tracks["video"],
+                  audioStream: tracks["audio"],
+                };
               });
+              myId = 1;
               dispatch({ type: ADD_PLAYER, num: 1 });
+              if (dataSocket != undefined) {
+                console.log("Send Profile1");
+                dataSocket.emit("get_game_data", {
+                  type: "PROFILE",
+                  userId: myProfile.userId,
+                  nickname: myProfile.nickname,
+                  profile_image_url: myProfile.profile_image_url,
+                } as TransferDataType);
+              }
             }
           } catch (error) {
             console.error("Failed to signal new consumer transport:", error);
@@ -316,9 +379,21 @@ export default function GamePage() {
         "producer-closed",
         ({ remoteProducerId }: { remoteProducerId: string }): void => {
           closeProducer(remoteProducerId);
-          userList = userList.filter(
-            (user) => user.nickname !== remoteProducerId,
-          );
+
+          setOtherUser((state) => {
+            return {
+              ...state,
+              userId: 1,
+              nickname: "대기 중..",
+              profile_image_url: DefaultProfile,
+            };
+          });
+          myId = 1;
+          setMyProfile({
+            userId: 1,
+            nickname: "김민석",
+            profile_image_url: DefaultProfile,
+          });
           dispatch({ type: ADD_PLAYER, num: -1 });
         },
       );
@@ -347,6 +422,14 @@ export default function GamePage() {
               },
             });
             break;
+          case "PROFILE":
+            setOtherUser((state) => {
+              return {
+                ...state,
+                nickname: res.data.nickname!,
+                profile_image_url: res.data.profile_image_url!,
+              };
+            });
         }
       });
     }
@@ -395,34 +478,29 @@ export default function GamePage() {
   );
 
   return (
-    <>
-      <div id="stars" />
-      <div id="stars2" />
-      <div id="stars3" />
+    <SpaceBackground>
       <GamePageWrapper>
         <GameContext.Provider value={value}>
           <MemoizedMyGame
             turn={turn}
-            userId={myId}
-            row={ROW_LENGTH}
-            column={COL_LENGTH}
+            userId={myProfile.userId}
+            nickname={myProfile.nickname}
           />
           <MemoizedOtherUserVideoView
             turn={turn}
-            users={userList}
+            user={otherUser}
             userNum={playersNum - 1}
           />
         </GameContext.Provider>
       </GamePageWrapper>
 
       <AnimatePresence>
-        {!start ? (
+        {!start && winner == -1 ? (
           <Overlay
             initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
             animate={{ backgroundColor: "rgba(0, 0, 0, .5)" }}
             exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
           >
-            {" "}
             <HoverCard
               initial="hidden"
               animate="visible"
@@ -465,7 +543,7 @@ export default function GamePage() {
               variants={modalVariants}
               header={
                 <div color="yellow">
-                  {myId === winner
+                  {myProfile.userId === winner
                     ? "그럴 수 있어. 이런 날도 있는거지 뭐."
                     : "이겼닭! 오늘 저녁은 치킨이닭!"}
                 </div>
@@ -507,6 +585,14 @@ export default function GamePage() {
           </Overlay>
         ) : null}
       </AnimatePresence>
-    </>
+      <MemoizedUserProfile
+        user={myProfile}
+        style={{ bottom: "20px", left: "100px" }}
+      />
+      <MemoizedUserProfile
+        user={otherUser}
+        style={{ bottom: "20px", right: "100px" }}
+      />
+    </SpaceBackground>
   );
 }

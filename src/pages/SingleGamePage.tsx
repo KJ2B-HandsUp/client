@@ -20,6 +20,7 @@ import { pauseBGMAudio, playBGMAudio } from "../utils/audio";
 import HoverCard from "../components/HoverCard";
 import CSSButtonComponent from "../components/CSSButtonComponent";
 import "/src/index.css";
+import SpaceBackground from "../components/SpaceBackground";
 
 const initalState: StateType = {
   start: true,
@@ -90,16 +91,11 @@ export default function SingleGamePage() {
   });
 
   return (
-    <>
+    <SpaceBackground>
       <TutorialPageWrapper>
         <GamePageWrapper>
           <SingleGameContext.Provider value={value}>
-            <MemoizedSingleMyGame
-              turn={turn}
-              userId={myId}
-              row={ROW_LENGTH}
-              column={COL_LENGTH}
-            />
+            <MemoizedSingleMyGame turn={turn} userId={myId} />
           </SingleGameContext.Provider>
           <HoverCard
             header={"가상 런치패드 소개"}
@@ -120,9 +116,6 @@ export default function SingleGamePage() {
           </HoverCard>
         </GamePageWrapper>
       </TutorialPageWrapper>
-      <div id="stars" />
-      <div id="stars2" />
-      <div id="stars3" />
-    </>
+    </SpaceBackground>
   );
 }

@@ -407,15 +407,10 @@ export default function GamePage() {
       <div id="stars"></div>
       <GameContext.Provider value={value}>
         <GamePageWrapper>
-          <MemoizedMyGame
-            turn={turn}
-            userId={myId}
-            row={ROW_LENGTH}
-            column={COL_LENGTH}
-          />
+          <MemoizedMyGame turn={turn} userId={myId} />
           <MemoizedOtherUserVideoView
             turn={turn}
-            users={userList}
+            user={userList[0]}
             userNum={playersNum - 1}
           />
         </GamePageWrapper>

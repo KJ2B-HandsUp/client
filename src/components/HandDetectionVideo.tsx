@@ -5,7 +5,6 @@ import { MyCameraView } from "../styled/game.styled";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
 import { HandType } from "../types/game.type";
 import { GameContext } from "../pages/GamePage";
-import { canvasToImage } from "../utils/takeScreenshot";
 
 let ctx: CanvasRenderingContext2D | null = null;
 let rectLeft = 0;
@@ -67,10 +66,7 @@ function HandDetectionVideo() {
     if (start) {
       resizeCanvas();
     }
-    if (gameover && canvasRef.current) {
-      canvasToImage(canvasRef.current);
-    }
-  }, [start, gameover]);
+  }, [start]);
 
   const onResults = useCallback(
     (results: Window["Results"]) => {
@@ -161,9 +157,10 @@ function HandDetectionVideo() {
         }}
       />
       <Webcam
+        className="no-capture"
         audio={false}
         ref={webcamRef}
-        style={{ visibility: "hidden" }}
+        style={{ visibility: "collapse" }}
         videoConstraints={{
           facingMode: "user",
           width: 600,

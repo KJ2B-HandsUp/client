@@ -27,17 +27,8 @@ export function drawCanvas(
 
       const imageWidth = fingerSize[idx] * 3;
       const imageHeight = fingerSize[idx] * 3;
-
-      if (plandImage[idx].complete) {
-        ctx.drawImage(
-          plandImage[idx],
-          x - imageWidth / 2,
-          y - imageHeight / 2,
-          imageWidth,
-          imageHeight,
-        );
-      } else {
-        plandImage[idx].onload = () => {
+      if (plandImage[idx]) {
+        if (plandImage[idx].complete) {
           ctx.drawImage(
             plandImage[idx],
             x - imageWidth / 2,
@@ -45,7 +36,17 @@ export function drawCanvas(
             imageWidth,
             imageHeight,
           );
-        };
+        } else {
+          plandImage[idx].onload = () => {
+            ctx.drawImage(
+              plandImage[idx],
+              x - imageWidth / 2,
+              y - imageHeight / 2,
+              imageWidth,
+              imageHeight,
+            );
+          };
+        }
       }
       idx++;
     }

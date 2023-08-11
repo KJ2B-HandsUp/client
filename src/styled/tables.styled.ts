@@ -6,7 +6,8 @@ export const GridTable = styled(motion.table)`
   border-collapse: separate;
   border-spacing: 10px;
   width: ${CAMERA_VIEW_WIDTH - 10}vw;
-  height: ${CAMERA_VIEW_HEIGHT - 10}vh;
+  height: ${CAMERA_VIEW_HEIGHT - 25}vh;
+  margin-bottom: 50px;
 `;
 
 const flash = keyframes`

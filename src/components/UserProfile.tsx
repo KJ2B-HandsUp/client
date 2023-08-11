@@ -8,13 +8,14 @@ import { memo } from "react";
 
 interface UserProfileProps {
   user: UserType | null;
+  style: React.CSSProperties;
 }
 
-function UserProfile({ user }: UserProfileProps) {
+function UserProfile({ user, style }: UserProfileProps) {
   return (
     <>
       {user == null ? null : (
-        <UserProfileWrapper>
+        <UserProfileWrapper style={style}>
           <UserImage src={user.profile_image_url} alt={user.nickname} />
           <UserNickname>{user.nickname}</UserNickname>
         </UserProfileWrapper>

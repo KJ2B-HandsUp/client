@@ -1,5 +1,5 @@
-import { useEffect, memo, useContext, useRef, useCallback } from "react";
-import { COL_LENGTH, ROW_LENGTH, UserType } from "../types/game.type";
+import { useEffect, memo, useContext, useRef } from "react";
+import { UserType } from "../types/game.type";
 import { Board } from "./Board";
 import {
   GameWrapper,
@@ -10,15 +10,14 @@ import {
   BoardWrapper,
 } from "../styled/game.styled";
 import { GameContext } from "../pages/GamePage";
-import html2canvas from "html2canvas";
 
 function OtherUserVideoView({
   turn,
-  users,
+  user,
   userNum,
 }: {
   turn: number;
-  users: UserType[];
+  user: UserType;
   userNum: number;
 }) {
   const { start } = useContext(GameContext);
@@ -27,9 +26,9 @@ function OtherUserVideoView({
 
   useEffect(() => {
     if (userNum > 0 && videoRef.current) {
-      videoRef.current!.srcObject = users[0].stream!;
+      videoRef.current!.srcObject = user.stream!;
       videoRef.current!.play();
-      audioRef.current!.srcObject = users[0].audioStream!;
+      audioRef.current!.srcObject = user.audioStream!;
       audioRef.current!.play();
     }
   }, [videoRef.current]);
@@ -56,17 +55,12 @@ function OtherUserVideoView({
             />
             <audio ref={audioRef} />
           </MyCameraView>
-          {users[0] && start && turn == users[0].userId && (
-            <Board
-              turn={turn}
-              userId={users[0].userId}
-              row={ROW_LENGTH}
-              column={COL_LENGTH}
-            />
+          {user && start && turn == user.userId && (
+            <Board turn={turn} userId={user.userId} />
           )}
         </BoardWrapper>
         <PlayerIdContainer>
-          Player ID: {userNum > 0 ? users[0].userId : "대기 중.."}
+          Player ID: {userNum > 0 ? user.nickname : "대기 중.."}
         </PlayerIdContainer>
       </GameWrapper>
     </>

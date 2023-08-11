@@ -3,8 +3,6 @@ import { styled } from "styled-components";
 export const UserProfileWrapper = styled.div`
   position: fixed;
   display: flex;
-  top: 40px;
-  right: 40px;
   flex-direction: column;
   align-items: center;
   justify-content: center;

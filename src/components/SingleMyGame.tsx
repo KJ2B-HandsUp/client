@@ -5,19 +5,14 @@ import { GameProps } from "../types/table";
 import { memo, useContext } from "react";
 import { SingleGameContext } from "../pages/SingleGamePage";
 
-function SingleMyGame({ turn, userId, row, column }: GameProps) {
+function SingleMyGame({ turn, userId }: GameProps) {
   const { start } = useContext(SingleGameContext);
 
   return (
     <GameWrapper>
       <MemoizedHandDetectionVideo />
       {start && turn == userId && (
-        <MemoizedSingleBoard
-          turn={turn}
-          userId={userId}
-          row={row}
-          column={column}
-        />
+        <MemoizedSingleBoard turn={turn} userId={userId} />
       )}
     </GameWrapper>
   );

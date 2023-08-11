@@ -11,6 +11,7 @@ const Card = styled(motion.div)`
   background: #212121;
   border: 2px solid #313131;
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  color: gold;
 
   &:hover {
     box-shadow: 0 0 20px rgba(9, 117, 241, 0.8);
@@ -26,7 +27,7 @@ const Content = styled.div`
 
 const Heading = styled.p`
   font-weight: 700;
-  font-size: 60px;
+  font-size: 3vw;
 `;
 
 const Paragraph = styled.div`

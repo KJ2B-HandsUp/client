@@ -43,8 +43,8 @@ function bfs(
     }
     setTimeout(() => {
       const newNewFlash = Array.from(
-        { length: 4 },
-        () => Array(3).fill(0) as number[],
+        { length: ROW_LENGTH },
+        () => Array(COL_LENGTH).fill(0) as number[],
       );
       visitedCell.map((Cell) => {
         newNewFlash[Cell[0]][Cell[1]] = 1;
@@ -56,16 +56,19 @@ function bfs(
 
   setTimeout(() => {
     const newNewFlash = Array.from(
-      { length: 4 },
-      () => Array(3).fill(0) as number[],
+      { length: ROW_LENGTH },
+      () => Array(COL_LENGTH).fill(0) as number[],
     );
     setCellFlash(newNewFlash);
   }, 400);
 }
 
-function SingleBoard({ row, column }: GameProps) {
+function SingleBoard({}: GameProps) {
   const [cellFlash, setCellFlash] = useState(
-    Array.from({ length: row }, () => Array(column).fill(0) as number[]),
+    Array.from(
+      { length: ROW_LENGTH },
+      () => Array(COL_LENGTH).fill(0) as number[],
+    ),
   );
 
   const handleCellClick = useCallback(
@@ -79,9 +82,9 @@ function SingleBoard({ row, column }: GameProps) {
       audio.currentTime = 0;
       audio.play();
 
-      const visited = Array(4)
+      const visited = Array(ROW_LENGTH)
         .fill(false)
-        .map(() => Array(3).fill(false) as boolean[]);
+        .map(() => Array(COL_LENGTH).fill(false) as boolean[]);
       bfs(rowIndex, colIndex, visited, setCellFlash);
     },
     [cellFlash],
@@ -89,7 +92,7 @@ function SingleBoard({ row, column }: GameProps) {
 
   const renderRow = (rowIndex: number) => (
     <tr key={rowIndex}>
-      {Array.from({ length: column }, (_, colIndex) =>
+      {Array.from({ length: COL_LENGTH }, (_, colIndex) =>
         renderCell(rowIndex, colIndex),
       )}
     </tr>
@@ -118,7 +121,7 @@ function SingleBoard({ row, column }: GameProps) {
   return (
     <GridTable>
       <tbody>
-        {Array.from({ length: row }, (_, index) => renderRow(index))}
+        {Array.from({ length: ROW_LENGTH }, (_, index) => renderRow(index))}
       </tbody>
     </GridTable>
   );

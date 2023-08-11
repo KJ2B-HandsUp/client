@@ -14,6 +14,8 @@ export const COL_LENGTH = 3;
 export type TransferDataType = {
   type: string;
   userId: number;
+  nickname?: string;
+  profile_image_url?: string;
   clickedBlock: BlockType;
 };
 

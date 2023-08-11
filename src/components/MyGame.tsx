@@ -6,22 +6,17 @@ import {
 } from "../styled/game.styled";
 import { MemoizedHandDetectionVideo } from "./HandDetectionVideo";
 import { GameProps } from "../types/table";
-import { memo, useContext } from "react";
-import { GameContext } from "../pages/GamePage";
+import { memo } from "react";
 
-function MyGame({ turn, userId, row, column }: GameProps) {
-  const { start } = useContext(GameContext);
+function MyGame({ turn, userId, nickname }: GameProps) {
   console.log("MyGame rendered", turn);
   return (
     <GameWrapper>
       <BoardWrapper>
         <MemoizedHandDetectionVideo />
-        {turn == userId ? (
-          <Board turn={turn} userId={userId} row={row} column={column} />
-        ) : null}
+        {turn == userId ? <Board turn={turn} userId={userId} /> : null}
       </BoardWrapper>
-      <PlayerIdContainer>Player ID: {userId}</PlayerIdContainer>
-      {start && turn == userId && <h2 color="red">Your Turn!</h2>}
+      <PlayerIdContainer>Player ID: {nickname}</PlayerIdContainer>
     </GameWrapper>
   );
 }
