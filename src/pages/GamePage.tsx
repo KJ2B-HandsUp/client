@@ -277,7 +277,7 @@ export default function GamePage() {
   }, []);
 
   useEffect(() => {
-    if (socket.current == undefined) {
+    if (socket.current == undefined && !dataSocket) {
       dataSocket = io(`${import.meta.env.VITE_MEDIASERVER_IP}/data`);
 
       dataSocket.on("connection-success", () => {
@@ -344,18 +344,9 @@ export default function GamePage() {
                 "video" in tracks &&
                 "audio" in tracks
               ) {
-                setOtherUser((state) => {
-                  return {
-                    ...state,
-                    userId: 1,
-                    stream: tracks["video"],
-                    audioStream: tracks["audio"],
-                  };
-                });
-                dispatch({ type: ADD_PLAYER, num: 1 });
                 myId = 2;
                 setMyProfile((state) => {
-                  return { ...state, userId: 2 };
+                  return { ...state, userId: myId };
                 });
                 // 내가 들어갔을 떄 못 받아온다
                 // 내 프로필 보내기
@@ -367,6 +358,15 @@ export default function GamePage() {
                     nickname: myProfile.nickname,
                     profile_image_url: myProfile.profile_image_url,
                   } as TransferDataType);
+                  setOtherUser((state) => {
+                    return {
+                      ...state,
+                      userId: 1,
+                      stream: tracks["video"],
+                      audioStream: tracks["audio"],
+                    };
+                  });
+                  dispatch({ type: ADD_PLAYER, num: 1 });
                 }
               }
             }
@@ -384,7 +384,7 @@ export default function GamePage() {
               producerId,
               socket.current!,
             );
-            console.log(mediaStream);
+            // console.log(mediaStream);
             console.log(tracks);
             if ("audio" in tracks && "video" in tracks) {
               // console.log("Success: get new producer video");
@@ -397,16 +397,16 @@ export default function GamePage() {
                   audioStream: tracks["audio"],
                 };
               });
-              myId = 1;
-              dispatch({ type: ADD_PLAYER, num: 1 });
               if (dataSocket != undefined) {
-                console.log("Send Profile1");
+                console.log("Send Profile2");
                 dataSocket.emit("get_game_data", {
                   type: "PROFILE",
                   userId: myProfile.userId,
                   nickname: myProfile.nickname,
                   profile_image_url: myProfile.profile_image_url,
                 } as TransferDataType);
+                myId = 1;
+                dispatch({ type: ADD_PLAYER, num: 1 });
               }
             }
           } catch (error) {
@@ -429,10 +429,11 @@ export default function GamePage() {
             };
           });
           myId = 1;
-          setMyProfile({
-            userId: 1,
-            nickname: "김민석",
-            profile_image_url: DefaultProfile,
+          setMyProfile((state) => {
+            return {
+              ...state,
+              userId: 1,
+            };
           });
           dispatch({ type: ADD_PLAYER, num: -1 });
         },
@@ -562,6 +563,12 @@ export default function GamePage() {
                   style={{ margin: "20px", width: "40vw", height: "40vh" }}
                 />
               )}
+              <a ref={downloadLinkRef} style={{ display: "none" }}>
+                Download
+              </a>
+              <button onClick={() => downloadLinkRef.current?.click()}>
+                <AiOutlineDownload size="30" />
+              </button>
               <div
                 style={{
                   display: "flex",
@@ -579,12 +586,6 @@ export default function GamePage() {
                     Home
                   </CSSButtonComponent>
                 </NavLink>
-                <a ref={downloadLinkRef} href="/" style={{ display: "none" }}>
-                  Download
-                </a>
-                <button onClick={() => downloadLinkRef.current?.click()}>
-                  <AiOutlineDownload size="30" />
-                </button>
               </div>
             </HoverCard>
           </Overlay>
