@@ -61,7 +61,7 @@ function OtherUserVideoView({
           )}
         </BoardWrapper>
         <PlayerIdContainer>
-          Player ID: {userNum > 0 ? user.nickname : "대기 중.."}
+          Player: {userNum > 0 ? user.nickname : "Waiting.."}
         </PlayerIdContainer>
       </GameWrapper>
     </>

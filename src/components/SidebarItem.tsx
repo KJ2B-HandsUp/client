@@ -26,7 +26,6 @@ export default function SidebarItem({ menu }: SidebarItemProps) {
       onHoverStart={playHoverBtnAudio}
       whileHover={{
         scale: 1.2,
-        rotate: 360,
         color: "rgb(25, 255, 94)",
       }}
     >

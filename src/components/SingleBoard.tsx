@@ -101,7 +101,7 @@ function SingleBoard({}: GameProps) {
   const renderCell = (rowIndex: number, colIndex: number) => (
     <GridCell
       key={colIndex}
-      flashcolor={colorList[colIndex]}
+      flashcolor={colorList[(rowIndex * COL_LENGTH + colIndex) % 7]}
       initial={{
         scale: 1,
       }}

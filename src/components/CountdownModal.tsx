@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import CSSButtonComponent from "./CSSButtonComponent";
-
-const Button = styled.button`
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-`;
+import CSSButtonComponent2 from "./CSSButtonComponent2";
 
 const Backdrop = styled(motion.div)`
   position: fixed;
@@ -47,7 +41,7 @@ export default function CountdownModal({ onClick }: { onClick: () => void }) {
 
   return (
     <>
-      <CSSButtonComponent onClick={handleClick}>Start</CSSButtonComponent>
+      <CSSButtonComponent2 onClick={handleClick}>Start</CSSButtonComponent2>
       <AnimatePresence>
         {isVisible && (
           <Backdrop

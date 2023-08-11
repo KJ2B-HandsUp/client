@@ -16,7 +16,7 @@ function MyGame({ turn, userId, nickname }: GameProps) {
         <MemoizedHandDetectionVideo />
         {turn == userId ? <Board turn={turn} userId={userId} /> : null}
       </BoardWrapper>
-      <PlayerIdContainer>Player ID: {nickname}</PlayerIdContainer>
+      <PlayerIdContainer>Player: {nickname}</PlayerIdContainer>
     </GameWrapper>
   );
 }

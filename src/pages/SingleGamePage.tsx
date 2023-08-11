@@ -18,7 +18,7 @@ import { NavLink } from "react-router-dom";
 import { TutorialPageWrapper } from "../styled/tutorial.styled";
 import { pauseBGMAudio, playBGMAudio } from "../utils/audio";
 import HoverCard from "../components/HoverCard";
-import CSSButtonComponent from "../components/CSSButtonComponent";
+import CSSButtonComponent2 from "../components/CSSButtonComponent2";
 import "/src/index.css";
 import SpaceBackground from "../components/SpaceBackground";
 
@@ -115,7 +115,7 @@ export default function SingleGamePage() {
 
             <br />
             <NavLink to="/main">
-              <CSSButtonComponent>Home</CSSButtonComponent>
+              <CSSButtonComponent2>Home</CSSButtonComponent2>
             </NavLink>
           </HoverCard>
         </GamePageWrapper>

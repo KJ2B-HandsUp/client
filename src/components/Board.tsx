@@ -120,7 +120,7 @@ export function Board({ userId }: GameProps) {
   const renderCell = (rowIndex: number, colIndex: number) => (
     <GridCell
       key={rowIndex * COL_LENGTH + colIndex}
-      flashcolor={colorList[colIndex]}
+      flashcolor={colorList[(rowIndex * COL_LENGTH + colIndex) % 7]}
       initial={{
         scale: 1,
       }}

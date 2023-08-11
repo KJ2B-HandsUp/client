@@ -154,6 +154,7 @@ export default function LobbyBGMPlayer() {
         padding: "10px",
         width: "200px",
         borderRadius: "40px",
+        opacity: 0.8,
       }}
     >
       <CheckboxInput id="checkboxInput" onClick={handleToggle} />

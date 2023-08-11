@@ -43,7 +43,7 @@ import {
 import { takeScreenshot } from "../utils/takeScreenshot";
 import CountdownModal from "../components/CountdownModal";
 import HoverCard from "../components/HoverCard";
-import CSSButtonComponent from "../components/CSSButtonComponent";
+import CSSButtonComponent2 from "../components/CSSButtonComponent2";
 import { AiOutlineDownload } from "react-icons/ai";
 import SpaceBackground from "../components/SpaceBackground";
 import axios from "axios";
@@ -215,7 +215,7 @@ export default function GamePage() {
   });
   const [otherUser, setOtherUser] = useState<UserType>({
     userId: 2,
-    nickname: "대기중...",
+    nickname: "Waiting..",
     profile_image_url: DefaultProfile,
   });
 
@@ -429,7 +429,7 @@ export default function GamePage() {
             return {
               ...state,
               userId: 1,
-              nickname: "대기 중..",
+              nickname: "Waiting..",
               profile_image_url: DefaultProfile,
             };
           });
@@ -529,25 +529,33 @@ export default function GamePage() {
               animate="visible"
               exit="exit"
               variants={modalVariants}
-              header={"Ready?"}
+              header={
+                otherUser.nickname === "Waiting.." ? "Waiting.." : "Ready?"
+              }
               style={{ width: "50vw", height: "70vh" }}
             >
-              <CountdownModal onClick={handleNewGame} />
-              <NavLink
-                to={`/main`}
+              <div
                 style={{
-                  textDecoration: "none",
-                  color: "white",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  gap: "30px",
                 }}
               >
-                <CSSButtonComponent
+                <CountdownModal onClick={handleNewGame} />
+                <NavLink
+                  to={`/main`}
+                  style={{
+                    textDecoration: "none",
+                    color: "white",
+                  }}
                   onClick={() => {
                     handleBeforeUnload();
                   }}
                 >
-                  Home
-                </CSSButtonComponent>
-              </NavLink>
+                  <CSSButtonComponent2>Home</CSSButtonComponent2>
+                </NavLink>
+              </div>
             </HoverCard>
           </Overlay>
         ) : null}
@@ -599,17 +607,17 @@ export default function GamePage() {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-evenly",
+                  gap: "30px",
                 }}
               >
                 <CountdownModal onClick={handleNewGame} />
-                <NavLink to="/main">
-                  <CSSButtonComponent
-                    onClick={() => {
-                      handleBeforeUnload();
-                    }}
-                  >
-                    Home
-                  </CSSButtonComponent>
+                <NavLink
+                  to="/main"
+                  onClick={() => {
+                    handleBeforeUnload();
+                  }}
+                >
+                  <CSSButtonComponent2>Home</CSSButtonComponent2>
                 </NavLink>
               </div>
             </HoverCard>

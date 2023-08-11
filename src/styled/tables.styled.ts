@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export const GridTable = styled(motion.table)`
   border-collapse: separate;
   border-spacing: 10px;
-  width: ${CAMERA_VIEW_WIDTH - 10}vw;
+  width: ${CAMERA_VIEW_WIDTH - 8}vw;
   height: ${CAMERA_VIEW_HEIGHT - 25}vh;
   margin-bottom: 50px;
 `;
@@ -17,7 +17,7 @@ const flash = keyframes`
   }
   100% {
     background-color: white;
-    opacity: 0.4;
+    opacity: 0.5;
   }
 `;
 
@@ -32,7 +32,7 @@ const rotation_481 = keyframes`
 
 export const GridCell = styled(motion.td)<{ flashcolor: string }>`
   position: relative;
-  border: 4px solid ${(props) => props.flashcolor};
+  border: 2px solid ${(props) => props.flashcolor};
   text-align: center;
   vertical-align: middle;
   color: ${(props) => props.flashcolor};
@@ -40,9 +40,11 @@ export const GridCell = styled(motion.td)<{ flashcolor: string }>`
   opacity: 0.5;
   cursor: pointer;
   border-radius: 10px;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 0 20px ${(props) => props.flashcolor};
 
   &.flash {
-    animation: ${flash} 0.5s;
+    animation: ${flash} 0.7s;
     opacity: 1;
   }
 `;

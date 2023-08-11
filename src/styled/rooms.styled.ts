@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
 
 export const RoomListPageWrapper = styled.div`
   display: flex;

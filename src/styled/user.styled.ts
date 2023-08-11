@@ -9,14 +9,14 @@ export const UserProfileWrapper = styled.div`
 `;
 
 export const UserImage = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 7vh;
+  height: 7vh;
   border-radius: 50%;
-  border: 5px solid white;
+  border: 3px solid white;
   margin-bottom: 10px;
 `;
 
 export const UserNickname = styled.div`
-  font-size: 14px;
+  font-size: 20px;
   color: #fff;
 `;

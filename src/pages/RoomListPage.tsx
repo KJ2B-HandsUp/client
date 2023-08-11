@@ -151,11 +151,11 @@ export default function RoomListPage() {
         <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>
           <InputGroup>
             <InputField placeholder="Room ID" ref={newRoomNameRef} />
-            <SubmitButton type="submit">Create Room</SubmitButton>
+            <SubmitButton type="submit">Create</SubmitButton>
           </InputGroup>
         </FormWrapper>
 
-        <table style={{ borderCollapse: "separate", borderSpacing: "30px" }}>
+        <table style={{ borderCollapse: "separate", borderSpacing: "40px" }}>
           <tbody>
             {Array(ROW_LENGTH)
               .fill(0)
