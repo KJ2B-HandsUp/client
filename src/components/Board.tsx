@@ -124,14 +124,7 @@ export function Board({ userId }: GameProps) {
       initial={{
         scale: 1,
       }}
-      animate={
-        cellFlash[rowIndex][colIndex] >= 1
-          ? {
-              scale: [0.9, 1.1, 0.9, 1],
-            }
-          : {}
-      }
-      className={cellFlash[rowIndex][colIndex] === 2 ? "flash" : ""}
+      className={cellFlash[rowIndex][colIndex] >= 1 ? "flash" : ""}
       onClick={() => handleCellClick(rowIndex, colIndex)}
     />
   );

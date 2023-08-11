@@ -98,15 +98,19 @@ export default function SingleGamePage() {
             <MemoizedSingleMyGame turn={turn} userId={myId} />
           </SingleGameContext.Provider>
           <HoverCard
-            header={"가상 런치패드 소개"}
+            header={"게임 방식"}
             style={{
               width: `${CAMERA_VIEW_WIDTH}vw`,
               height: `${CAMERA_VIEW_HEIGHT}vh`,
             }}
           >
-            <br />
-            <h2>게임 방식</h2>
-            <p>화면을 치는 모션으로 런치패드를 칠 수 있습니다.</p>
+            <p style={{ fontSize: "30px" }}>
+              검지 손가락을 뒤에서 앞으로
+              <br />
+              빠르게 꺽는 모션으로
+              <br />
+              런치패드를 칠 수 있습니다.
+            </p>
             <br />
 
             <br />

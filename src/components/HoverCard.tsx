@@ -25,15 +25,18 @@ const Content = styled.div`
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 `;
 
-const Heading = styled.p`
+const Heading = styled.div`
   font-weight: 700;
   font-size: 3vw;
+  color: gold;
+  text-align: center;
 `;
 
 const Paragraph = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   line-height: 1.5;
   gap: 20px;
 `;
@@ -46,6 +49,15 @@ export default function HoverCard(props) {
   return (
     <Card {...props}>
       <Heading>{props.header}</Heading>
+      <div
+        style={{
+          position: "relative",
+          width: "30vw",
+          height: "1px",
+          backgroundColor: "gold",
+          margin: "20px",
+        }}
+      />
       <Paragraph>{props.children}</Paragraph>
     </Card>
   );

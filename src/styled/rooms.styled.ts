@@ -54,7 +54,7 @@ export const InputField = styled.input`
   border: none;
   width: 300px;
   padding-left: 8px;
-  color: white;
+  color: black;
   font-size: 14px;
   ::placeholder {
     color: rgb(184, 184, 184);

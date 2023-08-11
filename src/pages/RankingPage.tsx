@@ -1,12 +1,18 @@
-import { RankingPageWrapper,Card,CustomTable,TableData,SubCard,Rank} from "../styled/ranking.styled";
+import {
+  RankingPageWrapper,
+  Card,
+  CustomTable,
+  TableData,
+  SubCard,
+  Rank,
+} from "../styled/ranking.styled";
 import { useEffect } from "react";
 import HomeButton from "../components/HomeButton";
 import { UserType } from "../types/game.type";
 import { AiOutlineCrown } from "react-icons/ai";
 
 const cardColors = ["#f43f5e", "#3b82f6", "#22c55e"];
-const crownColors = ["yellow", "silver", "brown"];
-
+const crownColors = ["yellow", "silver", "black"];
 
 let userList: UserType[] = [
   {
@@ -66,47 +72,47 @@ let userList: UserType[] = [
   },
   {
     userId: 12,
-    nickname: "이영수",
+    nickname: "박유빈",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
   {
     userId: 13,
-    nickname: "박성현",
+    nickname: "최원",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
   {
     userId: 14,
-    nickname: "최지영",
+    nickname: "김대인",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
   {
     userId: 15,
-    nickname: "강민호",
+    nickname: "황현성",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
   {
     userId: 16,
-    nickname: "김은희",
+    nickname: "유대겸",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
   {
     userId: 17,
-    nickname: "이유진",
+    nickname: "왕준수",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
   {
     userId: 18,
-    nickname: "박재영",
+    nickname: "이지현",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
   {
     userId: 19,
-    nickname: "최현민",
+    nickname: "김민석",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
   {
     userId: 20,
-    nickname: "강지은",
+    nickname: "강인호",
     highscore: Math.floor(Math.random() * 20) + 1,
   },
 ];
@@ -125,37 +131,39 @@ export default function RankingPage() {
       <RankingPageWrapper>
         <HomeButton />
         <Rank>Rank</Rank>
-       <Card><SubCard>
-       <CustomTable>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Nickname</th>
-            <th>Highscore</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userList.slice(0, 10).map((user, index) => (
-            <tr key={index}>
-              <TableData>
-                  {index < 3 && (
-                    <AiOutlineCrown style={{ color: crownColors[index] }} />
-                  )}{" "}
-                  {index + 1}위
-              </TableData>
-              <TableData>{user.nickname}</TableData>
-              <TableData>{user.highscore}</TableData>
-            </tr>
-          ))}
-        </tbody>
-      </CustomTable>
-      </SubCard>
+        <Card>
+          <SubCard>
+            <CustomTable>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Nickname</th>
+                  <th>Highscore</th>
+                </tr>
+              </thead>
+              <tbody>
+                {userList.slice(0, 10).map((user, index) => (
+                  <tr key={index}>
+                    <TableData>
+                      {index < 3 && (
+                        <AiOutlineCrown style={{ color: crownColors[index] }} />
+                      )}
+                      {index + 1}위
+                    </TableData>
+                    <TableData>{user.nickname}</TableData>
+                    <TableData>{user.highscore}</TableData>
+                  </tr>
+                ))}
+              </tbody>
+            </CustomTable>
+          </SubCard>
         </Card>
       </RankingPageWrapper>
     </>
   );
 }
-{/* <table style={{ borderCollapse: "separate", borderSpacing: "10px" }}> 
+{
+  /* <table style={{ borderCollapse: "separate", borderSpacing: "10px" }}> 
           <thead>
             <tr>
               <th>Rank</th>
@@ -178,4 +186,5 @@ export default function RankingPage() {
             ))}
             
           </tbody>
-        </table> */}
+        </table> */
+}

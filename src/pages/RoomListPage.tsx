@@ -150,8 +150,8 @@ export default function RoomListPage() {
         <HomeButton />
         <FormWrapper onSubmit={handlenewRoomNameRefSubmit}>
           <InputGroup>
-            <InputField placeholder="Room ID" ref={newRoomNameRef}></InputField>
-            <SubmitButton type="submit">ADD</SubmitButton>
+            <InputField placeholder="Room ID" ref={newRoomNameRef} />
+            <SubmitButton type="submit">Create Room</SubmitButton>
           </InputGroup>
         </FormWrapper>
 

@@ -21,6 +21,7 @@ export const HomeButtonWrapper = styled(NavLink)`
   width: 60px;
   height: 60px;
   cursor: pointer;
+  margin: 15px;
 
   &::before {
     content: "";
@@ -58,7 +59,3 @@ export const HomeButtonWrapper = styled(NavLink)`
     scale: 0.7;
   }
 `;
-
-
-
-

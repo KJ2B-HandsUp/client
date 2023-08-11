@@ -492,6 +492,14 @@ export default function GamePage() {
     [start, trigerClick, end],
   );
 
+  useEffect(() => {
+    if (start || end) {
+      document.body.style.overflow = "hidden"; // 모달 열릴 때 스크롤 막기
+    } else {
+      document.body.style.overflow = "auto"; // 모달 닫힐 때 스크롤 허용
+    }
+  }, [start, end]);
+
   return (
     <SpaceBackground>
       <GamePageWrapper>
@@ -557,11 +565,9 @@ export default function GamePage() {
               exit="exit"
               variants={modalVariants}
               header={
-                <div color="yellow">
-                  {myProfile.userId === winner
-                    ? "그럴 수 있어. 이런 날도 있는거지 뭐."
-                    : "이겼닭! 오늘 저녁은 치킨이닭!"}
-                </div>
+                myProfile.userId === winner
+                  ? "You Lose..\n\n그럴 수 있어. 이런 날도 있는거지 뭐."
+                  : "You Win!\n\n이겼닭! 오늘 저녁은 치킨이닭!"
               }
               style={{ width: "60vw", height: "95vh" }}
             >
@@ -581,13 +587,13 @@ export default function GamePage() {
               >
                 Download
               </a>
-              <button
+              {/*<button
                 onClick={() => {
                   downloadLinkRef.current?.click();
                 }}
               >
                 <AiOutlineDownload size="30" />
-              </button>
+              </button>*/}
               <div
                 style={{
                   display: "flex",

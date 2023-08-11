@@ -23,9 +23,8 @@ export const Card = styled.div`
   z-index: 0;
 
   &::before,
-
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -44,8 +43,8 @@ export const CustomTable = styled.table`
   border-spacing: 10px;
   position: relative;
   z-index: 3; /* 뒤로 보내기 */
-  width:70vh;
-  height:100vh;;
+  width: 70vh;
+  height: 100vh;
 `;
 
 export const TableData = styled.td`
@@ -81,10 +80,5 @@ export const Rank = styled.div`
   letter-spacing: -4px;
   text-align: center;
   border-radius: 20px;
-  margin-top: 4vh;`;
-//margin-top: 50px;
-//   margin-bottom: 20px;
-//   background: rgba(100, 46, 254, 0.8);
-//   padding: 0.6em 1.0em;
-//   border: 2px solid black;
-//   border-radius: 0.4em;
+  margin: 3vh;
+`;
