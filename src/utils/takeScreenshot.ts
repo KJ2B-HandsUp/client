@@ -11,8 +11,7 @@ export function canvasToImage(canvasElement) {
   img.src = dataUrl;
   canvasElement.parentNode.insertBefore(img, canvasElement);
   canvasElement.style.display = "none";
-  html2canvas(document.body).then((canvas) => {
-    document.body.appendChild(canvas);
+  html2canvas(document.body).then(() => {
     canvasElement.style.display = "";
     img.remove();
   });

@@ -47,6 +47,10 @@ function OtherUserVideoView({
                 width: `${CAMERA_VIEW_WIDTH}vw`,
                 height: `${CAMERA_VIEW_HEIGHT}vh`,
                 border: "5px solid #ffffff",
+                borderRadius: "20px",
+                boxShadow: "0 0 20px red",
+                borderColor: "red",
+                transition: "all 0.5s cubic-bezier(0.23, 1, 0.32, 1)",
               }}
               autoPlay
               playsInline

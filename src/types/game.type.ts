@@ -3,6 +3,7 @@ import { RoomData } from "./roomType";
 export const START_GAME = "START_GAME";
 export const CLICK_BLOCK = "CLICK_BLOCK";
 export const CHANGE_TURN = "CHANGE_TURN";
+export const CHANGE_MODE = "CHANGE_MODE";
 export const ADD_PLAYER = "ADD_PLAYER";
 export const OTHER_PLAYER_CLICK = "OTHER_PLAYER_CLICK";
 export const OTHER_CHANGE_TURN = "OTHER_CHANGE_TURN";
@@ -47,6 +48,7 @@ export type StateType = {
   winner: number;
   trigerClick: boolean;
   clickedBlock: BlockType;
+  mode?: number;
 };
 
 export type ActionType =
@@ -54,6 +56,7 @@ export type ActionType =
   | { type: "CLICK_BLOCK"; userId: number; clickedBlock: BlockType }
   | { type: "ADD_PLAYER"; num: number }
   | { type: "CHANGE_TURN" }
+  | { type: "CHANGE_MODE" }
   | { type: "OTHER_PLAYER_CLICK"; userId: number; clickedBlock: BlockType }
   | { type: "OTHER_CHANGE_TURN" };
 

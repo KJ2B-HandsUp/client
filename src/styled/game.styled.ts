@@ -31,7 +31,6 @@ export const BoardWrapper = styled.div`
 `;
 
 export const MyCameraView = styled.div`
-  overflow: hidden;
   position: absolute;
   width: ${CAMERA_VIEW_WIDTH}vw;
   height: ${CAMERA_VIEW_HEIGHT}vh;

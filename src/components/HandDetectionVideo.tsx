@@ -154,6 +154,9 @@ function HandDetectionVideo() {
           width: `${CAMERA_VIEW_WIDTH}vw`,
           height: `${CAMERA_VIEW_HEIGHT}vh`,
           border: "5px solid #ffffff",
+          borderRadius: "20px",
+          boxShadow: "0 0 20px rgba(9, 117, 241, 0.8)",
+          borderColor: "#0974f1",
         }}
       />
       <Webcam

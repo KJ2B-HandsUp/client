@@ -21,7 +21,6 @@ export const VideoBackground = styled.video`
 
 export const TitleWrapper = styled.div`
   position: fixed;
-  font-family: "establishRetrosansOTF";
   text-transform: uppercase;
   display: block;
   font-size: 92px;

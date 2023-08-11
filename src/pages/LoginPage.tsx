@@ -7,7 +7,6 @@ import {
   Cell,
   StyledNavLink,
 } from "../styled/login.styled";
-//import Sidebar from "../components/Sidebar";
 import { SidebarItemType } from "../types/sidebar.type";
 import { playBtnAudio } from "../utils/audio";
 
