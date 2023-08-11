@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useContext, memo } from "react";
 import Webcam from "react-webcam";
-import { drawCanvas, updateCanvasImage } from "../utils/drawCanvas";
+import { drawCanvas } from "../utils/drawCanvas";
 import { MyCameraView } from "../styled/game.styled";
 import { CAMERA_VIEW_WIDTH, CAMERA_VIEW_HEIGHT } from "../styled/game.styled";
 import { HandType } from "../types/game.type";
 import { GameContext } from "../pages/GamePage";
+import { canvasToImage } from "../utils/takeScreenshot";
 
 let ctx: CanvasRenderingContext2D | null = null;
 let rectLeft = 0;
@@ -12,7 +13,7 @@ let rectTop = 0;
 const threshold = 5;
 
 function HandDetectionVideo() {
-  const { start } = useContext(GameContext);
+  const { start, gameover } = useContext(GameContext);
 
   const webcamRef = useRef<Webcam>(null);
   const resultsRef = useRef<Window["Results"]>();
@@ -57,20 +58,19 @@ function HandDetectionVideo() {
   useEffect(() => {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
-    const resizeEvent = new Event("resize", {
-      bubbles: true,
-      cancelable: false,
-    });
-
-    window.dispatchEvent(resizeEvent);
     return () => {
       window.removeEventListener("resize", resizeCanvas);
     };
   }, [resizeCanvas]);
 
   useEffect(() => {
-    resizeCanvas();
-  }, [start]);
+    if (start) {
+      resizeCanvas();
+    }
+    if (gameover && canvasRef.current) {
+      canvasToImage(canvasRef.current);
+    }
+  }, [start, gameover]);
 
   const onResults = useCallback(
     (results: Window["Results"]) => {
@@ -106,7 +106,6 @@ function HandDetectionVideo() {
       });
 
       drawCanvas(ctx, results, fingerSize);
-      updateCanvasImage(canvasRef.current!);
     },
     [simulateClick],
   );

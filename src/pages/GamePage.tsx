@@ -64,7 +64,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case START_GAME:
       if (!state.start) {
-        console.log("start game");
+        //console.log("start game");
         GameStartAudio.play();
         if (dataSocket != undefined) {
           dataSocket.emit("get_game_data", {
@@ -88,7 +88,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
       const idx = state.blockList.length;
       console.log(myId, state.turn);
       if (dataSocket != undefined && !state.trigerClick && myId == state.turn) {
-        console.log("Click Block");
+        //console.log("Click Block");
         dataSocket.emit("get_game_data", {
           type: "CLICK",
           userId: myId,
@@ -105,7 +105,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
           state.prevBlockList[idx].rowIndex !== action.clickedBlock.rowIndex ||
           state.prevBlockList[idx].colIndex !== action.clickedBlock.colIndex
         ) {
-          console.log("Game Over");
+          //console.log("Game Over");
           return {
             ...state,
             turn: -1,
@@ -131,7 +131,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
       };
     }
     case CHANGE_TURN: {
-      console.log("change turn");
+      //console.log("change turn");
       return {
         ...state,
         turn: (state.turn % state.playersNum) + 1,
@@ -147,14 +147,14 @@ const reducer = (state: StateType, action: ActionType): StateType => {
         playersNum: state.playersNum + action.num,
       };
     case OTHER_PLAYER_CLICK:
-      console.log("clicked by other player");
+      //console.log("clicked by other player");
       return {
         ...state,
         trigerClick: true,
         clickedBlock: action.clickedBlock,
       };
     case OTHER_CHANGE_TURN:
-      console.log("change turn by other player");
+      //console.log("change turn by other player");
       return {
         ...state,
         turn: ((state.turn + 1) % state.playersNum) + 1,
@@ -437,7 +437,11 @@ export default function GamePage() {
                 textAlign: "center",
               }}
             >
-              <h1>{myId === winner ? "You Lose..." : "You Win!!!"}</h1>
+              <h1 color="gold">
+                {myId === winner
+                  ? "그럴 수 있어. 이런 날도 있는거지 뭐."
+                  : "이겼닭! 오늘 저녁은 치킨이닭!"}
+              </h1>
               {screenshotData && (
                 <img
                   src={screenshotData}
