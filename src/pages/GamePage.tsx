@@ -353,10 +353,11 @@ export default function GamePage() {
                   };
                 });
                 dispatch({ type: ADD_PLAYER, num: 1 });
+                myId = 2;
                 setMyProfile((state) => {
                   return { ...state, userId: 2 };
                 });
-                myId = 2;
+                // 내가 들어갔을 떄 못 받아온다
                 // 내 프로필 보내기
                 if (dataSocket != undefined) {
                   console.log("Send Profile1");
