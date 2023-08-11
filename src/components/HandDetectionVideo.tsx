@@ -10,6 +10,7 @@ let ctx: CanvasRenderingContext2D | null = null;
 let rectLeft = 0;
 let rectTop = 0;
 const threshold = 5;
+let lastClickTime = 0;
 
 function HandDetectionVideo() {
   const { start, gameover } = useContext(GameContext);
@@ -76,6 +77,7 @@ function HandDetectionVideo() {
       if (ctx === null) {
         return;
       }
+
       if (
         results.multiHandLandmarks.length == 2 &&
         results.multiHandedness[0].label !== results.multiHandedness[1].label
@@ -95,8 +97,13 @@ function HandDetectionVideo() {
               zValue < 0
             ) {
               if (previousZRef.current[handType]! - zValue > threshold) {
-                simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
-                fingerSize[index] = 40;
+                const currentTime = new Date().getTime();
+                // 0.5초 이내에 다시 클릭되면 무시
+                if (currentTime - lastClickTime >= 500) {
+                  lastClickTime = currentTime;
+                  simulateClick(indexFingerLandmark.x, indexFingerLandmark.y);
+                  fingerSize[index] = 40;
+                }
               }
             }
 
