@@ -21,17 +21,19 @@ export function drawCanvas(
   if (results.multiHandLandmarks) {
     let idx = 0;
     for (const landmarks of results.multiHandLandmarks) {
-      const indexFingertip = landmarks[8];
-      ctx.beginPath();
-      ctx.arc(
-        indexFingertip.x * width,
-        indexFingertip.y * height,
-        fingerSize[idx],
-        0,
-        2 * Math.PI,
-      );
-      ctx.fillStyle = "#ffffff";
-      ctx.fill();
+      if ("x" in landmarks && "y" in landmarks) {
+        const indexFingertip = landmarks[8];
+        ctx.beginPath();
+        ctx.arc(
+          indexFingertip.x * width,
+          indexFingertip.y * height,
+          fingerSize[idx],
+          0,
+          2 * Math.PI,
+        );
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+      }
       idx++;
     }
   }
