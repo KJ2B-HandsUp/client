@@ -21,8 +21,8 @@ export function drawCanvas(
   if (results.multiHandLandmarks) {
     let idx = 0;
     for (const landmarks of results.multiHandLandmarks) {
-      if ("x" in landmarks && "y" in landmarks) {
-        const indexFingertip = landmarks[8];
+      const indexFingertip = landmarks[8];
+      if ("x" in indexFingertip && "y" in indexFingertip) {
         ctx.beginPath();
         ctx.arc(
           indexFingertip.x * width,
