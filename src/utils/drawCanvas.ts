@@ -22,35 +22,16 @@ export function drawCanvas(
     let idx = 0;
     for (const landmarks of results.multiHandLandmarks) {
       const indexFingertip = landmarks[8];
-      if (!("x" in indexFingertip || "y" in indexFingertip)) {
-        break;
-      }
-      const x = indexFingertip.x * width;
-      const y = indexFingertip.y * height;
-
-      const imageWidth = fingerSize[idx] * 3;
-      const imageHeight = fingerSize[idx] * 3;
-      if (plandImage[idx]) {
-        if (plandImage[idx].complete) {
-          ctx.drawImage(
-            plandImage[idx],
-            x - imageWidth / 2,
-            y - imageHeight / 2,
-            imageWidth,
-            imageHeight,
-          );
-        } else {
-          plandImage[idx].onload = () => {
-            ctx.drawImage(
-              plandImage[idx],
-              x - imageWidth / 2,
-              y - imageHeight / 2,
-              imageWidth,
-              imageHeight,
-            );
-          };
-        }
-      }
+      ctx.beginPath();
+      ctx.arc(
+        indexFingertip.x * width,
+        indexFingertip.y * height,
+        fingerSize[idx],
+        0,
+        2 * Math.PI,
+      );
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
       idx++;
     }
   }
