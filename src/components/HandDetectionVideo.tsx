@@ -88,7 +88,12 @@ function HandDetectionVideo() {
           ]?.label.toLowerCase() as HandType;
 
           const indexFingerLandmark = landmarks[8];
-          if (indexFingerLandmark && "z" in indexFingerLandmark) {
+          if (
+            indexFingerLandmark &&
+            "z" in indexFingerLandmark &&
+            "x" in indexFingerLandmark &&
+            "y" in indexFingerLandmark
+          ) {
             const zValue = indexFingerLandmark.z * 100;
             if (
               typeof zValue === "number" &&
