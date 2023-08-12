@@ -98,7 +98,7 @@ function HandDetectionVideo() {
             if (
               typeof zValue === "number" &&
               previousZRef.current[handType] != null &&
-              previousZRef.current[handType]! > -0.015 &&
+              previousZRef.current[handType]! > -0.01 &&
               zValue < 0
             ) {
               if (previousZRef.current[handType]! - zValue > threshold) {
