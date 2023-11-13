@@ -14,7 +14,7 @@ import "./index.css";
 function App() {
   return (
     <>
-      <BrowserRouter basename="/">
+      <BrowserRouter basename="/client">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/main/*" element={<MainPage />} />
