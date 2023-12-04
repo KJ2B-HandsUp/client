@@ -17,7 +17,7 @@ for (let rowIndex = 0; rowIndex < mp3List2.length; rowIndex++) {
   const tempList: HTMLAudioElement[] = [];
   for (let colIndex = 0; colIndex < mp3List2[0].length; colIndex++) {
     const tempAudio = new Audio(
-      `/dpmaudio/dubstep_club_${mp3List2[rowIndex][colIndex]}.wav`,
+      `/client/dpmaudio/dubstep_club_${mp3List2[rowIndex][colIndex]}.wav`,
     );
     tempAudio.preload = "auto";
     tempList.push(tempAudio);
@@ -25,7 +25,7 @@ for (let rowIndex = 0; rowIndex < mp3List2.length; rowIndex++) {
   audioList.push([...tempList]);
 }
 
-const btnAudio = new Audio("/mp3/warp1.mp3");
+const btnAudio = new Audio("/client/mp3/warp1.mp3");
 btnAudio.preload = "auto";
 
 export function playBtnAudio() {
@@ -37,14 +37,14 @@ export function pauseBtnAudio() {
   btnAudio.pause();
 }
 
-export const GameStartAudio = new Audio("/mp3/gamestart.mp3");
+export const GameStartAudio = new Audio("/client/mp3/gamestart.mp3");
 GameStartAudio.preload = "auto";
-export const GameOverAudio = new Audio("/mp3/gameover.mp3");
+export const GameOverAudio = new Audio("/client/mp3/gameover.mp3");
 GameOverAudio.preload = "auto";
-export const GameWinAudio = new Audio("/mp3/gamewin.mp3");
+export const GameWinAudio = new Audio("/client/mp3/gamewin.mp3");
 GameWinAudio.preload = "auto";
 
-const GameBGMAudio = new Audio("/mp3/dubstep_drum_trap_loop.mp3");
+const GameBGMAudio = new Audio("/client/mp3/dubstep_drum_trap_loop.mp3");
 GameBGMAudio.preload = "auto";
 
 export function playBGMAudio() {
@@ -57,7 +57,7 @@ export function pauseBGMAudio() {
   GameBGMAudio.pause();
 }
 
-const HoverBtnAudio = new Audio("/mp3/jump02.mp3");
+const HoverBtnAudio = new Audio("/client/mp3/jump02.mp3");
 HoverBtnAudio.preload = "auto";
 HoverBtnAudio.volume = 0.5;
 

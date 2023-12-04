@@ -38,7 +38,7 @@ export default function LoginPage() {
   return (
     <>
       <VideoBackground autoPlay loop muted playsInline>
-        <source src="/back.mp4" type="video/mp4" />
+        <source src="/client/back.mp4" type="video/mp4" />
       </VideoBackground>
       <LoginPageWrapper>
         <header>
@@ -64,7 +64,7 @@ export default function LoginPage() {
             LOGIN
           </StyledNavLink>
           <img
-            src="/kakao_login_medium.png"
+            src="/client/kakao_login_medium.png"
             onClick={requestLogin}
             style={{ cursor: "pointer" }}
           />

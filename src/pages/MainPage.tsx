@@ -72,7 +72,7 @@ export default function MainPage() {
   return (
     <>
       <VideoBackground autoPlay loop muted playsInline>
-        <source src="/back.mp4" type="video/mp4" />
+        <source src="/client/back.mp4" type="video/mp4" />
       </VideoBackground>
       <MainPageWrapper>
         <MemoizedUserProfile
