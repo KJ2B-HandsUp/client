@@ -1,6 +1,6 @@
 let plandImage = [new Image(), new Image()];
-plandImage[0].src = "/hand.png";
-plandImage[1].src = "/hand_flip.png";
+plandImage[0].src = "/client/hand.png";
+plandImage[1].src = "/client/hand_flip.png";
 
 export function drawCanvas(
   ctx: CanvasRenderingContext2D,
